@@ -1,0 +1,874 @@
+<HTML>
+<HEAD>
+<TITLE>
+Setup
+</TITLE>
+<!-- Changed by: Bernhard Hailer, 24-Feb-1997 -->
+</HEAD>
+
+<BODY>
+<H1>
+<P ALIGN=CENTER>
+<IMG SRC="setup.jpg" ALT="Linux">
+<!IMG SRC="linux.gif" ALT="Linux">
+<!IMG SRC="isdn.gif"  ALT="ISDN">
+<BR>
+ <FONT SIZE=+3>Installation and Configuration</FONT>
+</P>
+</H1>
+
+<HR>
+<P>
+
+
+<H4>The Kernel</H4>
+
+<FONT SIZE=+3><B>O</B></FONT>nce 
+upon a time there was the 1.2.13 kernel, which was included in the most 
+distributions. This kernel did a goodjob for i4l, when no ISDN drivers 
+existed in the kernel code, but the development stopped at version 0.7.3beta.
+So i4l users mostly used kernels younger than 1.3.68, the so-called 
+"hacker kernels".
+<P>
+
+These days you should take a kernel version 1.3.97 or younger (there are 
+kernel internal drivers available since kernel 1.3.69, but this thing only 
+is stable enough since 1.3.97).
+<P>
+
+Now, while kernel 2.0 is released, we will talk about this kernel. Nowadays
+it is recommended to use kernel version 2.0.27, which cooperates flawlessly
+with isdn4k-utils-2.0.
+You should look for the kernel at your SunSite, e.g. at
+
+<PRE>
+  <A HREF="ftp://ftp.leo.org/pub/comp/os/linux/Linus/v2.0/">ftp.leo.org/pub/comp/os/linux/Linus/v2.0/</a>
+</PRE>
+
+(e.g. linux-2.0.27.tar.gz; this kernel runs at the author's machine since 
+months without any problems). And you also should fetch the new 
+<TT>modules</TT> package:
+
+<PRE>
+  <A HREF="ftp://ftp.leo.org/pub/comp/os/linux/Linus/v2.0/modules-2.0.0.tar.gz">ftp.leo.org/pub/comp/os/linux/Linus/v2.0/modules-2.0.0.tar.gz</a>
+</PRE>
+
+Handle the kernel as you are used to - have a look at the kernel-HOWTO:
+
+<PRE>
+  <A HREF="ftp://ftp.leo.org/pub/comp/os/linux/sunsite/docs/HOWTO/Kernel-HOWTO.gz">ftp.leo.org/pub/comp/os/linux/sunsite/docs/HOWTO/Kernel-HOWTO.gz</A>
+</PRE>
+
+You should decompree your modules and install them as described in the 
+Kernel-HOWTO.
+<P>
+
+If you want to use isdn4linux to drive an ISDN card you don't need to apply 
+any more a patch to this kernel (only kernel 2.0.0 needed the 
+two patches isdn4kernel-2.0-patch1+2). <B>But:</B> Most passive ISDN cards
+with Siemens chip set (Teles, Creatix, AVM, Elsa, ...) only work, if you use
+the driver package "HiSax". If you run such a card you must fetch this driver, too, and put it into<TT>/usr/src</TT>:
+<PRE>
+  <A HREF="ftp://ftp.franken.de/pub/isdn4linux/HiSax/">ftp.franken.de/pub/isdn4linux/HiSax/</A>
+</PRE>
+(e.g. version 1.5; read the README to learn which cards are supported!)
+Now patch it into the kernel:
+<PRE>
+  root:# cd /usr/src
+  root:# tar zxfv HiSax_1.5.patch_for_2.0.tar.gz
+  root:# patch -p &lt;HiSax_1.5.patch_for_2.0
+  root:# _
+</PRE>
+
+You must set now the following items while "make config" or its graphical 
+relatives "make menuconfig" or "make xconfig" to compile the kernel:
+
+<PRE>
+<B>Code maturity level options":</B>
+  Prompt for development and/or incomplete code/drivers: No
+<B>Section "General Setup":</B>
+  Networking support: Yes
+<B>Section "Networking options":</B>
+  TCP/IP networking: Yes
+  <I>all other items are up to you</I>
+<B>Section "Network device support":</B>
+  Network device support: Yes
+  PPP (point-to-point) support: Yes  
+  <I>all other items are up to you</I>
+<B>Section "ISDN subsystem":</B>
+  <I>Only if you need isdn4linux:</I>
+  ISDN support: Yes
+  Support synchronous PPP: Yes (!)
+  Use VJ compression with synchronous PPP: Yes
+  Support audio via ISDN: Yes
+  Support generic MP (RFC 1717): Yes
+  <I>Mark your own PC card here, too.</I>
+</PRE>
+
+If this kernel later works properly you could think about defining some of
+the parts of it to modules instead of using a monolithic kernel.
+
+
+<H4>ISDN Card Driver Software</H4>
+
+If you only want to use a modem (analogous modem or ISDN modem) you may
+skip this section.
+<P>
+
+If you want to drive an ISDN card you also need the <U>current</U> version of
+Fritz Elfert's "isdn4kernel utilities". If you have an older version of 
+isdn4linux you must update: the command "<TT>isdnctrl pppbind</TT>" must
+exist! Find out -  type in <TT>isdnctrl</TT> and have a look at the available
+options.
+
+<PRE>
+  <A HREF="ftp://ftp.franken.de/pub/isdn4linux/v2.0/isdn4k-utils-2.0.tar.gz">ftp.franken.de/pub/isdn4linux/isdn4k-utils-2.0.tar.gz</A>
+</PRE>
+
+Put it into the /usr/src directory and unpack it by 
+"<TT>tar zxfv isdn4k-utils-2.0.tar.gz</TT>". Now in the directory
+
+<PRE>
+  /usr/src/isdn4k-utils-2.0
+</PRE>
+
+you find all the files you need to operate i4l.
+
+Some Linux distributions lack of some important links, so you need to change
+some of the make files. These make files are all in the subdirectory 
+<TT>tools</TT>. 
+<B>/usr/src/isdn4k-utils-2.0/tools/Makefile</B>
+  <I>remove "isdnbutton-1.1" in the following line,
+  if you don't have Motif - or you will get compiler errors.</I>
+  SUBDIRS=imon imontty-0.3 isdnlog-2.41 isdnbutton-1.1 tcltk
+  [...]
+
+<B>/usr/src/isdn4k-utils-2.0/tools/imontty-0.3/Makefile</B>
+  [...]
+  LDFLAGS=-lncurses -lm
+  [...]
+
+<B>/usr/src/isdn4k-utils-2.0/tools/isdnlog-2.41/Makefile</B>
+  [...]
+  LIB         = -lgdbm
+  [...]
+</PRE>
+
+At first the programs need to be built. Therefore go into the 
+<TT>/usr/src/isdn4k-utils-2.0</TT> directory, compile it by typing in
+"<TT>make</TT>", create the ISDN device files by "<TT>make devices</TT>" and 
+finally install all executables by "<TT>make install</TT>" in the 
+/sbin directory (also the man pages where they need to be).
+<P>
+
+You also need to define the card parameters - please read the ISDN4Linux manual
+
+<PRE>
+  /usr/src/linux/Documentation/isdn/README
+</PRE>
+
+These parameters will be set while booting or while loading the i4l modules.
+<P>
+
+
+<H2>Configuration</H2>
+
+<I><B>Hint:</B><BR>
+There are some large script files following. They are downloadable within
+this tutorial package - just click onto the script headlines!
+</I>
+
+<I><B>Remark for readers who are familiar with my tutorial:</B><BR>
+The scripts have changed heavily. There is no longer a command <TT>isdn</TT>,
+all things are now handled by a script package named <TT>connect</TT>.
+This package can handle now modems, too!</I>
+<BR>
+
+<H3>Configuration files</H3>
+
+Two central files are used for setup and maintaining connections: The first one
+is called while machine boot-up, it lays in the startup directory and is named
+<TT>rc.connect</TT>. The other one is <TT>connect</TT> and is responsible
+for establishing and deleting connections and more.
+<P>
+
+Eine Reihe weiterer Dateien m&uuml;ssen angelegt werden. So ist f&uuml;r 
+jeden Provider je eine Datei pro Einwahl-Telefonnummer herzustellen, in der
+alle wichtigen Daten enthalten sind. Die PPP-D&auml;monen ben&ouml;tigen
+&uuml;berdies ein paar weitere Dateien. Das werden wir nun der Reihe nach
+besprechen.
+<P>
+
+There are also some more files necessary. So you need one file per provider
+and per dial-in number. And the PPP daemons need some more files, too.
+We will discuss this now.
+<P>
+
+If you did load down this WWW pages as package "leafsite.tar.gz", you
+find the scripts in the subdirectory "scripts".
+<P>
+
+
+<H3>Some Pre Work</H3>
+
+<BLOCKQUOTE>
+<SMALL>
+  If you have used the old "isdn" package before, stop the isdn system
+  using
+  <PRE>
+    root:# &lt;startup_path&gt;/i4l stop (or "rc.isdn stop" or whatever)
+    root:# _
+  </PRE>    
+  (<TT>&lt;startup_path&gt;</TT> is the path, where all the system bootup
+  files are located). 
+  <P>
+
+  Then remove (or save, if you like) some old files:
+  <PRE>
+    root:# rm &lt;startup_path&gt;/i4l (if you use a newer SuSE distribution)
+    root:# rm &lt;startup_path&gt;/rc.isdn
+    root:# rm /sbin/isdn
+    root:# rm /etc/i4l.provider (or /etc/i4l.config, if older "isdn" version)
+    root:# rm /etc/i4l.secrets  (or /etc/i4l.param, if older "isdn" version)
+    root:# _
+  </PRE>
+</SMALL>
+</BLOCKQUOTE>
+
+You have to create some directories for the beginning:
+<PRE>
+  root:# mkdir /usr/lib/connect
+  root:# mkdir /usr/lib/connect/providers
+  root:# mkdir /var/lib/connect
+  root:# _
+</PRE>
+
+
+<H3>Provider Data</H3>
+
+In <TT>/usr/lib/connect/providers</TT> for each provider and each dial-in
+number is needed. Files for isdn4linux and for modems look slightly
+different. Here some cutted examples - you can load down some examples, 
+containing more explanations. Name these files as you like, but don't use
+a connect keyword (on, off, status, help, maxtries, route, device, all).
+<P>
+
+<A HREF="scripts/prov-d1">Beispiel f&uuml;r eine isdn4linux-Datei</A>
+<PRE>
+  #!/bin/bash
+  MODE=i4l
+  PHONE=0891234567
+  IP_ADDRESS=123.234.210.109
+  OPTIONS_FILE=/etc/ppp/options.ipppd
+</PRE>
+
+<A HREF="scripts/prov-a1">Beispiel f&uuml;r eine Modem-Datei</A>
+<PRE>
+  #!/bin/bash
+  MODE=modem
+  IP_ADDRESS=234.123.134.56
+  DEVICE=ttyS1
+  OPTIONS_FILE=/etc/ppp/options.pppd
+  CHAT_SCRIPT="ABORT BUSY ABORT 'NO CARRIER' '' ATZ0 OK ATD0,08912345 CONNECT"
+</PRE>
+
+This files define some environment variables, which are used in the scripts
+described here. <TT>MODE</TT> tells connect whether it shall call i4l or
+drive a modem, <TT>IP_ADDRESS</TT> is the IP address of the remote you want
+to dial in, <TT>OPTIONS_FILE</TT> is the (i)pppd options file for this
+remote. isdn4linux needs the telephone number of the remote (<TT>PHONE</TT>),
+and pppd needs a chat script (<TT>CHAT_SCRIPT</TT>) and the serial port name
+(<TT>DEVICE</TT>), where the modem is connected.
+<P>
+
+You can load down a <A HREF="scripts/i4l.provider.db">database with 
+date for several universities and other providers</A>.
+<P>
+
+By the way: I would be pleased to get the configuration file for your
+provider - just 
+<A HREF="mailto:hailer@ilo.baynet.de?subject=i4l-config">mail it</A>!
+<P>
+
+<H3>Default Values</H3>
+
+Some data are loaded while system startup. Therefore you must write a
+configuration file. Here is mine:
+
+<PRE>
+<A HREF="scripts/base">/usr/lib/connect/base</A>
+#!/bin/bash
+# (c) 1997 Bernhard Hailer (GNU GPL V.2)
+
+# Edit this file for your needs
+
+# local settings
+# ==============
+
+# Fully qualified host name
+read MY_HOSTNAME &lt;/etc/HOSTNAME                          # read host's name
+# MY_HOSTNAME=foo.bar.com
+
+# Host phone number and MSN (EAZ) - replace by your numbers!
+MY_PHONE=817890032                                          # no leading zero!
+MY_EAZ=90032
+
+# Email address for fetching mail - replace by your address!
+MY_EMAIL_ADDRESS=dl4mhk@lrz.uni-muenchen.de
+
+
+# extra start commands for rc.connect (e.g. module loading)
+# ---------------------------------------------------------
+function Con_Start()
+{
+  insmod /lib/modules/`/bin/uname -r`/misc/isdn.o
+  insmod /lib/modules/`/bin/uname -r`/misc/hisax.o io=3,2,12,0xd80 HiSax_id=Teles0
+  #insmod /lib/modules/`/bin/uname -r`/misc/teles.o io=0,12,0xd80,2 teles_id=Teles0
+  #rmmod teles.o
+  #insmod /lib/modules/`/bin/uname -r`/misc/teles.o io=0,12,0xd80,2 teles_id=Teles0
+  return
+}
+
+# extra stop commands for rc.connect (e.g. module unloading)
+# ----------------------------------------------------------
+function Con_Stop()
+{
+  rmmod hisax.o  
+  #rmmod teles.o
+  sleep 1
+  rmmod isdn.o
+  return
+}
+
+# Default remote providers for regular connects
+DEFAULT_REMOTES="lrz-d1 lrz-d2"
+
+# default device where your modem is connected - no leading "/dev/"!
+DEFAULT_DEVICE="ttyS1"
+
+# Maximum number of dialin attempts
+declare -i DEFAULT_MAX_TRIES
+DEFAULT_MAX_TRIES=4
+
+# Maximum idle time before hangup (you should use a time of about 300 secs
+# here, because it is more expensive to dial often than to hold a line!)
+# This only works for isdn4linux connections.
+declare -i HUPTIMEOUT
+HUPTIMEOUT=300             # 5 min
+</PRE>
+
+The shell functions <TT>Con_Start()</TT> and <TT>Con_Stop()</TT> are called
+from the script <TT>rc.connect</TT> - these functions are very interesting if 
+you load your ISDN subsystem as modules: enter here the commands for loading
+and unloading the modules. Examples for the Teles and the HiSax driver are 
+printed here (I'm using currently HiSax 1.4 to drive a Teles 16.3 card).
+<P>
+
+Here also some default values are defined. 
+<TT>DEFAULT_REMOTES</TT> contains the file names of the remotes which
+shall be called by default (if you define more than one, "connect" tries to
+call one after the other until the connection establishes).
+<TT>DEFAULT_MAX_TRIES</TT> says how often this should happen. 
+<TT>HUPTIMEOUT</TT> is valid only for isdn4linux. Enter here after how many
+idle time isdn4linux shall hang up (modems: read the manual, please). 
+And <TT>DEFAULT_DEVICE</TT> is the name of the serial interface the modem 
+normally is connected.
+<P>
+
+We will discuss now this script <TT>rc.connect</TT>.
+
+
+<H3>What Happens While Booting</H3>
+
+There are two possibilities Linux may boot. One is <TT>simpleinit</TT> 
+(e.g. Slackware), the other one (more complicated, but also more flexible)
+is <TT>sysvinit</TT> (S.u.S.E. since 4.0, Debian, Caldera, 
+Red Hat...). These two need different linking of the ISDN startup scripts.
+
+
+<H4>simpleinit</H4>
+
+<TT>simpleinit</TT> has its startup scripts in <TT>/etc/rc.d/</TT>. There are 
+some single scripts. Important for us are the files <TT>rc.M</TT> (calls
+some startup scripts) and <TT>rc.6</TT> (reboot script). In this directory
+we set a new file named <TT>rc.isdn</TT>, which starts up the ISDN system.
+<P>
+
+You must create this file. Before this you must add the following to
+<TT>/etc/rc.d/rc.M</TT>, because this new file must be known by the booting 
+system:
+
+<PRE>
+<B>/etc/rc.d/rc.M, section "# Initialize the NET subsystem."</B>
+  . /etc/rc.d/rc.inet1
+  . /etc/rc.d/rc.connect    # &lt;-- add this line!
+  . /etc/rc.d/rc.inet2
+</PRE>
+
+
+<H4>sysvinit</H4>
+
+Under <TT>sysvinit</TT> the start-up is completely different. Here the scripts
+are in the directory <TT>/sbin/init.d/, /etc/init.d</TT> or 
+<TT>/etc/rc.d/</TT>. The scripts do have two functionalities: called with the 
+argument "<TT>start</TT>" it starts up a part of the system, called with
+the argument "<TT>stop</TT>" it shuts down. This whole thing works with 
+so-called "run levels"; level 0 is "system halt", level 1 is "single
+user mode", level 2 commonly is "multi user mode with network" and  level 3 is 
+"with xdm", and finally level 6 is running shutdown. The
+system calls the first three levels one after the other while startup (using 
+"<TT>start</TT>"). In run level 6 they are called vice versa (using 
+"<TT>stop</TT>").
+<P>
+
+This sequence is a bit "tricky": a "master script" looks into the
+directory of the run level (<TT>./rc1.d, ./rc2.d, ./rc3.d</TT> and so on) what 
+to do. Therein are a lot of soft links to the scripts I wrote above. All links 
+are named
+<PRE>
+  S<I>nnScriptName</I>
+</PRE>
+or
+<PRE>
+  K<I>nnScriptName</I>
+</PRE>
+with a number <TT><I>nn</I></TT>, which tells the master script in which order 
+it has to call these scripts. So if we create a script - let's call it 
+<TT>rc.connect</TT> again -, we must also set two links in the runlevel 2 
+directory <TT>./rc2.d</TT>:
+<PRE>
+  root:# cd /sbin/init.d/rc2.d  # (please verify path!!)
+  root:# ln -s ../rc.connect K20rc.connect
+  root:# ln -s ../rc.connect S20rc.connect
+  root:# _
+</PRE>
+
+ <BLOCKQUOTE><SMALL>
+ <B>Remark for  S.u.S.E. users (version 4 and newer):</B>
+ A similar file exists here, named <TT>i4l</TT>, also there may exist a file
+ <TT>i4l_hardware</TT>. These files must be removed, and also their calling
+ scripts in <TT>/sbin/init.d/rc2.d</TT>. Of course so the <TT>I4L_*</TT> 
+ entries in the S.u.S.E. configuration file <TT>/etc/rc.config</TT> are 
+ obsolete now.
+ <P>
+
+ Sorry for this inconvenience, but this is necessary to get a
+ distribution independent package.
+ </SMALL></BLOCKQUOTE>
+
+
+<H4>System Start and Stop</H4>
+
+The file(s) you need for <TT>simpleinit</TT> or for <TT>sysvinit</TT> you
+can load down as usual in this tutorial. Because the script is awfully big
+I only descripe here how the ISDN subsystem is booted within this script
+(modems don't need startup sections). Just load and install this script as
+described above.
+<PRE>
+<B><A HREF="scripts/rc.connect">/sbin/init.d/rc.connect</A></B> (cutting)
+  /sbin/isdnctrl verbose 0  # For debugging set to 2 (max. 4)
+  # ISDN device drivers     ippp0 (PPP)
+  /sbin/isdnctrl addif      ippp0
+  /sbin/isdnctrl pppbind    ippp0 0
+  /sbin/isdnctrl addphone   ippp0 out $PHONE      # dial-out number
+  /sbin/isdnctrl addphone   ippp0 in $MY_PHONE    # my telephone no
+  /sbin/isdnctrl eaz        ippp0 $MY_EAZ         # my MSN / EAZ
+  /sbin/isdnctrl huptimeout ippp0 $HUPTIMEOUT     # defined in $BASE
+  /sbin/isdnctrl secure     ippp0 on              # nobody may enter
+  /sbin/isdnctrl l2_prot    ippp0 hdlc
+  /sbin/isdnctrl l3_prot    ippp0 trans
+  /sbin/isdnctrl encap      ippp0 syncppp
+  /sbin/ifconfig ippp0 $MY_HOSTNAME pointopoint $IP_ADDRESS metric 1
+  /sbin/route add default ippp0                   # interface definitions 
+  /sbin/ipppd /dev/ippp0 file $OPTIONS_FILE &
+  /sbin/route del default
+  ifconfig ippp0 down
+</PRE>
+
+Some people must edit the PATH in this script!
+<P>
+
+You must make this file executable by typing in <TT>chmod 744</TT> now.
+<P>
+
+You see: some of the environment variables defined above are used here!
+Some commands are remarkable: the "pppbind" command is against side
+effects, if more than one ipppd is started. If you don't call this command,
+all ipppd's use the passwords defined for the first one! The last two
+commands are also essential: only if no ipppd is up you can start a 
+regular pppd for modems without problems!
+<P>
+
+By the way: We don't call the standard PPP daemon pppd 2.2.0[ef] here, but an 
+especially patched version named "ipppd". This pppd is part of the ISDN4Linux 
+package and is set while installation to /sbin. Anyway the PPP HOWTO and the 
+pppd manpage is valid.
+<P>
+
+
+<H3>More Files</H3>
+
+To get this stuff working you must edit some more files as root:
+Either pppd or ipppd use the file <TT>/etc/ppp/options</TT> to load central
+configuration parameters. You can tell the (i)pppd with the command line
+argument <TT>file</TT> to load more files - we already have defined these 
+files while building our remote files (<TT>OPTIONS_FILE</TT>). 
+Here now <TT>/etc/ppp/options</TT>, which <I>always is loaded</I>:
+<PRE>
+<A HREF="scripts/options"><B>/etc/ppp/options</B></A>
+# comment out the following three lines if you don't need 
+# dynamic IP negotiation.
+ipcp-accept-local
+ipcp-accept-remote
+noipdefault
+# more pppd/ipppd options
+lock
+mru 1500
+mtu 1500
+debug
+-detach
+</PRE>
+
+If you don't dynamically receive your IP from your provider you must comment
+out the first three options. The rest is needed always.
+
+Now let's have a look at the extra option files. They are necessary, because
+<UL>
+<LI>the ipppd needs other options than the pppd,
+<LI>the options vary from provider to provider.
+</UL>
+
+<PRE>
+<A HREF="scripts/options.pppd.prov-1"><B>sample file for the pppd</B></A>
+   pppd</B></A>
+# /etc/ppp/options
+crtscts
+user hailer
+</PRE>
+
+<PRE>
+<A HREF="scripts/options.ipppd.prov-1"><B>sample file for the ipppd</B></A>
+# /etc/ppp/options for ipppd
+useifip
+-vjccomp
+-ac
+-pc
+-detach
+-bsdcomp
+-vj
+user hailer
+</PRE>
+
+<B>Remark to option "</B><TT>-vj</TT><B>":</B> If you don't define this option 
+the system may get very angry. X Window sessions simply may hang, while
+common vt100 sessions may show some "kernel oopses". You may especially see 
+the line "<TT>Aiee, killing interrupt handler</TT>". The option 
+<TT>useifip</TT> is against side effects, if more than one ipppd is running.
+
+<PRE>
+<B>/etc/resolv.conf:</B> (see provider database)
+search <I>&lt;what_you_need&gt;</I>
+nameserver <I>&lt;IP 1st nameserver&gt;</I> 
+nameserver <I>&lt;IP 2nd nameserver&gt;</I> 
+nameserver <I>&lt;IP 3rd nameserver&gt;</I>
+</PRE>
+
+You may enter here max. three nameservers. At "search" you can enter where
+short hostnames shall be searched. Example: If you have a "search" entry
+like this: <TT>search lrz-muenchen.de</TT> the command <TT>ping sun3</TT>
+will find <TT>sun3.lrz-muenchen.de</TT>.
+
+<PRE>
+<B>/etc/host.conf:</B>
+  order hosts bind
+  multi on
+
+<B>/etc/hosts:</B>
+  # For loopbacking.
+  127.0.0.1       localhost
+  # My own IP address
+  192.168.1.1     machine.name                alias    # or your own IP address
+  # (192.168.x.x is free, you always may use it!)
+  # example entries
+  129.187.10.22   sun3.lrz-muenchen.de        sun3     # (example remote)
+  129.187.13.48   sunmailhost.lrz-muenchen.de getmail  # (example, for email)
+  129.187.13.48   news.lrz-muenchen.de        getnews  # (example, for news)
+</PRE>
+
+
+<H3>Authentification</H3>
+
+You must authentificate yourself at the provider if you use PPP. Therefore
+two methods exist: PAP (Password Authentification Protocol) and CHAP 
+(Challenge Authentification Protocol). PAP is widely used, but CHAP offers
+the provider more security. The secrets are in the file 
+<TT>/etc/ppp/pap-secrets</TT> or <TT>/etc/ppp/chap-secrets</TT>.
+<B>Attention!</B> The<TT>/etc/ppp/pap-secrets</TT> file contains passwords
+and must be secured in any cases against unauthorized access!
+<PRE>
+  root:# chmod 600 /etc/ppp/pap-secrets (or /etc/ppp/chap-secrets)
+  root:# _
+</PRE>
+<P>
+
+
+<H4>PAP</H4>
+
+<PRE>
+<B>/etc/ppp/pap-secrets</B>
+  # Secrets for authentification using PAP
+  # client          server           secret          IP addresses
+  <I>&lt;provider_login&gt;</I>  <I>&lt;1st provider&gt;</I>   '<I>&lt;password&gt;</I>'    -
+  <I>&lt;provider_login&gt;</I>  <I>&lt;2nd provider&gt;</I>   '<I>&lt;password&gt;</I>'    -
+</PRE>
+
+Remarks: 
+<UL>
+<LI>It is recommended to nest the password in apostrophes. So no error 
+    appears if a "#" is in the password. (Thanks to Michael Matschilles 
+    <TT>&lt;mat@pascal.bmw.de&gt;</TT> for the hint!)
+<LI>In many cases it is easier to enter an asterisk "*" instead of the
+    provider's name in the server column.
+</UL>     
+<P>
+
+Don't forget to secure it with <TT>chmod 600 /etc/ppp/pap-secrets</TT>!
+
+
+<H4>CHAP</H4>
+
+Providers don't know your fully qualified hostname in most cases. So you have 
+to rename your machine to the same name as your login at your provider - don't 
+use a domain. But you can do it a more elegant way: give 
+"<TT>name <I>&lt;provider_login&gt;</I></TT>" as option while calling the
+ipppd (or make an entry in <TT>/etc/ppp/options</TT>). Instead of 
+<TT>/etc/ppp/pap-secrets</TT> you must create a file 
+<TT>/etc/ppp/chap-secrets</TT> like this (please note: there are <I>two</I> 
+lines required per provider entry!):
+<PRE>
+<B>/etc/ppp/chap-secrets</B>
+  # Secrets for authentification using CHAP
+  # client          server             secret       IP addresses
+  <I>&lt;provider_login&gt;</I>  <I>&lt;1st provider&gt;</I>      <I>&lt;password&gt;</I>
+  <I>&lt;1st provider&gt;</I>     <I>&lt;provider_login&gt;</I>   ""
+  <I>&lt;provider_login&gt;</I>  <I>&lt;2nd provider&gt;</I>      <I>&lt;password&gt;</I>
+  <I>&lt;2nd provider&gt;</I>     <I>&lt;provider_login&gt;</I>   ""
+</PRE>
+
+Don't forget to secure it with <TT>chmod 600 /etc/ppp/chap-secrets</TT>!
+
+
+<H3>Some Polish</H3>
+
+Now you should bend the PPP log to an extra file for debugging.
+Therefore you should edit <TT>/etc/syslog.conf</TT> and add the following line
+(remark: use only tabulator characters, <I>no spaces!</I>):
+
+<PRE>
+  daemon.*                      /var/log/ppp-log
+</PRE>
+
+With this all the stuff the PPP daemon tells is saved to /var/log/ppp-log.
+<P>
+
+<H2>Running</H2>
+
+The system sometimes likes to connect more or less without any motivation
+to the provider. This is because of the nature of the system: If there is any
+IP packet (e.g. a name server request) Linux wants to get rid of it. Because 
+this costs money we must switch it off. You could do it by deleting the
+default route, so that Linux now doesn't know any longer the way out.
+<P>
+
+The newer kernels since 1.3.100 have a something painful behavior: they
+set the default route automatically when a interface is defined. To 
+prevent collisions you need to wait until a connect is <I>completely</I> 
+built up (dialing, PPP handshake) before setting the default route.
+The following script does this. It is written so that you may call it
+more than once, so the first application (e.g. exchanging email) makes
+the connect, and the next applications don't need to open more lines. The
+last application cleans up: it hangs up and deletes the default route.
+Call this script as <TT>/sbin/connect on</TT> und <TT>/sbin/connect off</TT>.
+Here's only a very short example; you can load down a very sophisticated
+script by clicking onto the headline.
+<P>
+
+Put the script to /sbin and make it executable (route may be called only by 
+"root"!):
+<PRE>
+  root:# chmod 744 /sbin/connect
+  root:# _
+</PRE>
+
+<PRE>
+<B><A HREF="scripts/connect">/sbin/connect</A></B>
+  #! /bin/bash
+
+  PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+  #  ISDN4Linux:
+
+  case $1 in
+    on)
+      isdnctrl dial ippp0       #  connect
+      sleep 5                   #  wait until open
+      route add default ippp0   #  set route
+      ;;
+    off)
+      isdnctrl hangup ippp0     #  disconnect
+      route del default         #  and delete route
+      ;;
+    *)
+      echo -e "\a Usage: 'isdn on' or 'isdn off'"
+      ;;
+  esac
+
+  # Modem:
+
+  IF_FILE=/var/lib/connect/interface
+  case $1 in
+    on)
+      pppd connect "chat $CHAT_SCRIPT" file $OPTIONS_FILE /dev/$DEVICE &
+      # the interface name was saved now by /etc/ppp/ip-up in IF_FILE.
+      sleep 1
+      echo "Sleeping 40 seconds for establishing connection..."
+      sleep 40
+      read INTERFACE &lt;$IF_FILE
+      route add default $INTERFACE
+      ;;
+    off)
+      kill -HUP `cat /var/lock/LCK..$DEVICE`
+      route del default
+      ;;
+  esac
+</PRE>
+
+Some people must edit the PATH in this script!
+<P>
+
+For modem usage INTERFACE must be retrieved with a trick: while startup of
+pppd the script <TT>/etc/ppp/ip-up</TT> is called with these arguments:
+<PRE>
+  ip-up interface device speed local_address remote_address
+</PRE>
+And we use that. We create a file ip-up:
+<PRE>
+<A HREF="scripts/ip-up"><B>/etc/ppp/ip-up</B></A>
+#!/bin/bash
+# This script is called by (i)pppd while starting up.
+# It is called this way:
+#   ip-up interface device speed local_address remote_address.
+#   So you can get the used interface by fetching $1
+echo $1 >/tmp/connect_interface.tmp
+</PRE>
+And so we have saved the interface name!
+<P>
+
+<B>Hints for more experiments:</B>
+<UL>
+<LI>The "isdnctrl dial ippp0" makes the connection - from there on it costs 
+your money. We prevent connection failures this way because the system can
+hang after the connect took place (may be an error in ipppd). These hangs may 
+appear if the system must dial <I>after</I> the connect command (telnet etc.).
+<LI>It is also important that you set the default route <I>after</I> 
+completion of the connect. Otherways the kernel kills the route too early
+and sends messages like "<TT>network not reachable</TT>", if you want to
+connect to another computer.
+</UL>
+<P>
+
+<B>Test:</B>
+<PRE>
+  root:# connect
+  Calling ippp0
+  Dialing of ippp0 triggered
+  Sleeping 8 sec for PPP handshaking...
+  Line open - checking...
+  :-) Line is ok - have fun!
+  root:# telnet sun3
+  [...]
+</PRE>
+(now log in as usual; later type in "exit" to finish)
+<PRE>
+  root:# connect off
+  Last application stopped - closing line.
+  prov0 hung up
+  prov1 already closed! To force closing use "connect off all"
+  root:# _
+</PRE>
+</PRE>
+
+
+<H2>What can "connect" do?</H2>
+
+You just learned about the first two possibilities:
+<PRE>
+"connect" (or "connect on")        connect default remote
+"connect off"                      disconnect
+</PRE>
+Important command:
+<PRE>
+"connect off all"                  disconnects <I>all</I> channels
+</PRE>
+It is easy to connect to other remotes:
+<PRE>
+"connect <I>remote1</I> (on)"             connect to <I>remote1</I>
+"connect <I>remote1</I> off"              and disconnect from it
+</PRE>
+If you enter more than one remotes in the command line, one after another
+will be tried, until a connection establishes.
+<PRE>
+"connect <I>remote1</I> <I>remote2</I> <I>remote3</I> ..."
+</PRE>
+You also may build more than one connection at the same time. Of course
+it is nonsense to set the defaultroute more than one time; you need to
+set special routes for each remote:
+<PRE>
+"connect <I>remote1</I> route <I>Netz-IP</I>"    connect via route
+"connect <I>remote2</I> route default"    connect via defaultroute
+</PRE>
+The route must match the remote! You don't really need "route default.
+<P>
+If the dial-in ports of your provider are heavily loaded, you may want to
+have a maximum number of dial attempts:
+<PRE>
+"connect <I>remote1</I> maxtries <I>number</I>"       
+</PRE>
+If you don't enter a "<TT>maxtries</TT>" the default value is taken from
+<TT>/usr/lib/connect/base</TT>.
+<P>
+And this is similar:
+<PRE>
+"connect <I>remote1</I> device ttyS<I>n</I>"       
+</PRE>
+So you tell "connect" where your modem is connected, if you want to use a 
+modem. If you don't enter a "<TT>device</TT>" the default device is taken from
+<TT>/usr/lib/connect/base</TT>.
+
+
+<H2>More Utilities</H2>
+
+There are some more very useful tools within the ISDN4Linux package.
+One is the X program "isdnmon" by Andreas Kool, wich shows the actual state
+of the S<SUB>0</SUB> bus (free or connected). Michael Knigge's "imon" does the
+same in terminals. Also very useful is "isdnlog" by Andreas Kool, which gives
+information about the S0 bus activity. With "imontty" by Volker Goetz you can
+get a print-out of the ISDN card activity - very useful for scripts!
+<P>
+
+Have a look at the README by Fritz Elfert.
+
+<P>
+<HR>
+<ADDRESS>
+<A HREF="http://www.chemie.uni-muenchen.de/ac/boehm/beh.html">Bernhard Hailer</A><BR>
+Last modification: 24-Feb-97 BeH
+</ADDRESS>
+
+</BODY>
+</HTML>
+
+
+
+
+

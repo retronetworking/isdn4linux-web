@@ -1,0 +1,637 @@
+<HTML>
+<HEAD>
+<TITLE>
+News
+</TITLE>
+<!-- Changed by: Bernhard Hailer, 21-Feb-1997 -->
+</HEAD>
+
+<BODY>
+<H1>
+<P ALIGN=CENTER>
+<IMG SRC="enews.gif" ALT="Linux">
+<!IMG SRC="linux.gif" ALT="Linux">
+<!IMG SRC="isdn.gif"  ALT="ISDN">
+<BR>
+ <FONT SIZE=+3>Tap the Usenet</FONT>
+</P>
+</H1>
+
+<HR>
+
+<FONT SIZE=+3><B>T</B></FONT>he
+Usenet offers lots of information - I wouldn't like it to miss some of them.
+<P>
+
+A powerful package is Rich $alz's "InterNetNews", say INN.
+It isn't easy to master the INN. Who made the <TT>sendmail</TT> 
+may be happy: it becomes more difficult...!
+<P>
+
+INN would be able to fetch and send news by itself, but we will get some
+cooperation from a more intelligent package: <TT>newsflash</TT> and
+<TT>postit</TT>.
+<P>
+
+Again I'll describe it depending on the S.u.S.E. 4.2 Linux distribution.
+Here INN is easily installable in the <TT>/usr/lib/news</TT> directory 
+(with the "YaST" tool). By the way you can find here a (sorry, not very 
+useful) overview: <TT>/usr/lib/news/README.linux</TT>, and INN is pre-installed
+(if marked in YaST), but all the Documentation is missing. You can get the
+documentation, if you send an email to
+<A HREF="mailto:majordomo@warren.mentorg.com">majordomo@warren.mentorg.com</A>
+<PRE>
+  Subject: <I>empty</I>
+  sendme faq-inn-1
+  sendme faq-inn-2
+  sendme faq-inn-3
+</PRE>
+Then you will receive a long FAQ describing how INN works and how to fix
+many problems. You also should read the tutorial (in German language)
+<A HREF="ftp://pople.pc.uni-koeln.de/pub/news-0.3.ps">news-0.3.ps</A> 
+by <A HREF="mailto:m.dickebohm@uni-koeln.de">Markus Dickebohm</A>.
+It describes in a very good way how to install a <TT>INN/newsflash/postit</TT>
+system. Have a look at this server: Maybe there are newer tutorials available.
+And you could also load down the packages <TT>newsflash</TT> and
+<TT>postit</TT> (see below: "Give and Take").
+<P>
+
+
+<H2>InterNetNews</H2>
+
+The first thing we will install is INN. A properly installed 
+<TT>sendmail</TT> is required. 
+
+
+<H3>Preworking</H3>
+
+The INN daemon <TT>innd</TT> does not like any other program listening at the 
+news port, and there may be a line in <TT>/etc/inetd.conf</TT> causing
+a fatal error:
+<PRE>
+  nntp stream tcp  nowait root  /usr/sbin/tcpd /usr/sbin/in.nntpd
+</PRE>
+You must add a "#" in the first column to make it a comment, otherwise 
+<TT>innd</TT> will not start (I needed several days to notice that).
+INN does not run together with C News or any other news daemon, too.
+It isn't necessary, by the way.
+<P>
+
+There is one thing you also should do. If INN does not like something it
+writes an email to "<TT>usenet@localhost</TT>". You must tell your system
+that "usenet" is a user of your system - some other mail addresses too.
+You do it by editing <TT>/etc/aliases</TT>. Add the following lines (perhaps 
+you have to create a new file):
+
+<PRE>
+<B>/etc/aliases</B>  
+  news: root
+  newsadm: news
+  newsadmin: news
+  usenet: news
+</PRE>
+
+Type in to tell sendmail the new aliases:
+
+<PRE>
+  root:# newaliases
+  root:# _
+</PRE>
+
+Now all emails concerning your Usenet system come to <TT>root</TT>.
+<P>
+
+But before we start configuring INN we have to edit the file 
+<TT>/etc/hosts</TT> and to insert one entry for the news server. Take the
+address from the <A HREF="scripts/i4l.config.db">database</A> or call the 
+provider's hotline. Add:
+
+<PRE>
+<B>/etc/hosts</B> (cutting)
+  <I>&lt;IP address&gt;</I>  <I>&lt;name_of_mail_server&gt;</I>    getmail
+</PRE>
+<P>
+
+
+<H3>INN configuration files</H3>
+
+There are some configuration files required.
+
+<PRE>
+<B>/var/lib/news/inn.conf</B>  (Slackware: /usr/lib/news/inn.conf)
+  # Basic installation of INN
+  server:	<I>your.computer</I>
+  organization:	<I>as you like</I>
+  fromhost:     <I>Email_adresse@Host.Computer</I> # for posting header
+</PRE>
+
+Thomas Schoepf &lt;schoepf@informatik.tu-muenchen.de&gt; wrote me: 
+if there appears a error message like <TT>ME: cant GetConfigValue 
+pathhost...</TT> while starting INN, you should add the line 
+<TT>pathhost: <I>&lt;Host.Fuer.News.Path&gt;</I></TT>.
+
+<PRE>
+
+<B>/var/lib/news/hosts.nntp</B> (Slackware: /usr/lib/news/hosts.nntp) 
+  # Which site feeds our newsreader?
+  localhost:
+  <I>Rechner.name</I>:
+
+<B>/var/lib/news/nnrp.access</B> (Slackware: /usr/lib/news/nnrp.access)
+  # Which computers may tap us?
+  localhost:Read Post:::*
+  (none):Read Post:::*
+  <I>your.computer</I>:Read Post:::*
+
+<B>/var/lib/news/newsfeeds</B> (Slackware: /usr/lib/news/newsfeeds)
+  # Where do the news go?
+  # We don't feed our news to anywhere.
+  ME\
+          :*::
+  # for NOV database
+  @overview:*:Tc,WO:/usr/lib/news/bin/overchan
+  # Feed the LRZ with all we have:
+  get/getlist\
+          :*:Ap,Tf,Wnm:get
+</PRE>
+
+Please refer to the INN documentation for more information.
+<TT><I>providername</I></TT> is the name the provider writes into the news
+header in the "Path:" line. You must exacltly write it the way your provider 
+does. If you don't the article negotiation will take much more time.
+<P>
+
+There are some files missing, which can be fetched from the news server.
+Therefore you could use the script <TT>getlist</TT>, which should be part
+of the INN package. If not, load it via ftp:
+<PRE>
+<A HREF="ftp://unix.hensa.ac.uk/mirrors/yggdrasil.fall95.disk1/usr/lib/news/bin/getlist">unix.hensa.ac.uk/mirrors/yggdrasil.fall95.disk1/usr/lib/news/bin/getlist</A>.
+</PRE> 
+Store it in <TT>/usr/lib/news/bin</TT> and make it executable:
+"<TT>chmod news getlist</TT>".
+<P>
+
+So you can load two files from <TT>lrznews</TT> using <TT>getlist</TT>:
+<PRE>
+  root:# /usr/lib/news/bin/getlist -h getnews active &gt;/var/lib/news/active.raw
+  root:# /usr/lib/news/bin/getlist -h getnews newsgroups &gt;/var/lib/news/newsgroups
+  root:# _
+</PRE>
+If you have the Slackware distribution change <TT>/var/lib/news</TT> against
+<TT>/usr/lib/news</TT>.
+<P>
+
+<BLOCKQUOTE>
+<FONT SIZE=-1>
+You even could manage this manually (without "getlist") using telnet:
+<PRE>
+  root: # telnet getnews 119 >/var/lib/news/active.raw
+<I>now wait 10 sec. - *no* prompt appears!</I>
+  list active
+<I>wait again a few seconds</I>
+  quit
+<I>wait until your own prompt appears (takes some time):</I>
+  root: # telnet getnews 119 >/var/lib/news/newsgroups
+<I>now wait 10 sec. - *no* prompt appears!</I>
+  list newsgroups
+<I>wait again a few seconds</I>
+  quit
+<I>wait until your own prompt appears (takes some time):</I>
+  root: # _
+</PRE>
+</FONT>
+</BLOCKQUOTE>
+
+The fresh file <TT>active</TT> must be edited now. In it you find all the
+subsribable Usenet groups and the actual posting numbers. <B>Warning:</B> 
+this file is sensitive. It does not like any changes (words per line, number
+of white spaces or number of digits)! You may not change anything except
+the things we discuss here!!!
+<P>
+
+You should do now two things. First, set all posting numbers zo zero.
+Do it this way:
+<PRE>
+  root:# cd /var/lib/news           # Slackware: /usr/lib/news
+  root:# sed 's/ [0-9]* [0-9]* / 0000000000 0000000001 /' active.raw > active
+  root:# _
+</PRE>
+Second, look if there are entries for the following newsgroups. If they are 
+missing add them now.
+<PRE>
+  to 0000000000 0000000001 y
+  junk 0000000000 0000000001 y
+  control 0000000000 0000000001 y
+</PRE>
+
+
+<H3>Polish</H3>
+
+I found some errors the hard way. INN needs total access to the whole
+directory <TT>/var/run</TT>:
+<PRE>
+  root:# chown root.root /var/run   # (not root.uucp!)
+  root:# _
+</PRE>
+(perhaps you need to play something with the access bits)
+<P>
+
+For testing look into <TT>/var/spool/news</TT> whether the directories
+<TT>in.coming, news.archive, out.going</TT> and <TT>over.view</TT> are
+present - if not, create them using <TT>mkdir</TT>!
+<P>
+
+Finally you must give all files in <TT>/var/lib/news</TT> (Slackware: 
+<TT>/usr/lib/news</TT> and in <TT>/var/spool/news</TT> the user <TT>news</TT>:
+<PRE>
+  root:# chown -R news.news /usr/lib/news/*    # for Slackware only this one
+  root:# chown -R news.news /var/lib/news/*    # if present
+  root:# chown -R news.news /var/spool/news/*  # if present
+  root:# _
+</PRE>
+
+For basic installation call now some assisting programs:
+<TT>makehistory</TT> and <TT>news.daily</TT>. Do it as user <TT>news</TT> 
+(important!):
+
+<PRE>
+  root# cd /
+  root# su news -c "/usr/lib/news/bin/makehistory -o"
+  root# su news -c "/usr/lib/news/bin/news.daily"
+  root# _
+</PRE>
+
+
+<H3>The Big Question: Does it Work?</H3>
+
+A test start:
+<PRE>
+  root:# /usr/lib/news/etc/rc.news
+  Starting innd.
+  root:# telnet localhost 119
+  Trying 127.0.0.1...
+  Connected to localhost.
+  Escape character is '^]'.
+  200 <I>my.computer</I> InterNetNews NNRP server INN <I>version date</I> ready (posting ok).
+  <I><B>no</B> prompt appears!</I>
+</PRE>
+
+If this message appears you may breath deeply and say loudly "uff!!!".
+You can escape here typing in <TT>quit</TT>.
+<P>
+
+If the message does not appear, sorry: you need to find the bug, and this may
+take some time. Let the INN-FAQ help you. Perhaps INN could send you an email
+to "<TT>usenet</TT>" - respectively "<TT>root</TT>", in which you may read what
+happened. If there is no mail perhaps you can find some hints in the 
+<TT>syslog</TT>, in <TT>/var/log/messages</TT> or in the log files in 
+<TT>/var/lib/news/log</TT>.
+<P>
+
+The INN installation made some gray hairs onto my head and took more than
+one month time. I tried to tell you all the mistake possibilities, but I feel
+I could not cover all of them. The INN is not very cooperative while
+debugging... But I think I could help you in most cases
+
+
+<H3>Start-up of the System</H3>
+
+The INN is started while system start in rc.news. You must include it in
+the start-up sequence.
+<P>
+
+Again we have the possibls cases <TT>sinpleinit</TT> or <TT>sysvinit</TT>.
+<P>
+
+
+<H4>simpleinit (e.g. Slackware)</H4>
+
+In <TT>/etc/rc.d/rc.M</TT> we define a new file:
+<PRE>
+<B>/etc/rc.d/rc.M; Sektion "# Initialize the NET subsystem."</B>
+  . /etc/rc.d/rc.inet1
+  . /etc/rc.d/rc.isdn       
+  . /etc/rc.d/rc.inet2
+  . /usr/lib/news/etc/rc.news   # &lt;-- add this line!
+</PRE>
+You also must find the file which is called while system reboot (often this is
+<TT>/etc/rc.d/rc.6</TT>). Here you should add before the shutdown commands:
+<PRE>
+<B>/etc/rc.d/rc.6</B>
+  echo -n "Shutting down NNTP port:"
+  /usr/lib/news/bin/ctlinnd throttle "shutdown"
+  /usr/lib/news/bin/ctlinnd shutdown "shutdown"
+  <I>[more shutdown commands]</I>
+</PRE>
+If you don't some (harmless) error messages appear while shutdown.
+<P>
+
+
+<H4>sysvinit (z.B. S.u.S.E, Caldera, Red Hat...)</H4>
+
+If you have sysvinit (like S.u.S.E. 4.2) it is a bit more complicated.
+First, create a start/stop file:
+<PRE>
+<B>/sbin/init.d/news</B> # (Red Hat: /etc/rc.d/news)
+  #! /bin/sh
+  # Author: Bernhard Hailer &lt;dl4mhk@lrz.uni-muenchen.de&gt;, 24-Jun-96
+  # /sbin/init.d/news
+  case "$1" in
+    start)  
+      echo "Initializing NNTP port. (INN)"
+      /usr/lib/news/etc/rc.news       #  rc.news wird beim INN mitgeliefert
+      ;;
+    stop) 
+      echo -n "Shutting down NNTP port:"
+      /usr/lib/news/bin/ctlinnd throttle "shutdown"
+      /usr/lib/news/bin/ctlinnd shutdown "shutdown"
+      ;;  
+    *)
+      echo "Usage: $0 {start|stop}"
+      exit 1
+  esac
+  exit 0
+</PRE>
+You must set some soft links, because the system needs to know which files
+have to be executed while starting or stopping:
+<PRE>
+  root:# cd /sbin/init.d/rc2.d  #  There are other path definitions
+  root:# ln -s ../news K20news  #  in other Linux distributions!
+  root:# ln -s ../news S20news
+  root:# _
+</PRE>
+Now while booting the INN start-up should appear on the screen - together
+with the sendmail daemon. Also while shutdown some messages should appear.
+
+
+<H3>Daily Work</H3>
+
+The file <TT>news.daily</TT> we used above should be called daily - if not,
+INN will mail some reproaches to the user <TT>usenet</TT>. And therefore
+we create a small crontab entry for the user <TT>news</TT>, who should
+be the only user allowed to execute this script:
+<PRE>
+<B>/var/cron/tabs/news</B> # (perhaps /var/spool/cron/crontabs/news)
+  PATH=/usr/lib/news/bin:/usr/lib/news/etc:/usr/lib/news:/usr/bin:/usr/sbin
+  10 07 * * * /usr/lib/news/bin/news.daily 
+</PRE>
+We tell this now <TT>crond</TT>:
+<PRE>
+  root:# chown news.news /var/cron/tabs/news
+  root:# crontab -u news /var/cron/tabs/news
+  root:# _
+</PRE>
+Now the script should be called every day at 07:10 a.m.
+<P>
+
+<TT>news.daily</TT> does the cleaning and garbage collecting. Old news
+postings will be erased, and some old log files and so on will be deleted, 
+too. There are two control files which may be interesting:
+
+<PRE>
+<B>/var/lib/news/expire.ctl</B>  # Slackware: /usr/lib/news/expire.ctl
+  # If posting is erased we will remember its ID 14 days, because
+  # we don't want to receive it again:
+  /remember/:14
+  # (A)ll postings will be kept min. 3, regularly 10 and max. 30 days
+  # (min. and max., if an expire date is set in the posting)
+  *:A:3:10:30
+  # some special newsgroups may remain much shorter:
+  junk:A:1:1:2
+  control:A:1:1:2
+
+<B>/var/lib/news/control.ctl</B>  # Slackware: /usr/lib/news/control.ctl
+  # preset: if INN wants to tell something it has to mail it to admin.
+  all:*:*:mail
+</PRE>
+
+
+<H2>Give and Take</H2>
+
+To operate posting and polling some software packages exist, which are able to
+cooperate with INN, like <TT>newsflash+postit</TT> by Chris Blum or 
+<TT>suck+rpost</TT> by Tim Smith. INN also has some scripts on board which
+could do it. But the NNTP handshake is very complicated, and the telephone
+connection should be used very effectively, it is a good choice to take a more
+intelligent package.
+<P>
+
+The program <TT>suck</TT> is more known, but I choosed the (very compact)
+programs by Chris Blum, because they are highly configurable. They use
+the telephone line very efficiently, because they open more than one 
+connection to the news server. So, while the news server may create a news
+packet, there may take place some discussions about the next packet at the
+same time.
+<P>
+
+Load these programs down using ftp at
+<PRE>
+  <A HREF="ftp://pople.pc.uni-koeln.de/pub/newsflash-0.99.tgz">pople.pc.uni-koeln.de/pub/newsflash-0.99.tgz</A>
+  <A HREF="ftp://pople.pc.uni-koeln.de/pub/postit-jun96.tar.gz">pople.pc.uni-koeln.de/pub/postit-jun96.tar.gz</A> 
+</PRE>
+(please look if there are newer versions!) Store it in the directory
+<TT>/usr/src</TT> and extract them:
+<PRE>
+  root:# tar zxfv newsflash-0.99.tgz
+  root:# tar zxfv postit-jun96.tar.gz
+  root:# _
+</PRE>
+
+
+<H4>Installation of <TT>newsflash</TT></H4>
+
+Newsflash fetches some choosed newsgroups (the ones not existing yet at home).
+<P>
+
+Before compilation you should edit <TT>/usr/src/newsflash/config.h</TT> 
+and set the path variables correctly for your system (<TT>/var/lib/news</TT> 
+or <TT>/usr/lib/news/newsflash</TT> for Slackware). Then:
+<PRE>
+  root:# cd /usr/src/newsflash
+  root:# make dep
+  ...
+  root:# make
+  ...
+  root:# cp newsflash /usr/lib/news/bin
+  root:# cp printdate /usr/lib/news/bin
+  root:# _  
+</PRE>
+
+<TT>newsflash</TT> needs to know which newsgroups it shall retrieve, so
+you must tell this in a file: it contains the files listing the desired
+groups:
+<PRE>
+<B>/var/lib/news/serverlist</B> # or path defined in <TT>config.h</TT>!
+  get1 getnews 119 /var/lib/news/packet1 <I>timestamp</I>
+  get2 getnews 119 /var/lib/news/packet2 <I>timestamp</I>
+  get3 getnews 119 /var/lib/news/packet3 <I>timestamp</I>
+  get4 getnews 119 /var/lib/news/packet4 <I>timestamp</I>
+</PRE>
+
+Here four packets are executed, all aim at the news server of the provider.
+The first word is an ID string, the second is the server defined in 
+/etc/hosts, 119 is the standard news port. The packet description follows,
+and the last number is a timestamp. You can calculate an active timestamp
+using the program <TT>printdate</TT> (included in the newsflash package);
+the produced 9 digit number tells us how many seconds are gone since
+January 1st at midnight. To retrieve the new news since the last two days
+you should subtract about 150000 or so (one day are 86400 seconds) and 
+type in the result as timestamp.
+<P>
+
+Now we must prepare the packet files we defined above. Newsflash can
+optimize very good the data transmission parallelizing more than one
+packet. Here we tell it how to execute the transmission:
+
+<PRE>
+<B>/var/lib/news/packet1</TT>  # Slackware: /usr/lib/news/newsflash/packet1
+  de.comm.isdn
+  fido.ger.isdn
+  de.comp.os.linux.networking
+
+<B>/var/lib/news/packet2</TT>  # Slackware: /usr/lib/news/newsflash/packet2
+  de.comp.os.linux.networking
+  fido.ger.isdn
+  de.comm.isdn
+
+<B>/var/lib/news/packet3</TT>  # Slackware: /usr/lib/news/newsflash/packet3
+  de.comp.os.linux.misc
+  de.comp.os.linux.hardware
+  de.comp.os.linux.x
+  lrz.*
+
+<B>/var/lib/news/packet4</TT>  # Slackware: /usr/lib/news/newsflash/packet4
+  lrz.*
+  de.comp.os.linux.x
+  de.comp.os.linux.hardware
+  de.comp.os.linux.misc
+</PRE>
+
+As you see the packets 1/2 and 3/4 have the same contents, but in reverse
+order. So one packet is executed from both ends, and the transmission is
+optimized. The packets should have the same estimated number of postings.
+
+
+<H4>Installation of <TT>postit</TT></H4>
+
+Again here: before compilation you should edit 
+<TT>/usr/src/postit/config.h</TT> and correct the defined paths there
+(<TT>/var/spool/news</TT>). Most times this file should be ok.
+<PRE>
+  root:# cd /usr/src/postit
+  root:# make dep
+  ...
+  root:# make
+  ...
+  root:# cp postit /usr/lib/news/bin
+  root:# cp samples/sendnews /usr/lib/news/bin
+  root:# _  
+</PRE>
+
+The last file we copied here (<TT>/usr/lib/news/bin/sendnews</TT> ) must be
+edited:
+<PRE>
+<B>/usr/lib/news/bin/sendnews</B>
+  SPOOLPATH=/var/spool/news
+  OUTGOING=${SPOOLPATH}/out.going
+  BINPATH=/usr/lib/news/bin
+
+  ${BINPATH}/ctlinnd flush get
+  mv ${OUTGOING}/get ${OUTGOING}/get.postit
+  ${BINPATH}/ctlinnd begin get
+  ${BINPATH}/postit get.postit getnews
+</PRE>
+
+
+<H3>Another Big Question: Working Anyway?</H3>
+
+If you call now <TT>newsflash</TT> the telephone wire should get hot now for
+some minutes. You should be able to see what's going on on your console.
+The messages may seem to be mis-ordered, because the process is parallelized.
+<P>
+
+If it does not work, you must look for the bug. Read the README. In most
+cases you need to edit again one of the files <TT>hosts.nntp, nnrp.access, 
+newsfeeds</TT> etc. and play with the entries.
+<P>
+
+If it works you can read now the news groups with a news reader like
+ <TT>nn, tin</TT> or Netscape).
+<P>
+
+To fetch the news automatically you may use the following script, which is 
+very similar to the email fetcher script.
+<PRE>
+<B><A HREF="scripts/transnews">/sbin/transnews</A></B>
+  #!/bin/sh 
+  # transnews: gets and sends usenet news.
+  # Author:    Bernhard Hailer &lt;dl4mhk@lrz.uni-muenchen.de&gt;
+  # Version:   4.0 (27-Jan-97)
+
+  PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+  . /etc/i4l.provider
+  . /etc/i4l.secrets
+
+  cd /                                # against PATH=. effect 
+
+  echo -----------------------------------------------------------------------
+  echo -e "Starting news transfer: \c"; date
+
+  . /sbin/connect on
+
+  echo "Checking news server..."
+  set `ping -qc5 -i1 getnews | grep transmitted`
+  if [ $4 -gt 0 ];
+  then
+    echo "8-) News server online - starting news poll"  
+    echo "Sending news..."
+    su news -c "/usr/lib/news/bin/sendnews"
+    echo "Again sleeping 1 sec for PPP handshaking"
+    sleep 1
+    echo "Fetching news..."
+    su news -c "/usr/lib/news/bin/newsflash -v"    
+    echo "Again sleeping 1 sec for PPP handshaking"
+    sleep 1
+  else
+    echo ":-[ Sorry - news server is down. Try later..."
+  fi
+
+  . /sbin/isdn off
+
+  echo -e "Finished news transfer: \c"; date 
+</PRE>
+
+
+<H2>Does Your Computer Run All the Time?</H2>
+
+Yes? Then you should edit the <TT>crontab</TT> of <TT>root</TT> and add the
+following:
+<PRE>
+  # Transfer news every night at 04:29 a.m.
+  29 04 * * *       /sbin/transnews 1>> /var/log/news-log 2>> /var/log/news-log
+</PRE>
+As described in the email chapter cron must be called with the new crontab
+now. The script scould be started one minute before the email transfer starts 
+(not at the same time!!), so perhaps one tariff unit can be saved.
+If you would start the transfer at the same time, one of the applications
+would see a open line where no one is (opening a line takes some time).
+The connection would be interrupted. 
+<P>
+
+<HR>
+<P>
+
+Have Fun in the Usenet!!
+<P>
+
+<P>
+<HR>
+<ADDRESS>
+<A HREF="gnulis_e.html"  TARGET=Main>Copyright &#169; (GPL V 2)</A> 1996 
+<A HREF="http://www.chemie.uni-muenchen.de/ac/boehm/beh.html">Bernhard Hailer</A><BR>
+Last modification: 20-Feb-97
+</ADDRESS>
+
+</BODY>
+</HTML>

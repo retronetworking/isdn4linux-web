@@ -1,0 +1,37 @@
+  #!/bin/sh 
+  # transnews: connects to a free Ascend server of the LRZ.
+  # Author:    Bernhard Hailer <dl4mhk@lrz.uni-muenchen.de>
+  # Version:   4.0 (29-Dec-96)
+
+  PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+  . /etc/connect.provider
+  . /etc/connect.secrets
+
+  cd /                                # against PATH=. effect 
+
+  echo -----------------------------------------------------------------------
+  echo -e "Starting news transfer: \c"; date
+
+  . /sbin/connect on
+
+  echo "Checking news server..."
+  set `ping -qc3 -i1 getnews | grep transmitted`
+  if [ $4 -gt 0 ];
+  then
+    echo "8-) News server online - starting news poll"  
+    echo "Sending news..."
+    su news -c "/usr/lib/news/bin/sendnews"
+    echo "Again sleeping 1 sec for PPP handshaking"
+    sleep 1
+    echo "Fetching news..."
+    su news -c "/usr/lib/news/bin/newsflash -v"    
+    echo "Again sleeping 1 sec for PPP handshaking"
+    sleep 1
+  else
+    echo ":-[ Sorry - news server is down. Try later..."
+  fi
+
+  . /sbin/connect off
+
+  echo -e "Finished news transfer: \c"; date 

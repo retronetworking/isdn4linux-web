@@ -1,0 +1,218 @@
+connect V 0.99.1 - the new script package for the "leafsite" tutorial
+#####################################################################
+
+Bernhard Hailer <dl4mhk@lrz.uni-muenchen.de>             27-Jan-96
+
+License
+-------
+
+Like the "leafsite" package this package is protected by the
+GNU General Public License V2 ("GPL"). To learn about this license
+please have a look at "leafsite" - go to
+
+  http://www.lrz-muenchen.de/~ui161ab/www/isdn/
+
+and click at the license link. Or look at the file COPYING, which came with
+this package. There is NO GUARANTEE!
+
+
+Introduction
+------------
+
+"connect" replaces the "isdn" package, which was described in earlier
+versions of the "leafsite" tutorial at
+
+  http://www.lrz-muenchen.de/~ui161ab/www/isdn/
+
+Here you will find now the *new* tutorial.
+
+Features of the "connect" package:
+
+* "connect" can handle now modem/asyncPPP *and* isdn4linux syncPPP.
+* It is possible now to open more than one physical line, with
+  special routes for each channel.
+* You can define now how often connect shall try to dial-in.
+* You may define as many remotes as you like.
+
+
+Installation
+------------
+
+0.) If you have used the old "isdn" package before, stop the isdn system
+    using
+      <startup_path>/i4l stop
+    (<startup_path> is the path, where all the system bootup files are 
+    located). 
+    Then remove (or save, if you like) some old files:
+      rm <startup_path>/i4l (if you use a newer SuSE distribution)
+      rm <startup_path>/rc.isdn
+      rm /sbin/isdn
+      rm /etc/i4l.provider (or /etc/i4l.config, if older "isdn" version)
+      rm /etc/i4l.secrets  (or /etc/i4l.param, if older "isdn" version)
+
+1.) Create some directories:
+      mkdir /usr/lib/connect
+      mkdir /usr/lib/connect/providers
+      mkdir /var/lib/connect
+
+2.) Prepare base file: 
+    Take file "base" from this archive, edit it and save it as 
+      /usr/lib/connect/base
+    (this file is self-explaining).
+
+3.) Prepare startup file:
+    Take file "rc.connect" from this archive, edit it and save it as 
+      <startup_path>/rc.connect
+    (also self-explaining). Include it into your sysvinit or simpleinit 
+    environment - read the comments in rc.config. For newer SuSE distributions
+    you have to move the file to /sbin/init.d and to set a link:
+      ln -s i4l rc.connect
+
+4.) Now create a file for each provider and each dial-in number. For
+    asyncPPP connections (modems!) take the template "prov-a1", for 
+    syncPPP connections (isdn4linux) take "prov-d1"; edit each file
+    and store it in /usr/lib/connect/providers.
+    Example: If you have two providers, one offering two ISDN syncPPP
+             dial-in numbers, the other offering analogous connections
+             and one dial-in port, you have to write three files, say
+             prov1-d1, prov1-d2 and prov2-a1.
+    Use the template files, they are self-explaining. Name it as you
+    like, but don't use on, off, all, maxtries, status, route, device, 
+    or help as name.
+
+5.) pppd and ipppd need some configuration files. Save the files
+    options and ip-up to /etc/ppp. Edit them, if necessary. 
+    There also are special options for each provider needed, and also a 
+    chap-secrets or pap-secrets file for each provider - this depends on how
+    the provider wants an authentication from you.
+    Example: If you have the providers described one item before, you should
+             define in the according provider files (see above) the
+             options files "options.ipppd.prov1" for the first provider
+             and his two dial-in ports, and "options.pppd.prov2 for the
+             second provider.
+    For authentication you must write a file /etc/ppp/pap-secrets (or 
+    /etc/ppp/chap-secrets):
+      # Secrets for authentification using PAP
+      # client          server          secret          IP addresses
+      <provider_login>  <1. Provider>   '<password>'    -
+      <provider_login>  <2. Provider>   '<password>'    -
+
+6.) Now start up the new system using
+      <startup_path>/rc.connect start
+    (or, if you have a simpleinit system, by calling rc.connect without an 
+    argument). A new file is created: /var/lib/connect/status. It is the 
+    main data file containing all information about running connections. It 
+    will be removed while shutdown of connect (and shutdown of your Linux 
+    machine, of course).
+
+7.) Copy the shell script "connect" from this archive to /sbin and make it 
+    executable (as root):
+      cp ./connect /sbin
+      chmod 744 /sbin/connect
+
+8.) If you have the scripts "/sbin/transmail" and "/sbin/transnews" version 
+    3.3 or older, you must exchange them against the new ones in this archive.
+
+9.) You should have now a running "connect" environment :-)
+
+
+Using connect
+-------------
+
+Now it is simple to open a connection to any remote defined in the
+/usr/lib/connect/providers directory. For default remotes defined
+in /usr/lib/connect/base just type in
+
+  connect       (or "connect on" - it's the same)
+
+and the system will dial - via isdn4linux, or via modem, as defined.
+Remark: While one connect is running, a lock file is active: 
+/var/lock/connect..LCK. If connect detects a valid lockfile (i.e. there
+really is a job running with the PID defined in /var/lock/connect..LCK),
+it waits 30 seconds and tries again.
+
+To close the channel type in
+
+  connect off
+
+and the default remotes will hang up.
+
+To prepare a connection to a remote not defined as default, type in
+
+  connect <remote> [on]  (you don't need the "on" really)
+
+where <remote> is the name of the file in /usr/lib/connect/providers/,
+which describes the remote. To close it type:
+
+  connect <remote> off
+
+If you want to hangup all channels type in
+
+  connect off all
+
+This forces hangup of all channels defined in /usr/lib/connect/providers/.
+
+To open more than one channel at the same time you must use other routes
+than default, because the default route may exist only one time (the system
+removes all default routes, only the last one will survive). So you need
+to tell connect then, which IP's route through it:
+
+  connect <prov-a1> route a.b.c.0
+
+(of course the route must fit to the remote IP: e.g. if the remote has
+the IP 123.234.231.124, you may use the route 123.234.0.0, but not 
+198.76.154.0 or so. You need to use subnet IP's!). If you don't set a
+route while calling connect, the default route will be set. connect can
+detect whether a route is used already.
+
+If you cannot connect to your remote, because its dial-in port is
+heavily loaded, you can define a maximum number of attempts:
+
+  connect prov-d1 maxtries 20
+
+will try 20 times to dial to the remote.
+
+If you want to use more than one dial-in port of your provider, you may 
+tell this connect:
+
+  connect prov-d1 prov-d2 prov-d3 ...
+
+connect will use the second remote, if the first fails, and so on. 
+
+If you want to tell connect, at which device (i.e. serial port) your
+modem is connected, you can do it this way:
+
+  connect prov-a1 device ttyS1
+
+And so you can see which channels are open:
+
+  connect status
+
+
+The files "/sbin/transmail" and "/sbin/transnews" (as described in the
+"leafsite" tutorial) will work again, if they are not too old (version 3.2 
+or newer). May be you need to change the "isdn on" and "isdn off" commands 
+within these files to "connect on" and "connect off". If you are not sure
+please have a look again to
+
+  http://www.lrz-muenchen.de/~ui161ab/www/isdn/  
+
+
+Some remarks
+------------
+
+If something happens to the status file /var/lib/connect/status, connect 
+may behave in a very strange way (because some "set" commands begin
+to produce garbage). You will get then a bunch of weird output lines.
+THIS SHOULD NOT HAPPEN! Please report, if you had this, and describe exactly
+and in an reproducable way how it happened.
+
+You probably may ask why I did not write this script in Perl or so.
+I used a bash shell script because this script should work on each system,
+whether it has Perl installed or not. Each Linux box has a bash installed!
+
+Please send comments and criticims to dl4mhk@lrz.uni-muenchen.de, and
+flames to /dev/null ;-)
+
+Have fun!
+Bernhard

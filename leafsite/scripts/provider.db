@@ -1,0 +1,73 @@
+### CUT HERE ###                                                     Bielefeld
+
+# Provider: HRZ Uni Bielefeld
+# Hotline: A. Meyer, Tel: 0521/106-4945, Andreas.Meyer@hrz.uni-bielefeld.de
+# Data collected: Nils Jeisecke <njeiseck@techfak.uni-bielefeld.de>
+
+Phone: 0911781
+Name:  langate.hrz.uni-bielefeld.de
+IP:    129.70.37.254
+# remark: cannot ping this IP. 
+#         Use alias 129.70.4.29
+
+# Name servers (add manually to /etc/resolv.conf): 
+#  search hrz.uni-bielefeld.de
+#  nameserver 129.70.5.16 129.70.4.55
+
+# Mail server (add manually to /etc/hosts): 
+#  129.70.4.55		postfach.uni-bielefeld.de	getmail
+
+# News server (add manually to /etc/hosts): 
+#  129.70.4.55		news.uni-bielefeld.de		getnews
+
+
+### CUT HERE ###                                                          Essen
+
+# Provider: Uni Essen
+# Hotline: 0201-183-3015 Benutzerbuero
+#          0201-183-2922 Stoerungsannahme
+# Data collected: Matthias Hessler <hessler@wi-inf.uni-essen.de>
+
+Phone: 24010
+Name:  ascend1.netz.uni-essen.de
+IP:    132.252.2.29
+
+# Name servers (add manually to /etc/resolv.conf):
+#  search uni-essen.de
+#  nameserver 132.252.3.10
+
+# Mail server (add manually to /etc/hosts):
+#  132.252.3.11      mail.hrz.uni-essen.de     getmail
+
+# News server (add manually to /etc/hosts):
+#  132.252.3.47      news.hrz.uni-essen.de     getnews
+
+
+### CUT HERE ###                                                       Muenchen
+
+# Provider: Leibniz-Rechenzentrum Muenchen
+# Hotline: (089) 289-28800
+# Data collected: Bernhard Hailer <dl4mhk@lrz.uni-muenchen.de>
+
+# Telephone numbers for raw terminal programs: 08928057421, 0892805601
+# NOT VALID ANY LONGER!
+
+# first dial-in line:
+Phone: 0892881010
+Name:  ppp.lrz-muenchen.de
+IP:    129.187.24.253
+
+# second line:
+Phone: 0892881190
+Name:  ppp.lrz-muenchen.de
+IP:    129.187.24.126
+
+# Name servers (add to /etc/resolv.conf): 
+#  search lrz-muenchen.de 
+#  nameserver 129.187.10.25, 129.187.16.1
+
+# Mail server (add to /etc/hosts): 
+#  129.187.13.48	sunmailhost.lrz-muenchen.de	getmail
+
+# News server (add to /etc/hosts): 
+#  129.187.13.48	news.lrz-muenchen.de		getnews

@@ -1,0 +1,198 @@
+<HTML>
+<HEAD>
+<TITLE>
+FTP
+</TITLE>
+<!-- Changed by: Bernhard Hailer, 24-Feb-1997 -->
+</HEAD>
+
+<BODY>
+<H1>
+<P ALIGN=CENTER>
+<IMG SRC="ftp.jpg" ALT="Linux">
+<!IMG SRC="linux.gif" ALT="Linux">
+<!IMG SRC="isdn.gif"  ALT="ISDN">
+<BR>
+ <FONT SIZE=+3>FTP on Demand
+</FONT>
+</P>
+</H1>
+
+<HR>
+<P>
+
+<FONT SIZE=+3><B>Y</B></FONT>ou 
+know it: If you want to load down a big file from a distant server (overseas
+perhaps), the maximum transfer rate can not be reached. If you are using ISDN
+it is extreme. But you have no ISDN Port to spend the telecom union your money,
+and you use the best operating system in the world :-) People who can access
+the Internet via a university and send some Unix commands to it, can do
+something.
+<P>
+
+
+<H2>Theory</H2>
+
+But how? The trick is to load the file not directly, but let the provider do
+it for you. After some time you can load the desired file from the provider
+without wasting time - the connection to your provider most times is so fast
+that you reach the maximum transfer rate. Unix knows the command <TT>nohup</TT>
+which allows a command execution without being logged in - this is the trick.
+You can log in at your provider and type in:
+<PRE>
+  provider:# nohup ftp -i ftp.leo.org &amp;
+  provider:# exit
+  connection closed by foreign host.
+  root:# _
+</PRE>
+This takes only a few seconds, only one tariff unit is lost for a good 
+purpose.
+<P>
+
+But you have to do some prework, because <TT>ftp</TT> is an interactive 
+program, which needs a lot of information for its work (e.g. what to load).
+You can tell ftp how to be less interactive by giving the option "-i". 
+But you need to tell ftp the information what to do, and this happens if you
+create a file <TT>.netrc</TT> at your provider. (The option "-n" tells 
+ftp to ignore this file.)
+<P>
+
+If you want, for example, load down the Linux kernel 2.0.7 from the LEO.ORG 
+server (more than 5 Megabytes!) the file <TT>.netrc</TT> could look like:
+<PRE>
+<B>provider:~/.netrc</B>
+  machine ftp.leo.org
+  login anonymous
+  password <I>&lt;my@email.address&gt;</I>
+  macdef init
+    lcd /usr/src
+    cd /pub/comp/os/linux/Linus/v2.0
+    bin
+    get linux-2.0.7.tar.gz
+    close
+    quit
+</PRE>
+
+So cou could create an entry for each server you want to connect. This file
+must be stored in your directory at your provider before you call the
+<TT>nohup ftp</TT> command. One hour later you can load down directly your
+kernel. Great, isn't it?
+
+
+<H2>Automotion</H2>
+
+Ok now. Now we want to do it automatically. Of course we need the cron again,
+which will do the data transfer in the cheap night hours.
+<P>
+
+<IMG ALIGN=left SRC="constr.gif">
+<IMG ALIGN=right SRC="constr.gif">
+
+<P ALIGN=center>
+<B>... But this is not finished yet. Please wait...</B>
+</P>
+<HR>
+<P>
+
+I had no time to do more research - but some people wrote me hints.
+<P>
+
+Uwe Bonnes &lt;bon@elektron.ikp.physik.th-darmstadt.de&gt; wrote:
+<PRE>
+Hello,
+
+you should point at "ncftp" for ftp-on-demand. I open the program using
+"nohup ncftp", open the server I need, choose the file using the "tab" 
+expansion and start the download. A ctrl-Z and "bg" move the download into
+background and myself in the commandline to stop the connect.
+</PRE>
+
+<P>
+
+Gunnar Larisch &lt;Gunnar.Larisch@lpr.e-technik.tu-muenchen.de&gt; wrote:
+
+<PRE>
+Some nice scripts:
+
+getme &lt;Server&gt; &lt;Dir&gt; &lt;File&gt;
+cronftp must be started using cron. You can fetch your file the next day.
+
+fetfrom also may be useful.
+
+-----------getme--------------
+#!/usr/local/bin/bash
+
+# Parameters: Server Path File(s)
+
+FTPFILE="/tmp/.$UID.ftpjobs"
+echo Server : $1
+echo Dir    : $2
+echo "File   : $3"
+echo Jobfile: $FTPFILE
+
+touch $FTPFILE
+
+echo lcd ~/tmp/ftpjobs &gt;&gt$FTPFILE
+echo open $1 &gt;&gt;$FTPFILE
+echo user anonymous t8231ah@sunmail.lrz-muenchen.de &gt;&gt;$FTPFILE
+echo bin &gt;&gt;$FTPFILE
+echo "cd $2" &gt;&gt;$FTPFILE
+echo "mget $3" &gt;&gt;$FTPFILE
+echo close &gt;&gt;$FTPFILE
+-------------------------------
+
+---------getfrom---------------
+echo Hole $2 von $1...
+echo ftp -i $1 &gt;&gt;~/tmp/ftpjob
+echo bin &gt;&gt;~/TMP/ftpjob
+echo cd $2 &gt;&gt;~/tmp/ftpjob
+-------------------------------
+
+---------cronftp--------------
+#!/usr/local/bin/bash
+FTPFILE="/tmp/.$UID.ftpjobs"
+NEWFTPFILE="/tmp/.bgjob_$UID_$RANDOM"
+mkdir ~/tmp/ftpjobs
+echo Using $FTPFILE... as $NEWFTPFILE
+mv $FTPFILE $NEWFTPFILE
+nohup ftp -in &lt;$NEWFTPFILE &
+-------------------------------------
+
+Ciao Gunnar
+</PRE>
+<P>
+
+Siggi Thoma &lt;sthoma@twilight.rhein-neckar.de&gt; schrieb:
+<PRE>
+Did you hear about FTPMAIL? Perhaps this matches the purpose and is a bit
+simpler.
+
+Just write an e-mail to ftpmail@ftp.uni-stuttgart.de 
+subject HELP
+body:
+help
+quit
+
+
+---------------
+This server at the Uni allows to fetch any file from all over the world 
+to Stuttgart. It mails this file in uuencoded format to you. So only the
+providers transfer data rate is the limiting factor.
+
+You find detailled descriptions in the net. Search for FTPMAIL at Yahoo or 
+Altavista.
+
+Tschau
+Siggi
+</PRE>
+
+<HR>
+<ADDRESS>
+<A HREF="gnulis_e.html"  TARGET=Main>Copyright &#169; (GPL V 2)</A> 1996 
+<A HREF="http://www.chemie.uni-muenchen.de/ac/boehm/beh.html">Bernhard Hailer</A><BR>
+Last modification: 24-Feb-97 BeH
+</ADDRESS>
+
+</BODY>
+</HTML>
+

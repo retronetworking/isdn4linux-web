@@ -1,0 +1,14 @@
+# /etc/ppp/options
+
+# comment out the following three lines if you don't need 
+# dynamic IP negotiation.
+ipcp-accept-local
+ipcp-accept-remote
+noipdefault
+
+# more pppd/ipppd options
+lock
+mru 1500
+mtu 1500
+debug
+-detach

@@ -1,0 +1,40 @@
+  #!/bin/sh
+  # transmail.sh: exchanges email with the provider.
+  # Author:       Bernhard Hailer <dl4mhk@lrz.uni-muenchen.de>
+  # Version:      4.0 (29-Dec-96)
+
+  PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+  . /etc/connect.provider
+  . /etc/connect.secrets
+
+  cd /                                # against PATH=. effect 
+
+  echo -----------------------------------------------------------------------
+  echo -e "Starting mail transfer: \c"; date
+
+  . /sbin/connect on
+
+  echo "Checking mail server..."
+  set `ping -qc3 -i1 getmail | grep transmitted`
+  if [ $4 -gt 0 ]      
+  then
+    echo ":-) Mail server online - starting mail exchange"  
+    echo "Sending mail..."
+    sendmail -q
+    echo "Again sleeping 1 sec for PPP handshaking"
+    sleep 1
+    echo "Fetching mail..."
+    popclient -3 -u $MAIL_LOGIN -p $MAIL_PASSWD -o $MAIL_PATH getmail
+    echo "Again sleeping 1 sec for PPP handshaking"
+    sleep 1
+  else
+    echo ":-[ Sorry - mail server is down. Try later..." 
+  fi  
+
+  . /sbin/connect off
+
+  # allow dl4mhk access to mail:
+  chown dl4mhk.users /var/spool/mail/dl4mhk
+
+  echo -e "Finished mail transfer: \c"; date

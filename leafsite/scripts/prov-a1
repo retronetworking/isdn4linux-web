@@ -1,0 +1,20 @@
+#!/bin/sh
+# Modem connection template.
+
+# Provider: [Add here the name of your provider]
+
+# modem or i4l?
+MODE=modem
+
+# IP address of remote host
+IP_ADDRESS=
+
+# modem device (i.e. serial port) (without leading "/dev/"!)
+DEVICE=
+
+# pppd options file - edit!
+OPTIONS_FILE=/etc/ppp/options.pppd
+
+# chat script - edit dial-in number!
+CHAT_SCRIPT="ABORT BUSY ABORT 'NO CARRIER' '' ATZ0 OK ATD******* CONNECT"
+

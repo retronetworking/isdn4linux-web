@@ -1,0 +1,198 @@
+#!/bin/bash
+# rc.connect  This shell script boots up the ISDN subsystem.
+# Version:    @(#)/sbin/init.d/rc.connect 1.0 23-Feb-97
+# Author:     Bernhard Hailer <dl4mhk@lrz.uni-muenchen.de>
+# License:    GNU General Public License V2 ("GPL")
+
+# This script is designed for usage within System V style Init. If you boot
+# up your system with Simple Init (e.g. Slackware, older SuSE distributions),
+# then cut this file at the marked lines and save the parts as
+# /etc/rc.d/rc.connect  and   /etc/rc.d/rc.6.
+
+# Search paths
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+case "$1" in
+start)
+
+# === The following is /etc/rc.d/rc.connect for "simpleinit"! =================
+
+  # Files used (do not change!):
+  BASE=/usr/lib/connect/base             # base config file
+  PROV_DIR=/usr/lib/connect/providers    # config files, once per provider
+  STATUS=/var/lib/connect/status         # status file: how many connects open?
+
+  # variables
+  declare -i I4L
+  let I4L=0
+       
+  # load base file
+  . $BASE || { echo -e "\a base file missing"; exit 1 }
+ 
+  # extra start commands (define in $BASE)
+  Con_Start
+
+  # probe status file (how many connects are open?)
+  if [ -e $STATUS ]
+  then
+    echo -e "\aUnclean shutdown! Removing $STATUS"
+    rm $STATUS
+  fi
+  touch $STATUS
+
+  # load list of providers
+  for FILE in $PROV_DIR/*; do
+
+    REMOTE=`basename $FILE`
+
+    echo -e "$REMOTE\c" >>$STATUS
+    OPTIONS_FILE=""
+    IP_ADDRESS=""
+    MODE=""
+    PHONE=""
+
+    . $PROV_DIR/$REMOTE
+
+    # i4l startup, if necessary
+    case $MODE in
+    i4l)
+      if [ $I4L -eq 0 ]
+      then
+        # turn on isdn
+        echo -e "\nStarting isdn4linux"
+        # global 
+        isdnctrl verbose 0             # For debugging set to 2 (max. 4)
+      fi
+
+      # does option file exist?
+      if ! [ -e $OPTIONS_FILE ]
+      then
+        echo -e "\aOPTIONS_FILE misdefined in $PROV_DIR/$REMOTE! Exiting."
+        exit 1
+      fi
+
+      echo -e "\nConfiguring i4l device $REMOTE as ippp$I4L."
+      
+      # ISDN device drivers ippp$I4L (PPP)
+      isdnctrl addif      ippp$I4L
+      isdnctrl pppbind    ippp$I4L $I4L
+      isdnctrl addphone   ippp$I4L out $PHONE    # dial-out number
+      isdnctrl addphone   ippp$I4L in $MY_PHONE  # my telephone no
+      isdnctrl eaz        ippp$I4L $MY_EAZ       # my MSN / EAZ
+      isdnctrl huptimeout ippp$I4L $HUPTIMEOUT   # defined in $BASE
+      isdnctrl secure     ippp$I4L on            # nobody may enter
+      isdnctrl l2_prot    ippp$I4L hdlc
+      isdnctrl l3_prot    ippp$I4L trans
+      isdnctrl encap      ippp$I4L syncppp
+
+      ifconfig ippp$I4L $MY_HOSTNAME pointopoint $IP_ADDRESS metric 1
+      route add default ippp$I4L                 # interface definitions 
+      ipppd /dev/ippp$I4L file $OPTIONS_FILE &
+      route del default
+      ifconfig ippp$I4L down
+
+      #         interf.  dev.  IP address  TIMES_OPEN
+      echo -e " ippp$I4L ----- $IP_ADDRESS 0" >>$STATUS
+
+      let I4L+=1
+
+      ;;
+
+
+    modem)
+
+      echo -e "\nModem device $REMOTE configured"
+      #         intf. dev.  IP address  TIMES_OPEN
+      echo -e " ----- ----- $IP_ADDRESS 0" >>/var/lib/connect/status
+
+    ;;
+
+    *)	 
+      echo -e "\a$PROV_DIR/$REMOTE: \$MODE misdefined!"
+      exit 1
+    ;;
+      
+    esac
+
+  done
+
+
+# === Until here /etc/rc.d/rc.connect for "simpleinit"! =======================
+  
+;;
+
+stop)
+
+	
+# === Put this to the beginning of the "rc.6" file for "simpleinit": ==========
+
+  # Files used (do not change!):
+  BASE=/usr/lib/connect/base             # base config file
+  PROV_DIR=/usr/lib/connect/providers    # config files, once per provider
+  STATUS=/var/lib/connect/status         # status file: how many connects open?
+
+  # variables
+  declare -i I4L
+  let I4L=0
+       
+  # load base file
+  . $BASE || { echo -e "\a base file missing"; exit 1 }
+ 
+  for i in $PROV_DIR/*; do
+
+    REMOTE=`basename $i`
+
+    . $PROV_DIR/$REMOTE
+
+    case $MODE in
+    i4l)
+      if [ $I4L -eq 0 ]
+      then
+        # turn off isdn
+        echo "Shutting down isdn4linux..."
+      fi
+
+      echo "Shutting down ippp$I4L:"
+      set `cat $STATUS | grep $REMOTE`
+      isdnctrl pppunbind $2
+      ifconfig $2 down
+      sleep 1
+      isdnctrl delif $2
+      sleep 1
+
+      let I4L+=1
+    ;;
+
+    modem)
+      echo "Deleting $REMOTE"
+    ;;
+      
+    *)
+      echo -e "\aPROV_DIR/$REMOTE: \$MODE misdefined!"
+      exit 1
+    ;;
+    esac
+
+  done
+
+  if [ $I4L -gt 0 ]
+  then
+    echo "Killing ipppd(s)..."
+    killall -9 ipppd
+  fi
+  
+  # remove lock file
+  rm $STATUS
+
+  # extra stop commands (define in $BASE)
+  Con_Stop
+
+# === Until here! =========================================================
+
+  ;;
+*)
+  echo "Usage: $0 {start|stop}"
+  exit 1
+;;
+esac

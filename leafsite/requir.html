@@ -1,0 +1,107 @@
+<HTML>
+<HEAD>
+<TITLE>
+Ein Linux-Leafsite
+</TITLE>
+<!-- Changed by: Bernhard Hailer, 21-Feb-1997 -->
+</HEAD>
+
+<BODY>
+<H1>
+<P ALIGN=CENTER>
+ <IMG SRC="vortrag.jpg" ALT="Linux">
+ <!IMG SRC="linux.gif" ALT="Linux">
+ <!IMG SRC="isdn.gif" ALT="ISDN">
+ <BR>
+ <FONT SIZE=+3>Wie man sich unter Linux einen "Leafsite" aufbaut
+</FONT>
+</P>
+</H1>
+
+<HR>
+<P>
+
+<B><FONT SIZE=+3>D</FONT></B>iese
+Seiten wollen in kompakter Form beschreiben, wie man sich einen "Leafsite" 
+(also einen Rechner ohne permanente Internetanbindung) m&ouml;glichst
+kostensparend, aber trotzdem sehr leistungsf&auml;hig einrichten kann.
+<P>
+
+Mit einem einfachen Terminalprogramm kann man noch nicht viel anfangen - 
+gerade mal ein "telnet" ist m&ouml;glich, und schon die &Uuml;bertragung
+von Bin&auml;rdaten ist nicht mehr so ganz einfach.
+<P>
+
+Also setzt man ein Protokoll ein, welches die tempor&auml;re Vollanbindung
+des eigenen Rechners an das Internet erlaubt: PPP (Point-to-Point Protocol). 
+F&uuml;r die Dauer der Verbindung bekommt man sogar eine g&uuml;ltige 
+IP-Adresse zugeordnet. Das erlaubt nun beispielsweise auch FTP und den Einsatz 
+von WWW-Browsern.
+<P>
+
+Da Verbindungen ins Internet Telefonkosten verursachen, mu&szlig; man
+m&ouml;glichst viel "offline" machen k&ouml;nnen - das hei&szlig;t: email
+und News sollten einmal gesamt geladen werden und dann ohne stehende 
+Verbindung bearbeitet werden k&ouml;nnen. Auch dies beschreiben diese Seiten.
+<P>
+
+
+<H2>Voraussetzungen</H2>
+
+<H3>Allgemeines</H3>
+
+Zwingend notwendig ist eine Zugangsberechtigung zu Ihrem Provider.
+Bitte erkundigen Sie sich bei ihm, was dazu erforderlich ist.
+<P>
+
+Diese Seiten enthalten auch eine (im Moment noch sehr kleine) Datei, in denen
+die speziellen Daten bestimmter Provider aufgelistet sind. Wenn Sie einen
+Eintrag anf&uuml;gen k&ouml;nnen, w&auml;re ich daf&uuml;r sehr dankbar!
+<P> 
+
+
+<H3>Hardware</H3>
+
+Sie ben&ouml;tigen eine ISDN-Karte oder ein Modem. Die hier beschriebene
+Software f&uuml;r ISDN-Karten (isdn4linux) unterst&uuml;tzt zur Zeit eine 
+ganze Menge Karten, die einen bestimmten Siemens-Chipsatz (ISAC und HSCX) an 
+Bord haben, aber auch eine Reihe weiterer Karten. Genaueres hierzu verr&auml;t 
+die FAQ, die ebenfalls auf diesen Seiten zu haben ist (Leute, die sich das 
+Archiv geladen haben, m&uuml;ssen sie sich allerdings gesondert laden!).
+
+
+<H3>Software</H3>
+
+Man ben&ouml;tigt einen neuen PPP-D&auml;mon - dieser liegt aber jeder
+Linux-Distribution bei. Wer eine ISDN-Karte einsetzen will, mu&szlig; sich
+au&szlig;erdem eine Modememulation besorgen.
+Aus praktischen Gr&uuml;nden wird hier das Paket &quot;ISDN4Linux&quot;
+(&quot;i4l&quot;) von Fritz Elfert als Treibersammlung verwendet. Es gibt
+daneben aber auch andere Pakete wie beispielsweise UISDN von Matthias Urlichs.
+ISDN4Linux bietet aber derzeit als einziges Paket kernelinterne Treiberteile.
+
+<P>Wer &uuml;ber die weitere Entwicklung dieses Software-Paketes auf dem
+Laufenden gehalten werden will, sollte sich in der entsprechenden Mailingliste
+eintragen lassen (Aufkommen ca. 30 Mails pro Tag). Dazu schickt man eine
+email mit dem Inhalt</P>
+
+<PRE>  subscribe isdn4linux <I>&lt;eigene@email.adresse&gt;</I>
+</PRE>
+
+<P>an</P>
+
+<PRE>  <A HREF="mailto:majordomo@listserv.isdn4linux.de">majordomo@listserv.isdn4linux.de</A>
+</PRE>
+
+<P>(ohne Subject).</P>
+
+<P>
+<HR>
+<ADDRESS>
+<A HREF="gnulis.html"  TARGET=Main>Copyright &#169; (GPL V 2)</A> 1996 
+<A HREF="http://www.chemie.uni-muenchen.de/ac/boehm/beh.html">Bernhard Hailer</A><BR>
+Letzte &Auml;nderung: 21-Feb-97 BeH
+</ADDRESS>
+
+</BODY>
+</HTML>

@@ -1,0 +1,332 @@
+<HTML>
+<HEAD>
+<TITLE>
+Email
+</TITLE>
+<!-- Changed by: Bernhard Hailer, 21-Feb-1997 -->
+</HEAD>
+
+<BODY>
+<H1>
+<P ALIGN=CENTER>
+<IMG SRC="psst.jpg" ALT="Linux">
+<!IMG SRC="linux.gif" ALT="Linux">
+<!IMG SRC="isdn.gif"  ALT="ISDN">
+<BR>
+ <FONT SIZE=+3>Ein Offline-Email-System</FONT>
+</P>
+</H1>
+
+<HR>
+<P>
+
+<FONT SIZE=+3><B>Z</B></FONT>war 
+kann man email auch online lesen und bearbeiten, aber auf Dauer 
+kommt das etwas teuer - selbst im City-Bereich. Also was tun?
+<P>
+
+Zwei Programme kann man heranziehen, damit man email daheim 
+in aller Ruhe bearbeiten kann. Das eine ist <TT>sendmail</TT>, das andere
+<TT>popclient</TT>.
+<P>
+
+Bevor wir in die Tiefen von sendmail und popclient einsteigen, m&uuml;ssen
+wir noch die Datei <TT>/etc/hosts</TT> um den Eintrag des Mailservers 
+erweitern. Wer bei der Installation von isdn4linux die Datei
+<TT>i4l.config</TT> kreiert hat und "makeleaf" eingegeben hat, bei dem ist
+das korrekt eingebaut. Wer das nicht tun wollte, mu&szlig; eingeben:
+
+<PRE>
+<B>/etc/hosts</B> (Ausschnitt)
+  <I>&lt;IP-Adresse&gt;</I>  <I>&lt;Name_des_Mailservers&gt;</I>    getmail
+</PRE>
+<P>
+
+
+<H2>sendmail</H2>
+
+Auf die Low-Level-Konfiguration von sendmail will ich gar nicht erst eingehen 
+- das &uuml;berlasse ich Masochisten ;-) In meinem Falle setze ich eine
+Distribution ein (S.u.S.E. aktuell 4.2 Jun. 96; ELF), die sendmail in der 
+Version R8 enth&auml;lt. Diese l&auml;&szlig;t sich komfortabel
+mithilfe von m4-Scripts konfigurieren - siehe das zugeh&ouml;rige README. 
+Ich habe die Originalkonfiguration ("<TT>linux.smtp.mc</TT>") &uuml;bernommen 
+und etwas bearbeitet. Man begebe sich nach <TT>/usr/src/sendmail/cf/cf</TT> 
+und schreibe eine Datei <TT>linux.<I>beliebig</I>.mc</TT>, z.B.
+
+<PRE>
+<B>/usr/src/sendmail/cf/cf/linux.<I>beliebig</I>.mc</B>  # Meine eigene sendmail.cf
+  include(`../m4/cf.m4')dnl              # mu&szlig; sein!!!
+  VERSIONID(`<I>beliebig</I>')dnl        # Version nach Gusto benennen
+  OSTYPE(linux)dnl                       # Wir machen Linux!
+  FEATURE(nodns)dnl                      # Kein eigener Nameserver
+  FEATURE(nocanonify)dnl                 # Beim Senden DNS nicht benutzen
+  FEATURE(nouucp)dnl                     # Wir benutzen kein UUCP
+  define(SMART_HOST, relay:<I>&lt;fully.named.mailhost&gt;</I>)dnl   # Post an: siehe /etc/hosts
+  define(confCON_EXPENSIVE, True)dnl     # Post verteilen ist teuer
+  MASQUERADE_AS(<I>&lt;provider.name&gt;</I>)dnl      # Wir mimen "Provider"
+  define(confUSERDB_SPEC, /etc/userdb.db)dnl  # Adresskorrektur
+  FEATURE(notsticky)dnl                  # Userdatabase immer durchforsten
+  MAILER(local)dnl                       # Benutzte Mailer:
+  MAILER(smtp)dnl                        # local, Simple Mail Transfer Prot.
+</PRE>
+
+Dem sendmail mu&szlig; man jetzt nur noch kundtun, was Sache ist: 
+
+<PRE>
+  root:# m4 linux.<I>beliebig</I>.mc &gt; /etc/sendmail.cf
+  root:# _
+</PRE>
+
+Man mu&szlig; seine email-Adresse so angeben, da&szlig; ein "Reply" 
+zuverl&auml;ssig wieder zur&uuml;ckkommt - das bedeutet, die From:-Zeile im
+Email-Header mu&szlig; auf den Account beim Provider lauten. Das wird
+einerseits durch die Zeile "MASQUERADE_AS ..." im m4-Script erledigt,
+andererseits durch eine Email-Nutzer-Datenbank (<TT>/etc/userdb.db</TT>).
+diese mu&szlig; hergestellt werden. Dazu editiert man eine Datei, in die
+pro Nutzer zwei Zeilen eingetragen werden m&uuml;ssen:
+
+<PRE>
+<B>/etc/userdb.db</B>
+  <I>&lt;eigener_login_name&gt;</I>:mailname  <I>&lt;provider_login_name&gt;</I>
+  <I>&lt;provider_login_name&gt;</I>:maildrop <I>&lt;eigener_login_name&gt;</I>
+</PRE>
+
+Dieses mu&szlig; in ein f&uuml;r <TT>sendmail</TT> lesbares Format umgesetzt 
+werden:
+
+<PRE>
+  root:# makemap btree /etc/userdb.db &lt; /etc/userdb
+  root:# _
+</PRE>
+
+(Laut sendmail-FAQ funktioniert das nur, wenn man das Berkeley-db-Paket
+hat - das ist aber z.B. bei S.u.S.E. 4.2 der Fall.)
+<P>
+
+Nach einem Reboot (alternativ kann man den sendmail auch killen und mit der
+Option "-bd" wieder neu starten) hat man einen funktionierenden Postmeister.
+<P>
+ 
+Sendmail l&auml;uft als D&auml;mon im Hintergrund, und man kann ihn dazu
+bringen, alle selbstgeschriebene email zu sammeln (sie wird in 
+<TT>/var/spool/mqueue</TT> oder <TT>/var/mqueue</TT> zwischengelagert) und 
+erst auf Kommando ("<TT>sendmail -q</TT>") &uuml;ber die Telefonleitung zu 
+schicken.
+<P>
+
+Damit das richtig funktioniert, mu&szlig; sendmail beim Booten als 
+D&auml;mon <I>ohne</I> die "<TT>-q ...</TT>"-Option aufgerufen werden. 
+Der Aufruf geschieht bei simpleinit in der zweiten H&auml;lfte der Start-Datei
+<TT>/etc/rc.d/rc.M</TT>, bei sysvinit passiert es in einer Extradatei, bei
+SuSE 4.2 heisst sie <TT>/sbin/init.d/sendmail</TT>. Hier 
+mu&szlig; die genannte Option entfernt werden ("<TT>-bd</TT>" mu&szlig; 
+bleiben, das ist f&uuml;r sendmail der Befehl, sich als D&auml;mon in den 
+Hintergrund zu begeben).
+<P>
+
+
+<H2>Des Mailers Wille...</H2>
+
+Mit dem UNIX-Klassiker <I>mail</I> funktioniert das Absenden von emails nun 
+pr&auml;chtig. Der Header wird richtig geschrieben, und die From-Zeile
+lautet so, wie sie mu&szlig;: auf die eigene Adresse beim Provider.
+<P>
+
+Andere Mailer sind aber recht eigenwillig. Programme wie pine oder Netscape
+&uuml;berschreiben den Header ziemlich hemmungslos mit dem, was sie f&uuml;r 
+richtig halten (was es in der Regel aber ganz und gar nicht ist)...
+<P>
+
+<B>Mutt</B> 
+<P>
+
+Diesen Hinweis schrieb mir Jan Berkel &lt;jan.berkel@on-line.de&gt;:
+In der <TT>.muttrc</TT> im Heimatverzeichnis mu&szlig; man folgende Zeile 
+einfügen:
+<PRE>
+my_hdr From: foo@foonet.com (Fooname)
+</PRE>
+Damit funktioniert das Header-Rewriting.
+<P>
+
+<B>Netscape</B> 
+<P>
+
+liest die Datei <TT>~/.netscape/preferences</TT> ein, die man
+editieren kann. Dort findet man die Zeile
+
+<PRE>
+<B>~/.netscape/preferences</B> (Ausschnitt)
+  [...]
+  EMAIL_ADDRESS:          <I>&lt;Email@Adresse&gt;</I>
+  [...]
+</PRE>
+
+Die Adresse mu&szlig; mit der gew&uuml;nschten Adresse ausgef&uuml;llt werden.
+<P>
+
+<B>Pine</B> 
+<P>
+
+Tilo Winkler &lt;twinkler@uni-paderborn.de&gt; hat herausbekommen, wie man dem
+Pine abgew&ouml;hnen kann, die From:-Zeile vollzum&uuml;llen: 
+Man mu&szlig; sich die pine-Sourcen besorgen und dann in 
+<TT>pine/makefile.lnx</TT> bei den <TT>CFLAGS</TT> ein
+<TT>-DALLOW_CHANGING_FROM</TT> anf&uuml;gen und dann neu compilieren. Dann 
+kann man in <TT>.pinerc</TT> im Heimatverzeichnis folgende Zeile(n) 
+einf&uuml;gen:
+<PRE>
+customized-hdrs=From: Mein Name &lt;Meine@email.adresse&gt;,
+                Reply-To: Mein Name &lt;Meine@email.adresse&gt;
+</PRE>
+
+<B>XEmacs</B>
+<P>
+
+(Hinweise hierzu hat mir dankenswerterweise Markus Dickebohm
+&lt;<A HREF="mailto:m.dickebohm@uni-koeln.de?subject=Mailer und Mailheader">m.dickebohm@uni-koeln.de</A>&gt; geschickt.)
+<P>
+Beim XEmacs kann man die Mailadresse mittels 
+<PRE>
+        (setq user-mail-address "m.dickebohm@uni-koeln.de")
+        (setq mail-host-address "mail.rrz.uni-koeln.de")
+</PRE>
+in der Datei <TT>~/.emacs</TT> faken. Auch hier keine ideale Sache, der Header
+wird nicht in Ruhe gelassen.
+<P>
+
+<B>Weitere Mailer</B>
+<P>
+
+Wer Informationen zu weiteren MUAs (<I>Mail User Agents</I>, also 
+Mailprogrammen) hat, m&ouml;ge diese bitte 
+<A HREF="mailto:hailer@ilo.baynet.de?subject=Mailer und Mailheader">mir 
+zukommen lassen</A>. Vielen Dank!
+
+
+<H2>popclient</H2>
+
+Popclient ist ganz einfach einzusetzen. Man ruft es so auf:
+
+<PRE>
+  ~:# popclient -3 -u<I>&lt;host-login&gt;</I> -p<I>&lt;host-password&gt;</I> -o/var/spool/mail/<I>&lt;user&gt;</I> getmail
+  ~:# _
+</PRE>
+
+<TT>getmail</TT> ist der in <TT>/etc/hosts</TT> definierte Mailhost.
+Gibt man zus&auml;tzlich noch die Option "-k" mit an, werden die Emails beim
+Provider <I>nicht</I> gel&ouml;scht.
+<P>
+
+<B>Hinweis:</B> Inzwischen gibt es einen leistungsstarken Nachfolger von
+popclient namens fetchmail. Ich habe bisher allerdings noch keine Erfahrungen
+mit fetchmail gemacht.
+
+
+<H2>Gesamtkunstwerk</H2>
+
+Eine Scriptdatei erledigt das Abholen und das Abschicken der 
+emails. Mit etwas Gl&uuml;ck dauert das so kurz, da&szlig; nur eine Einheit
+verloren geht. Etwas Kosmetik im Script erzeugt dabei einen verwertbaren 
+Mitschnitt des fortschreitenden Transfers. Dieses Script erzeugt man als root 
+und speichert sie in <TT>/sbin</TT>. 
+<P>
+
+Das Script benutzt die Datei <TT>/sbin/isdn</TT> zum &ouml;ffnen der Leitung.
+
+<PRE>
+<B><A HREF="scripts/transmail">/sbin/transmail</A></B>
+  #!/bin/sh
+  # transmail.sh: exchanges email with the provider.
+  # Author:       Bernhard Hailer &lt;dl4mhk@lrz.uni-muenchen.de&gt;
+  # Version:      4.0 (27-Jan-97)
+
+  PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+  . /etc/i4l.provider
+  . /etc/i4l.secrets
+
+  cd /                                # against PATH=. effect 
+
+  echo -----------------------------------------------------------------------
+  echo -e "Starting mail transfer: \c"; date
+
+  . /sbin/connect on
+
+  echo "Checking mail server..."
+  set `ping -qc5 -i1 getmail | grep transmitted`
+  if [ $4 -gt 0 ]      
+  then
+    echo ":-) Mail server online - starting mail exchange"  
+    echo "Sending mail..."
+    sendmail -q
+    echo "Again sleeping 1 sec for PPP handshaking"
+    sleep 1
+    echo "Fetching mail..."
+    popclient -3 -u $MAIL_LOGIN -p $MAIL_PASSWD -o $MAIL_PATH getmail
+    echo "Again sleeping 1 sec for PPP handshaking"
+    sleep 1
+  else
+    echo ":-[ Sorry - mail server is down. Try later..." 
+  fi  
+
+  . /sbin/isdn off
+
+  # allow dl4mhk access to mail:
+  chown dl4mhk.users /var/spool/mail/dl4mhk
+
+  echo -e "Finished mail transfer: \c"; date
+</PRE>
+
+Die sleep-Befehle sind wichtig - sonst bleibt die Verbindung 
+wom&ouml;glich h&auml;ngen!
+<P>
+
+
+<H2>Let's cron!</H2>
+
+Wer den Rechner rund um die Uhr laufen l&auml;&szlig;t, kann einen 
+automatischen Transfer erreichen, indem er den <TT>cron</TT>-D&auml;mon 
+bem&uuml;ht. Man macht dazu folgendes:
+<P>
+
+<B>1.) cron-Datei ver&auml;ndern.</B><BR>
+<PRE>
+  root:# cd ~
+  root:# cp /var/spool/cron/crontabs/root .crontab
+  root:# _
+</PRE>
+
+An die Datei <TT>.crontab</TT> h&auml;ngt man folgende Zeilen an:
+<PRE>
+  # Transfer mail
+  30 04 * * * /sbin/transmail.sh 1>> /var/log/transmail-log 2>> /var/log/transmail-log
+</PRE>
+
+<B>2.) Dem cron die &Auml;nderung bekannt machen.</B><BR>
+<PRE>
+  crontab .crontab
+</PRE>
+
+Den Rest erledigt die Uhr des Rechners. Allt&auml;glich nachts um halb 
+f&uuml;nf Uhr wird die Post erledigt! (Anmerkung: die Rechnerzeit mu&szlig; 
+nat&uuml;rlich richtig gesetzt sein; <TT>man date; man clock</TT>.)
+<P>
+
+Hier mu&szlig; man eine Kosten-/Nutzen-Rechnung aufstellen: der 
+dauerlaufende Rechner kostet Strom - und nicht zu knapp. Bei mir geht das 
+trotzdem so, es ist halt so bequem...
+<P>
+
+
+<HR>
+<ADDRESS>
+<A HREF="gnulis.html"  TARGET=Main>Copyright &#169; (GPL V 2)</A> 1996 
+<A HREF="http://www.chemie.uni-muenchen.de/ac/boehm/beh.html">Bernhard 
+Hailer</A><BR>
+Letzte &Auml;nderung: 21-Feb-97 BeH
+</ADDRESS>
+
+</BODY>
+</HTML>

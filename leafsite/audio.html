@@ -1,0 +1,440 @@
+<HTML>
+<HEAD>
+<TITLE>
+Audio
+</TITLE>
+<!-- Changed by: Bernhard Hailer, 21-Feb-1997 -->
+</HEAD>
+
+<BODY>
+<H1>
+<P ALIGN=CENTER>
+<IMG SRC="audio.jpg" ALT="Linux">
+<!IMG SRC="linux.gif" ALT="Linux">
+<!IMG SRC="isdn.gif"  ALT="ISDN">
+<BR>
+ <FONT SIZE=+3>Ein Anrufbeantworter</FONT>
+</P>
+</H1>
+
+<HR>
+
+<FONT SIZE=+3><B>M</B></FONT>an
+kann schon feine Sachen machen mit seinem Linuxmaschinchen! Wer h&auml;tt's 
+gedacht - inzwischen kann man relativ einfach sogar einen Anrufbeantworter
+selbst basteln. Die Grundlage zu dieser Anleitung bildet eine email, die mir
+dankenswerterweise 
+<A HREF="mailto:hessler@wi-inf.uni-essen.de?subject=vbox-Anleitung">Matthias 
+He&szlig;ler</A> geschickt hat - vielen Dank f&uuml;r die Erlaubnis, das
+&uuml;bernehmen zu d&uuml;rfen!
+<P>
+
+Ein paar Voraussetzungen gibt es allerdings:
+<UL>
+<LI> Eine Soundkarte mu&szlig; installiert sein und unter Linux laufen.
+     Bei Eingabe von <TT>ls &gt; /dev/audio</TT> sollte ein kurzes Rauschen
+     zu h&ouml;ren sein - falls nicht, muﬂ wohl der Kernel neu kompiliert 
+     werden unter Einbeziehung der Soundoptionen (siehe auch Sound-HOWTO!).
+<LI> Der Kernel mu&szlig; im Abschnitt ISDN mit Audiosupport compiliert
+     worden sein.
+<LI> Das mgetty-Paket mu&szlig; installiert sein, wenn man auf andere
+     Aufzeichnungsformate als uLAW zur&uuml;ckgreifen will (im Paket ist eine
+     Tools-Sammlung enthalten, die in diesem Falle ben&ouml;tigt wird). Das 
+     Paket wird im Kapitel Fax genau erkl&auml;rt (im Moment allerdings noch 
+     nicht :-). 
+</UL>
+
+Nun besorgt man sich die vbox-Software von 
+<A HREF="mailto:michael@abadonna.franken.de?subject=vbox">Michael `Ghandi' 
+Herold</A>, die <I>nicht</I> Bestandteil des ISDN4Linux-Pakets
+ist. Man mu&szlig; sie sich herunterladen:
+
+<PRE>
+  <A HREF="ftp://ftp.franken.de/pub/isdn4linux/contributions/vbox-1.1.tgz">ftp.franken.de/pub/isdn4linux/contributions/vbox-1.1.tgz</A>
+</PRE>
+
+Man setzt sich das ins Verzeichnis /usr/src und entpackt sie
+per "<TT>tar zxfv vbox-1.1.tgz</TT>". Im Verzeichnis 
+
+<PRE>
+  /usr/src/vbox
+</PRE>
+
+sind jetzt die ben&ouml;tigten Dateien. Die darin enthaltene Dokumentation 
+(auf Deutsch, mit einem WWW-Browser anschaubar!) ist empfehlenswert!
+Nach der Compilation ist auch ein TeX-Dokument lesbar.
+
+
+<H2> Compilation</H2>
+
+Vor der &Uuml;bersetzung von vbox mu&szlig; man sich das Makefile vornehmen 
+und die Installationspfade anpassen (in der Regel sind keine &Auml;nderungen 
+notwendig).
+
+<P>
+
+Ebenfalls angepa&szlig;t werden mu&szlig; die Datei <TT>src/settings.h</TT>:
+<PRE>
+<B>src/settings.h</B> (Ausschnitt)
+  ...
+  #define DEFAULT_RINGS 24           /* hebt ca. nach dem 4. Klingeln ab */
+  ...
+  #define DEFAULT_RECORD_TIME 120    /* maximal 2 min Aufnahme zulassen */
+  ...
+  #define VOICE_COMPRESSION_MODE 6   /* &lt;--- Hier MUSS "6" stehen!!! */
+  ...
+  #define VBOXPLAYCMD "/usr/local/sbin/vboxplay"
+  ...
+</PRE>
+
+Zum <TT>VOICE_COMPRESSION_MODE</TT>: 2, 3 und 4 (ADPCM-2, ADPCM-3 und ADPCM-4)
+sind komprimierte Modi, zum Abspielen werden die <TT>pvftools</TT> von
+mgetty-0.99 ben&ouml;tigt. 5 entspricht einer Aufzeichnung im aLAW-Format,
+6 einer im uLAW-Format. Trotz gegenteiliger Angabe in der Anleitung kann man 
+"aLAW"-Dateien nicht mit den mitgelieferten Tools (rmd*) abspielen - nur uLAW 
+kann verarbeitet werden!
+<P>
+
+<BLOCKQUOTE>
+ <SMALL>
+Sollte man ein anderes Format angegeben haben, kann man sich &uuml;ber einen 
+kleinen Trick die Nachrichten trotzdem abspielen: vboxgetty kennt n&auml;mlich 
+alle Formate. Man kopiere die abzuspielende Datei um in das 
+message-Verzeichnis (siehe unten) unter dem Namen standard.msg. Die wird dann 
+als Ansage abgespielt, wenn man sich selbst anruft (vielleicht nicht ganz
+billig, aber ein schneller Weg... :-)
+<P>
+
+Die <TT>pvftools</TT> sind im Paket <TT>mgetty</TT> von Gert Doering 
+enthalten. Siehe dazu die Fax-Seiten in dieser Anleitungssammlung.
+ </SMALL>
+</BLOCKQUOTE>
+
+In meinem Falle mu&szlig;te auch noch ein kleiner Patch angewendet werden, 
+damit die Darstellung unter X brauchbar wurde (ohne Patch waren im 
+vbox-Terminal nur wirre Zeichen zu sehen). F&uuml;r den Hinweis, wo der Patch 
+zu setzen ist, danke ich Roland Rosenfeld 
+&lt;<A HREF="mailto:roland@spinnaker.rhein.de?subject=vbox-patch">roland@spinnaker.rhein.de</A>&gt;.
+<PRE>
+<B><A HREF="scripts/vbox.c.patch">/usr/src/vbox/vbox.c.patch</A></B>
+--- vbox.c      Sat Sep 28 11:57:58 1996
++++ vbox.c.orig Sat Sep 28 11:57:46 1996
+@@ -1953,9 +1953,9 @@
+ 
+ static chtype Color(int Pair)
+ {
+-       if (!Mono) return(COLOR_PAIR(Pair) | A_ALTCHARSET);
++       if (!Mono) return(COLOR_PAIR(Pair));
+ 
+-       return(COLOR_PAIR(0) | A_ALTCHARSET);
++       return(COLOR_PAIR(0));
+ }
+ 
+ /*************************************************************************
+</PRE>
+
+Diesen Patch f&uuml;gt man ein mit
+<PRE>
+  root:# patch -p0 src/vbox.c &lt;vbox.c.patch
+  root:# _
+</PRE>
+
+Nun kann es ans Compilieren gehen. Man lasse sich zeigen, was getan werden 
+mu&szlig;:
+<PRE>
+  root:# make
+  <I>(eine lange Liste erscheint)</I>
+  root:# _
+</PRE>
+Im Ganzen ist das folgende zu tun:
+<PRE>
+  root:# make vbox
+  ...
+  root:# make vbox-install
+  ...
+  root:# make vbox-spooldir
+  ...
+  root:# _
+</PRE>
+
+Sind die Programme nun installiert, geht es daran, das Spool-Verzeichnis
+aufzubereiten. Es ist wichtig zu wissen, daﬂ f&uuml;r jeden User, der 
+sp&auml;ter vbox aufrufen will, ein separates Unterverzeichnis angelegt werden 
+muﬂ:
+<PRE>
+  root:# mkdir /var/spool/vbox/<I>user</I>
+  root:# mkdir /var/spool/vbox/<I>user/messages</I>
+  root:# mkdir /var/spool/vbox/<I>user/incoming</I>
+  root:# _
+</PRE>
+
+Jetzt werden einige Scripte und Tools an ihren Platz kopiert und etwas
+Feinschliff daran vorgenommen:
+<PRE>
+  root:# mkdir /usr/local/lib/vbox
+  root:# cp /usr/src/vbox/scripts/vbox* /usr/local/sbin
+  root:# cp /usr/src/vbox/bin/rmd* /usr/local/bin
+  root:# chown root.root -R /usr/local/sbin/vbox*
+  root:# chmod 755 /usr/local/sbin/vbox*
+  root:# chown root.root -R /usr/local/bin/rmd*
+  root:# chmod 755 /usr/local/bin/rmd*
+  root:# _
+</PRE>
+
+Falls sich die Verzeichnisse <TT>/usr/local/bin</TT> und 
+<TT>/usr/local/sbin</TT> nicht im Pfad befinden, mu&szlig; man 
+<TT>/etc/profile</TT> editieren und diese Pfade in die PATH-Variable
+nachtragen.
+<P>
+
+Schlie&szlig;lich mu&szlig; jeder User in seinem Heimatverzeichnis die Datei 
+<TT>~/.vboxrc</TT> installiert haben. Man kopiert sich am besten die 
+mitgelieferte Beispieldatei an Ort und Stelle:
+<PRE>
+  root:# cp /usr/src/vbox/samples/sample-vboxrc /home/<I>&lt;user&gt;</I>/.vboxrc
+  root:# chown <I>&lt;user&gt;</I>.users /home/<I>&lt;user&gt;</I>/.vboxrc
+  root:# _
+</PRE>
+
+Diese Datei mu&szlig; man noch editieren und den Inhalt an seine 
+Bed&uuml;rfnisse anpassen. Rufnummern mit Vorwahl ohne f&uuml;hrende Null.
+Beispiel:
+
+<PRE>
+<B>/home/<I>&lt;user&gt;</I>/.vboxrc</B>
+  [CALLERID]
+  81785005                -               K. Gentner
+  817890031               -               Familie Hailer
+  817890032               -               Bernhard Hailer
+  *                       -               *** Unbekannt ***
+
+  [DEBUG]
+  FATAL + ERRORS + WARNINGS + INFOS + DEBUG + JUNK
+
+  [RINGS]
+  0-8             MO,DI,MI,DO,FR,SA,SO    5
+  *               *                       30
+
+  [STANDARD]
+  *       *       standard.msg    120
+</PRE>
+
+F&uuml;r den Anfang werden die mitgelieferten Ansagetexte in unser
+messages-Verzeichnis kopiert:
+<PRE>
+  root:# cp samples/messages/*  /var/spool/vbox/<I>user</I>/messages
+  root:# _
+</PRE>
+
+Nun k&ouml;nnen wir vboxgetty starten (unter <TT>EAZ</TT> die EAZ/MSN 
+eintragen, unter der Anrufe entgegengenommen werden sollen):
+<PRE>
+  root:# /usr/local/sbin/vboxgetty -d /dev/ttyI1 -i "ATZ&E<I>EAZ</I>" -u <I>user</I>
+  root:# _
+</PRE>
+
+
+<H3>Ein Test</H3>
+
+Einem Testanruf steht nun nichts im Wege - vboxgetty sollte nach dem 4.
+Klingeln (je nach <TT>DEFAULT_RINGS</TT>) abnehmen und eine kurze Ansage 
+abspielen.
+<P>
+
+Dabei kann man gleich seinen neuen Ansagetext aufsprechen (wer will schon
+die Telefonnummer des Autors von vbox in W¸rzburg in der Ansage behalten :-).
+Wenn's geklappt hat, m&uuml;&szlig;te sich in /var/spool/vbox/incoming eine 
+neue Datei finden. Mit
+<PRE>
+  root:# cat /var/spool/vbox/incoming/<I>Zeit</I>-<I>Rufnummer</I> &gt; /dev/audio
+  root:# _
+</PRE>
+sollte man die sich dann schon relativ gut anh&ouml;ren k&ouml;nnen (falls
+VOICE_COMPRESSION_MODE nicht auf 6 gestellt wurde, ist nat&uuml;rlich
+nichts zu verstehen, zum Abspielen werden dann die pvftools im 
+mgetty-0.99-Paket vom Juni ben&ouml;tigt).
+<P>
+
+
+<H3>Fehlersuche</H3>
+
+Schiefgehen kann immer etwas. Falls im Folgenden etwas nicht funktioniert, 
+sehe man in <TT>/var/log/messages</TT> oder - sehr aussagekr&auml;ftig! -
+in <TT>/var/log/vbox.ttyI1</TT> nach.
+
+
+<H3>Feinjustage</H3>
+
+Der Rest ist jetzt nur noch Feinkram, um es etwas komfortabler zu gestalten.
+<P>
+
+Als erstes rufen wir vbox auf - das ist der "eigentliche" Anrufbeantworter:
+<PRE>
+  root:# vbox -u <I>user</I>
+  [Der vbox-Screen kommt im "View Mode"]
+</PRE>
+Die Angabe -u <I>user</I> ist nur unter root n&ouml;tig/m&ouml;glich - User 
+<I>user</I> kann direkt
+<PRE> 
+  <I>user</I>:# vbox
+  [Der vbox-Screen erscheint]
+</PRE>
+eingeben. Dann m&uuml;&szlig;te unser Testanruf angezeigt werden. 
+<P>
+
+Wer kein "auplay" auf seinem System hat, legt sich einfach ein Script an, um 
+nicht mehr den cat direkt verwenden zu m&uuml;ssen (auplay wird von vboxplay 
+aufgerufen).
+<PRE>
+<B>/usr/local/bin/auplay</B>
+  #!/bin/sh
+  cat $1 &gt; /dev/audio
+</PRE>
+Nachdem man mit <TT>chmod 755 /usr/local/bin/auplay</TT> das Script 
+ausf&uuml;hrbar gemacht hat, klappt das Abspielen auch so:
+<PRE>
+  root:# auplay /var/spool/vbox/incoming/<I>Zeit</I>-<I>Rufnummer</I>
+  root:# _
+</PRE>
+Wenn das klappt, kann man es auch in vbox versuchen: dazu auf dem
+aufgelisteten Anruf einfach RETURN dr&uuml;cken - und schon sollte die 
+Nachricht zu h&ouml;ren sein.
+<P>
+
+Wenn man zufrieden ist, kann man die Aufnahme zum Standard-Ansagetext machen:
+<PRE>
+  root:# cp /var/spool/vbox/incoming/<I>Zeit</I>-<I>Rufnummer</I> /var/spool/vbox/messages/standard.msg
+  root:# _
+</PRE>
+Und alles ist in Butter...
+
+
+<H3>Der automatische Systemstart</H3>
+
+Nat&uuml;rlich soll der Anrufbeantworter auch bei jedem Booten automatisch
+gestartet werden. Dazu muﬂ ein Eintrag in der Datei <TT>/etc/inittab</TT> 
+vorgenommen werden. Wie der aussieht, kann auch der Datei 
+<TT>/usr/src/vbox/samples/sample-inittab</TT> entnommen werden. Einige
+&Auml;nderungen sind aber n&ouml;tig; der Eintrag sollte etwa so aussehen:
+<PRE>
+<B>/etc/inittab</B>
+  ...
+  # getty-programs for the normal runlevels
+  ...
+  I1:23:respawn:/usr/local/sbin/vboxgetty -d /dev/ttyI1 -i "ATZ&E<I>EAZ</I>" -u <I>user</I>
+  ...
+</PRE>
+Zu beachten ist, daﬂ die Runlevel korrekt sein m&uuml;ssen (in der Regel "23").
+Nach einem Systemrestart l&auml;uft unsere Voicebox!
+
+
+<H3>Achtung - Aufnahme!</H3>
+
+Nun kosten Ansagen, wenn man sie &uuml;ber einen Selbstanruf erledigt, Geld - 
+so ist das sicherlich nicht im Sinne des Erfinders. Wir haben eine Soundkarte, 
+und mit der kann man ja schlie&szlig;lich auch was aufnehmen, oder?
+<P>
+
+Ein paar Zeichen am Beginn einer Sounddatei sagen etwas &uuml;ber ihre
+Verpackung aus. Mit vbox kommt ein Programm, mit dem man einen solchen Header
+herstellen kann. Dieses Programm benutzen wir nun, um einen solchen Header
+herzustellen (uLAW-Kompression):
+<PRE>
+  root:# rmdcatheader -u &gt;/etc/ulaw.header
+  root:# _
+</PRE>
+Ein Miniscript macht uns aus au-Dateien uLAW-Dateien:
+<PRE>
+<B>/usr/local/sbin/au2ulaw</B>
+  #!/bin/sh
+  cat /etc/ulaw.header $1.au &gt; $1.msg
+</PRE>
+Damit ist das Aufnehmen des Ansagetextes ganz einfach:
+<PRE>
+  root:# cd /var/spool/vbox/<I>user</I>/messages
+  root:# cat &lt;/dev/audio &gt;standard.au
+  <I>(Nun Ansagetext aufnehmen, danach Strg-C dr&uuml;cken)</I>
+  root:# au2ulaw standard
+  root:# _
+</PRE>
+Fertig! Entsprechend kann man noch eine individuelle <TT>beep.msg</TT> 
+herstellen, in der der "Piep!" nach dem Ansagetext gespeichert ist.
+Ferner gibt es noch die Datei <TT>timeout.msg"</TT>, in der das Ende
+der Aufzeichnungszeit verk&uuml;ndet wird, und die Datei <TT>panic.msg"</TT>,
+in der bekanntgegeben wird, da&szlig; der Plattenplatz knapp wird.
+
+
+<H3>Tools</H3>
+
+Dem Paket liegen zwei sehr interessante Scripten bei: <TT>vboxnotify</TT> und 
+<TT>vboxmime</TT>.
+<P> 
+
+<TT>vboxnotify</TT> schickt eine simple Email als Nachricht, wenn ein Anruf 
+hereinkommt, <TT>vboxmime</TT> schickt gleich die ganze Voicedatei selbst 
+base64-kodiert weiter.
+<P>
+
+Wer's unter X mag, der kann noch mit <TT>mam</TT> und <TT>xvboxled</TT> 
+experimentieren. 
+<P>
+
+<TT>mam</TT> (Motif Answering Machine) von 
+<A HREF="mailto:chrisb@ganzfix.duew.eunet.de?subject=mam">Chris Benndorf</A>
+ben&ouml;tigt zum &Uuml;bersetzen allerdings Motif, so da&szlig;
+man sich das nicht so ohne weiteres basteln kann. Es gibt allerdings unter
+<A HREF="ftp://ftp.franken.de/pub/isdn4linux/contributions/">ftp.franken.de/pub/isdn4linux/contributions/</A>
+eine statisch gelinkte Version zum Downloaden. Sie ist optisch ansprechender
+als das vt100-vbox-Programm, st&uuml;rzt aber gern mal ab, wenn es irgend
+etwas nicht findet. Apropos: die statisch gelinkte Version erwartet die
+vboxgetty-Dateien in den Originalverzeichnissen. Ich habe diese f&uuml;r die
+Anleitung etwas ver&auml;ndert, um die logische Linux-Verzeichnisstruktur
+besser zu unterst&uuml;tzen. Eventuell sind ein paar Softlinks von den
+erwarteten in die tats&auml;chlichen Verzeichnisse zu legen.
+<P>
+
+Auch <TT>xvboxled</TT> von 
+<A HREF="mailto:schoenep@wrcs3.urz.uni-wuppertal.de?subject=xvboxled">Jan 
+Schoenepauck</A> und <A HREF="mailto:gassen@uni-muenster.de?subject=xvboxled">Joachim 
+Gassen</A>, ein Programm, das &auml;hnlich wie xbiff die Ankunft neuer Anrufe
+anzeigt und vbox starten kann, mu&szlig; man sich erst noch &uuml;bersetzen. 
+Dazu begibt man sich ins Verzeichnis <TT>/usr/src/vbox/xvboxled</TT>, kopiert 
+<TT>example-config.h</TT> in <TT>config.h</TT> und editiert letzteres. 
+Darin ist nur ein Pfad anzupassen:
+
+<PRE>
+<B>/usr/src/vbox/tools/xvboxled</B> (Ausschnitt)
+  #define INCOMING_DIR "/var/spool/vbox/<U>user</I>/incoming"
+</PRE>
+
+Das Makefile ist in der Regel bereits so wie es ist brauchbar (vielleicht
+will man die Installationspfade ver&auml;ndern). Das Programm wird nun
+&uuml;bersetzt und installiert:
+<PRE>
+  root:# make
+  ...
+  root:# make install
+  ...
+  root:# _
+</PRE>
+
+Programm nun aufrufen und benutzen! Bei mir hat es seinen Platz neben xbiff
+und isdnmon in einem "Schaltkasten" eingenommen. Kommt echt sch&ouml;n!
+
+<P>
+<HR>
+<ADDRESS>
+<A HREF="gnulis.html"  TARGET=Main>Copyright &#169; (GPL V 2)</A> 1996 
+<A HREF="mailto:hessler@wi-inf.uni-essen.de?subject=vbox-Anleitung">Matthias 
+He&szlig;ler</A>, 
+<A HREF="http://www.chemie.uni-muenchen.de/ac/boehm/beh.html">Bernhard Hailer</A><BR>
+Letzte &Auml;nderung: 21-Feb-97 BeH
+</ADDRESS>
+
+</BODY>
+</HTML>
+
+
+
+
+

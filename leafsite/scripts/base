@@ -1,0 +1,58 @@
+#!/bin/bash
+# (c) 1997 Bernhard Hailer (GNU GPL V.2)
+
+# Edit this file for your needs
+
+# local settings
+# ==============
+
+# Fully qualified host name
+MY_HOSTNAME=`hostname --fqdn`           # read host's name
+# MY_HOSTNAME=foo.bar.com
+
+# Host phone number and MSN (EAZ) - replace by your numbers!
+MY_PHONE=817812345                      # no leading zero!
+MY_EAZ=12345
+
+# Email address for fetching mail - replace by your address!
+MY_EMAIL_ADDRESS=dl4mhk@lrz.uni-muenchen.de
+
+
+# extra start commands for rc.connect (e.g. module loading)
+# ---------------------------------------------------------
+function Con_Start()
+{
+  insmod /lib/modules/`/bin/uname -r`/misc/isdn.o
+  insmod /lib/modules/`/bin/uname -r`/misc/hisax.o io=3,2,12,0xd80 HiSax_id=Teles0
+  #insmod /lib/modules/`/bin/uname -r`/misc/teles.o io=0,12,0xd80,2 teles_id=Teles0
+  #rmmod teles.o
+  #insmod /lib/modules/`/bin/uname -r`/misc/teles.o io=0,12,0xd80,2 teles_id=Teles0
+  return
+}
+
+# extra stop commands for rc.connect (e.g. module unloading)
+# ----------------------------------------------------------
+function Con_Stop()
+{
+  rmmod hisax.o  
+  #rmmod teles.o
+  sleep 1
+  rmmod isdn.o
+  return
+}
+
+# Default remote providers for regular connects
+DEFAULT_REMOTES="lrz-d1 lrz-d2"
+
+# default device where your modem is connected - no leading "/dev/"!
+DEFAULT_DEVICE="ttyS1"
+
+# Maximum number of dialin attempts
+declare -i DEFAULT_MAX_TRIES
+DEFAULT_MAX_TRIES=4
+
+# Maximum idle time before hangup (you should use a time of about 300 secs
+# here, because it is more expensive to dial often than to hold a line!)
+# This only works for isdn4linux connections.
+declare -i HUPTIMEOUT
+HUPTIMEOUT=300             # 5 min

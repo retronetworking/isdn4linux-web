@@ -1,0 +1,120 @@
+<HTML>
+<HEAD>
+<TITLE>
+Fax
+</TITLE>
+<!-- Changed by: Bernhard Hailer, 21-Feb-1997 -->
+</HEAD>
+
+<BODY>
+<H1>
+<P ALIGN=CENTER>
+<IMG SRC="fax.jpg" ALT="Linux">
+<!IMG SRC="linux.gif" ALT="Linux">
+<!IMG SRC="isdn.gif"  ALT="ISDN">
+<BR>
+ <FONT SIZE=+3>Wir machen Fax(en)</FONT>
+</P>
+</H1>
+
+<HR>
+
+<H2>Der Einsatz als Faxger&auml;t</H2>
+
+klappt leider nicht, wenn man das mit ISDN4Linux machen will. Das liegt daran, 
+da&szlig; Linux ein Multi-Tasking-System ist und Fax doch sehr timingkritisch
+ist. Unter Windows 3.11 mag es noch klappen, aber Linux ist einfach nicht
+echtzeitf&auml;hig. Daf&uuml;r kann es sonst alles :-)
+<P>
+
+Wer also Fax machen will, ist auf ein analoges Modem angewiesen. Als Software
+bietet sich sofort <TT>mgetty+sendfax</TT> von Gert Doering an. Hier
+gleich eine <B>Warnung</B>: mit Billigmodems (40 Mark im Laden um die Ecke)
+geht sowas gerne schief! Ich habe mit einem solchen Billigteil eine Woche
+Zeit und unz&auml;hlige Telefoneinheiten verplempert, bis ich eingesehen
+hatte, da&szlig; hier einfach etwas besseres her mu&szlig;te. Das neue Modem
+war acht mal so teuer - lief aber daf&uuml;r auf Anhieb!
+<P>
+
+Hier also die Beschreibung, wie man mit einem Analogmodem Fax empfangen kann.
+Mein Anschlu&szlig; ist inzwischen total "sophisticated": ich habe parallel 
+einen Anrufbeantworter (vgetty) laufen, der automatisch erkennt, wenn ein Fax 
+oder Daten kommen, und dann entsprechend handeln kann.
+<P>
+
+Mgetty mu&szlig; man sich zun&auml;chst holen, zum Beispiel hier:
+
+  <A HREF="ftp://ftp.leo.org/pub/comp/networking/communication/modem/mgetty/mgetty-latest.tar.gz">ftp.leo.org/pub/comp/networking/communication/modem/mgetty/mgetty-latest.tar.gz</A>
+
+
+<H3>Konfiguration</H3>
+
+Die wichtigste Datei im Paket ist <TT>policy.h-dist</TT>. Diese mu&szlig; man 
+vorbereiten
+
+<PRE>
+  root:# cp policy.h_dist policy.h
+  root:# _
+</PRE>
+
+und editieren. Folgende Umstellungen sollten gemacht werden (alle anderen
+sind nach den Erfordernissen des Modems, der Telefonanlage und des eigenen 
+Geschmacks zu konfigurieren):
+
+<PRE>
+  #define LOG_PATH "/var/log/mgetty.%s"
+  #define MGETTY_PID_FILE        "/var/run/mgetty-pid.%s"
+  #define MODEM_CHECK_TIME -1    /* will not test modem periodically */
+  #define FAX_IN_OWNER           "&lt;user&gt;"       /* my username */
+  #define FAX_LOG                "/var/log/fax-log"
+  #define FAX_STATION_ID "++49 xxxx yyyyyy" /* my ID */
+  #define FAX_MODEM_TTYS "ttyS1"
+</PRE>
+
+Man lasse sich unbedingt von der guten Doku leiten! 
+<P>
+
+Jetzt editiert man noch das Makefile und baut ein:
+
+<PRE>
+<B>/usr/src/mgetty-0.99.x/Makefile</B> (Ausschnitt)
+
+  ...
+  INSTALL=install -c -o root -g root
+  ...
+</PRE>
+
+Und nun machen wir's:
+
+<PRE>
+  root:# make
+  root:# make install
+  root# _
+</PRE>
+
+Damit mgetty sich auf die Lauer legen kann, muss man es in die Init-Tabelle
+eintragen. Der folgende Eintrag leistet das (hier f&uuml;r den Fall, da&szlig; 
+das Modem an /dev/ttyS1 h&auml;ngt - der Chat-String mu&szlig; dem Modem 
+entsprechend angepa&szlig;t sein!):
+
+<PRE>
+  S1:23:respawn:/usr/local/sbin/mgetty -m '"" ATZ0 OK ATA' -x 3 -n 5 /dev/ttyS1
+</PRE>
+
+Damit nimmt mgetty nach dem f&uuml;nften Klingeln ab und nimmt Daten entgegen.
+
+
+<H3>Faxe senden<H3>
+
+
+
+<P>
+<HR>
+<ADDRESS>
+<A HREF="gnulis.html"  TARGET=Main>Copyright &#169; (GPL V 2)</A> 1996 
+<A HREF="http://www.chemie.uni-muenchen.de/ac/boehm/beh.html">Bernhard Hailer</A><BR>
+Letzte &Auml;nderung: 21-Feb-97 BeH
+</ADDRESS>
+
+</BODY>
+</HTML>

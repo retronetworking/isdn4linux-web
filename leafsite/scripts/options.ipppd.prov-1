@@ -1,0 +1,10 @@
+# /etc/ppp/options for ipppd
+useifip
+-vjccomp
+-ac
+-pc
+-detach
+-bsdcomp
+-vj
+
+user hailer

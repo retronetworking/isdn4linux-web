@@ -1,0 +1,97 @@
+<HTML>
+<HEAD>
+<TITLE>
+A Linux Leafsite
+</TITLE>
+<!-- Changed by: Bernhard Hailer, 21-Feb-1997 -->
+</HEAD>
+
+<BODY>
+<H1>
+<P ALIGN=CENTER>
+ <IMG SRC="vortrag.jpg" ALT="Linux">
+<!IMG SRC="linux.gif" ALT="Linux">
+<!IMG SRC="isdn.gif"  ALT="ISDN">
+<BR>
+ <FONT SIZE=+3>How to Build a Linux Leafsite
+</FONT>
+</P>
+</H1>
+
+<HR>
+<P>
+
+<FONT SIZE=+3><B>T</B></FONT>his 
+WWW pages tells you how to create easily a "leafsite" (a computer without 
+permanent connection to the Internet), saving money, but very powerful.
+<P>
+
+Using a terminal program you can't do too much - you can "telnet" to 
+somewhere; but transferring binary data is somewhat difficult with it.
+<P>
+
+So we use a protocol allowing temporarily a full connection of our computer 
+to the Internet: PPP (Point to Point Protocol). You get an own IP address 
+while the connection is established. With this, you can use FTP or WWW 
+browsers, for example.
+<P>
+
+Connections into the Internet cause bigger telephone bills, so we must
+do as much as possible "off line" - i.e. we should be able load down email 
+and news, and read them after download without an active connection.
+This procedures are described here, too.
+<P>
+
+<H2>Requirements</H2>
+
+
+<H3>General</H3>
+
+You must have access to your provider. Please ask him what you need to
+connect to him.
+<P>
+
+These pages contain a database file (which currently is very small) with 
+the data of some providers. If you can add an entry I would be very pleased.
+
+
+<H3>Hardware</H3>
+
+You need an ISDN card or a modem. The software described here (isdn4linux)
+supports cards with a special Siemens chip set on it (ISAC and HSCX), and also
+some other cards. Read the FAQ (also loadable from these pages - people who
+loaded down the archive must load down the FAQ in an extra step!).
+
+
+<H3>Software</H3>
+
+You need the PPP daemon, which comes with each Linux distribution. If you 
+use a ISDN card and need a modem emulation, you need the "ISDN4Linux" ("i4l") 
+package by Fritz Elfert. I describe it here 
+because of some practical reasons. Also available are some other packages like 
+"UISDN" by Matthias Urlichs. Only i4l offers kernel internal drivers yet, 
+however.
+<P>
+
+If you want to be told about the development of the i4l software you should 
+subscribe to the isdn4linux mailing list (about 30 mails per day). Therefore 
+you should send an email containing 
+<PRE>
+  subscribe isdn4linux <I>&lt;your_own@email.address&gt;</I>
+</PRE> 
+in the body to
+<PRE>
+  <A HREF="mailto:majordomo@listserv.isdn4linux.de">majordomo@listserv.isdn4linux.de</A>
+</PRE>
+(no subject required). The folks talking there also speak English.
+
+<P>
+<HR>
+<ADDRESS>
+<A HREF="gnulis_e.html"  TARGET=Main>Copyright &#169; (GPL V 2)</A> 1996 
+<A HREF="http://www.chemie.uni-muenchen.de/ac/boehm/beh.html">Bernhard Hailer</A><BR>
+Last modification: 21-Feb-97 BeH
+</ADDRESS>
+
+</BODY>
+</HTML>

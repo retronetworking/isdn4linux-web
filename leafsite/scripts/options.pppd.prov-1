@@ -1,0 +1,4 @@
+# /etc/ppp/options
+crtscts
+
+user hailer

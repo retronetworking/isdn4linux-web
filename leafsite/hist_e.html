@@ -1,0 +1,238 @@
+<HTML>
+<HEAD>
+<TITLE>
+History
+</TITLE>
+<!-- Changed by: Bernhard Hailer, 24-Feb-1997 -->
+</HEAD>
+
+<BODY>
+<H1>
+<P ALIGN=CENTER>
+<IMG SRC="c64.jpg" ALT="Linux">
+<!IMG SRC="linux.gif" ALT="Linux">
+<!IMG SRC="isdn.gif"  ALT="ISDN"><BR>
+ <FONT SIZE=+3>How to Get Access to the Internet using PPP
+</FONT>
+</P>
+</H1>
+
+<HR>
+<P>
+
+<H2>History</H2>
+
+<FONT SIZE=+3><B>B</B></FONT>ecause 
+always there are some points to improve this manual changes pretty often.
+It would be a bit difficult for the user to find out what has changed, and so
+I made a small history.
+
+<UL>
+<LI>In the far past: Once upon a time there was a poor student who desperately
+    tried to get this d... i4l running. He gathered smallest hints and spent
+    a lot of money to the Deutsche Telekom (telephone company in Germany).
+<LI>The LRZ asked him how-to, when the thing happened to work something. 
+<LI>The original version of this page appeared in the beginning of May 1996
+    as a suggestion for a LRZ info paper. Some smaller accidents were built-in,
+    however, e.g. the FTP transfer did not work properly.
+<LI>May 13rd: It worked. Sma<LI>6. Juli:
+    <UL>
+    <LI>Die IP-Adresse des ersten LRZ-Ascens war falsch. Korrigiert in der 
+        Einf&uuml;hrung und im Script rc.isdn. 
+    <LI>Viele Leser schrieben von Problemen mit SysV-init/simpleinit.
+        Daher wurde das bei der Konfiguration st&auml;rker ber&uuml;cksichtigt.
+    <LI>Das Problem "CHAP" wurde - obwohl am LRZ nicht relevant - erkl&auml;rt.
+    </UL>
+ll speech at LRZ within a workshop concerning
+    "accessing the LRZ via telephone lines". The page was converted from
+    plain ASCII to HTML. A lot of people wrote emails and wanted to have this
+    page. Dr. Werner Becker mounted it to the WWW under URL
+    &lt;<A HREF="http://o01.rosat.mpe-garching.mpg.de/~web/ISDN.html">http://o01.rosat.mpe-garching.mpg.de/~web/ISDN.html</A>&gt;
+<LI>May 16th: New version - sorry, it had bugs!
+    <UL>
+    <LI>/etc/rc.d/rc.isdn: added second Ascend server
+    <LI>/etc/rc.d/rc.isdn: the non-PPP device isdn1 -> isdn0
+    <LI>/etc/rc.d/rc.isdn: removedthe first "0" in "isdnctrl addphone ipppx in" 
+                           (small bug)
+    <LI>/etc/ppp/pap-secrets widened
+    <LI>/etc/hosts: added 2nd Ascend server, but killed the "lrz" entry
+    </UL>
+<LI>May 17th: because I forgot something in the last version it did not work.
+    <UL>
+    <LI>/etc/ppp/options: Removed "remotename lrz" entry.
+    <LI>/etc/rc.d/rc.isdn: added option "remotename lrz-px" to the ipppd calls
+        (with x=0,1)
+    </UL>
+    These changes worked.<BR>
+    Also a first good attempt to handle email off-line was suggested. But
+    it was LRZ specific.
+    <UL>
+    <LI>added email chapter
+    <LI>added "lrzmail" and "sunmail" to /etc/hosts.
+    </UL>
+<LI>May 18: No bigger changes - wrote this history. I'm working on INN
+    implementation...
+<LI>May 21: I could mount this page at an own site. The newest version of
+    this page is found at
+    &lt;<A HREF="http://www.lrz-muenchen.de/~ui161ab/www/isdn/">http://www.lrz-muenchen.de/~ui161ab/www/isdn/</A>&gt;<BR>
+    Changes:
+    <UL>
+    <LI>email chapter: added suggestion how to substitute chma (not ideal)
+    <LI>email chapter: corrected MASQUERADE_AS entry in 
+        /usr/src/sendmail/cf/cf/linux.dl4mhk.mc (host name had been wrong)
+    </UL>
+<LI>June 20th: INN is looking very reproachful, but:
+    <UL>
+    <LI>improved "look" of the pages
+    <LI>divided now the several subjects (installation, email, news etc.)
+        into separate pages
+    <LI>made this English translation of the original German page
+    <LI>widened the introduction,
+    <LI>removed some few bugs.
+    <LI>The page was completely rebuilt for kernel 2.0.0, so these scripts 
+        have changed:
+        <UL>
+        <LI><TT>/etc/rc.d/rc.isdn</TT>: The line<BR>
+            <TT>echo "0" >/etc/lines.active # makes it comfortable.</TT><BR>
+            was added.
+        <LI>The neton and netoff scripts were substituted against the very 
+            large but comfortable script <TT>/sbin/isdn</TT>
+        </UL>
+    <LI>made this English translation of the original German page (uff...)
+    </UL>
+<LI>June 30th: My Usenet system is running since four days now.
+    <UL>
+    <LI>The Usenet page (in German) is finished.
+    <LI>The Email page was modified slightly.
+    </UL>
+<LI>July 6th:
+    <UL>
+    <LI>The first LRZ Ascend IP address had been wrong. Fixed in the 
+        introduction and the /etc/hosts file.
+    <LI>The testing whether the line is ok is improved. Now the script
+        <TT>/sbin/isdn</TT> pings directly to the dial-in server, not to a 
+        more distant computer. The same way the scripts
+        <TT>/sbin/transmail</TT> and <TT>/sbin/transnews</TT> work - but here
+        also the mail/news host is tested. If this machine is off-line
+        no more dial attempts are made.
+    <LI>Many readers had trouble concerning SysV-init/simpleinit.
+        So I described this problem more extensive.
+    <LI>The "CHAP" problem is now described (not important at the LRZ, 
+        however).
+    </UL>
+<LI>July 19th:
+    <UL>
+    <LI>Installation: CHAP authentification described now more elegant
+    <LI>Instead of kernel 2.0.0 with patch1+2 now 2.0.6 "naked"
+    </UL>
+<LI>July 28th:
+    <UL>
+    <LI>Installation: The ipppd stop file for shutdown was enhanced:
+        A "<TT>ifconfig <I>device</I> down</TT>" prevents "busy" messages.
+    <LI>email: Added "<TT>FEATURE(nocanonify)</TT>" to the sendmail 
+        configuration file.
+    </UL>
+<LI>July 29th:
+    <UL>
+    <LI>Usenet: "T&auml;glicher Kleinkram":
+        "<TT>sendnews</TT>" command built in.
+    </UL>
+<LI>September 1st:<BR>
+    The pages have been revised completely: it is not longer bound at the
+    Leibniz-Rechenzentrum as provider, ant it is written now so generally,
+    that in most cases you should be able to setup your system with it.
+    This collection is protected now under the conditions of the GPL, so
+    you may use and copy it as you like.<BR>
+    Changes:
+    <UL>
+    <LI>A database with data of providers is built up. It is used actively in
+    the scripts.
+    <LI>/etc/hosts: 
+        <UL>
+        <LI>lrz-p0 -&gt; prvdr0
+        <LI>lrz-p1 -&gt; prvdr1
+        <LI>lrzmail -&gt; getmail
+        <LI>lrznews -&gt; getnews
+        </UL>
+    These names also were changed in the scripts - so be careful with 
+    updates. I apologize for any unconveniences, but I had to do this.
+    <LI> The scripts /sbin/isdn, /sbin/transmail and /sbin/transnews
+    contained a bad bug, making the more applications open in one channel
+    concept not work. Bug fixed.
+    <LI> All scripts were revised intensely.
+    <LI> The english translation of the Usenet chaper is finished.
+    <LI> A new chapter is born: ftp on demand!
+    <LI> The email chapter is now prepared in a way you can use it for
+    other providers. 
+    <LI> You can now download these pages (tared zipped).
+    </UL>
+<LI>October 20th:<BR>
+    The scripts had some new bugs, which are fixed now hopefully. you can now
+    see only simple easy-to-understand example scripts in the pages, but
+    can load down very sophisticated easy-to-use scripts.
+    Einige Sch&ouml;nheitskorrekturen. 
+<LI>November 21st:<BR>
+    <UL>
+    <LI>Matthias He&szlig;ler suggested to create better names for the
+        configuration scripts (<TT>i4l.provider</TT> and <TT>i4l.secrets</TT>).
+    <LI>Kernel configuration: the "Code Maturity-Level" question is now 
+        answered with "No". Should work.
+    <LI>The scripts rc.isdn, /sbin/isdn, /sbin/transmail, /sbin/transnews
+        got some polish. Some small bug fixes. rc.isdn was cleaned a bit more
+        intensively.
+    </UL>
+<LI>December 1st:<BR>
+    The scripts became faster because sleep time amounts were decreased.
+<LI>January 26th 1997:<BR>
+    "isdn" is dead - long lives "connect"! A totally new script package
+    handles now the connection to the Internet - via isdn4linux or via modem.
+    Multiple connections and route definitions are possible now, also
+    limited dial-in attempts and more.
+<LI>24. Februar 1997:<BR>
+    Some more or less serious bux were fixed, some changes were made. Many
+    thanks to Dirk Husfeld &lt;husfeld@usm.uni-muenchen.de&gt; and 
+    Herbert Thielen &lt;Herbert.Thielen@lpr.e-technik.tu-muenchen.de&gt;
+    for lots of most valuable hints and remarks.
+    <UL>
+    <LI>Provider templates: <TT>IP</TT> now is named correctly 
+        <TT>IP_ADDRESS</TT>.
+    <LI>The english installation page had a wrongly described chap-secrets
+        file.
+    <LI>S.u.S.E. uses a start script <TT>/sbin/init.d/i4l_hardware</TT> in 
+        newer Distributions - this is honored now.
+    <LI>The PID of the connect script is now determined by "$$",
+        and lock file handling is corrected somewhat.
+    <LI>Now before testing whether PPP negotiation was successful, a test
+        of the physical line is made.
+    <LI>Lots of small and big bugs are fixed.
+    <LI>If connect could open only the second defined remote, and connect is
+        called again, an unwanted second connection established in the old
+        script version. Fixed.
+    <LI>IMPORTANT: all files formerly written to <TT>/tmp</TT> are moved to
+        <TT>/var/lib/connect</TT> now! This touches the scripts
+        <TT>/etc/ppp/ip-up</TT> and <TT>/sbin/connect.</TT> This was done
+        because of the system security.
+    <LI>All absolute paths are substituted by variables.
+    </UL>
+    So version 1.0 officially is released! :-) But sorry: more changes
+    must wait, because I will start a stressful new job very soon. :-(
+</UL>
+
+<P>
+<HR>
+<ADDRESS>
+<A HREF="gnulis_e.html"  TARGET=Main>Copyright &#169; (GPL V 2)</A> 1996 
+<A HREF="http://www.chemie.uni-muenchen.de/ac/boehm/beh.html">Bernhard Hailer</A><BR>
+Last modification: 24-Feb-97 BeH
+</ADDRESS>
+
+</BODY>
+</HTML>
+
+
+
+
+
+
+
+

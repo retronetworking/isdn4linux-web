@@ -1,0 +1,749 @@
+#!/bin/bash
+# connect: connects to / disconnects from provider
+# Author:  Bernhard Hailer <Bernhard.Hailer@lrz.uni-muenchen.de>
+# Version: 1.0 (24-Feb-97)
+# License: GNU General Public License V2 ("GPL")
+
+
+# command line arguments
+
+ARG=$1
+if [ -n "$2" ]
+then
+  shift
+  ARGV=$*
+else
+  ARGV=""
+fi
+
+
+# Search paths
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+
+# Files (it is save to leave these untouched!)
+
+BASE=/usr/lib/connect/base              # basic definitions
+PROV_DIR=/usr/lib/connect/providers     # config files, once per provider
+STATUS=/var/lib/connect/status          # status file
+STATUS_BAK=/var/lib/connect/status.bak  # status file backup
+IF_FILE=/var/lib/connect/interface      # pppd interface - see /etc/ppp/ip-up!
+PPP_PID_DIR=/var/run                    # PPP pid file/Linux: /var/run/pppx.pid
+
+# Global variables
+. $BASE
+declare -i i       # i: standard counter
+NEW_CONN=false
+declare -i RETURN  # i: standard return value
+RETURN=0
+# wait before testing line (isdn4linux)
+declare -i I4L_WAIT
+I4L_WAIT=10
+# wait before testing line (modems)
+declare -i MODEM_WAIT
+MODEM_WAIT=40
+
+
+# process ID for lock file
+declare -i PID
+declare -i LCK_PID
+PID=$$
+
+
+# -----------------------------------------------------------------------------
+
+# Functions
+
+Fatal_Error()
+# beeps, prints the "Usage:" message, removes lock file and exits (1)
+{
+  echo -e "\a\nUsage:"
+  echo "connect <keyword> [<remote1> [<remote2> [<remote3> ...]]]"
+  echo "keywords:"
+  echo "  [on], off [<remote(s)>] opens/closes connection"
+  echo "  off all                 forced closing"
+  echo "  status                  displays status of all defined remotes"
+  echo "  route <IP>|default      sets route for line"
+  echo "  device <device>         modem device (e.g. \"ttyS1\")"
+  echo "  maxtries <tries|0>      maximum number of dial attempts"
+  echo "  help                    displays this message"
+  echo "<remote1> [<remote2> [<remote3> [... ]]]:     remote(s) to open/close"
+  echo "---------------------------------------------------------------------"
+  echo "You have to edit these files for *each* remote:"
+  echo "  $PROV_DIR/<remote>"
+  echo "$BASE:  Default remote definitions"
+  echo "Remotes must not be named like keywords! Avoid the following names:"
+  echo "  on, off, all, status, route, device, maxtries, help"
+  rm /var/lock/LCK..connect 2>/dev/null
+  exit 1
+}
+
+
+# -----------------------------------------------------------------------------
+
+# command line parsing
+
+OP_MODE=""
+ROUTE=""
+declare -i MAX_TRIES
+MAX_TRIES=0
+
+until [ -z "$ARG" ]
+do
+
+  case $ARG in
+  on)
+    if [ -z "$OP_MODE" ]
+    then
+      OP_MODE=on
+    else
+      echo -e "\nOperation mode (on, off, status, help) set twice in command line."
+      Fatal_Error
+    fi
+  ;;
+  off)
+    if [ -z "$OP_MODE" ]
+    then
+      OP_MODE=off
+    else
+      echo -e "\nOperation mode (on, off, status, help) set twice in command line."
+      Fatal_Error
+    fi
+  ;;
+  status)
+    if [ -z "$OP_MODE" ]
+    then
+      OP_MODE=status
+    else
+      echo -e "\nOperation mode (on, off, status, help) set twice in command line."
+      Fatal_Error
+    fi
+  ;;
+  help)
+    if [ -z "$OP_MODE" ]
+    then
+      OP_MODE=help
+    else
+      echo -e "\nOperation mode (on, off, status, help) set twice in command line."
+      Fatal_Error
+    fi
+  ;;
+  route)
+    if [ -z "$ROUTE" ]
+    then
+      if [ -n "$ARGV" ]
+      then
+        set `echo $ARGV`
+        ARG=$1
+        shift
+        ARGV=$*
+        ROUTE="$ARG"
+        if [ `cat $STATUS | grep "$ROUTE" >/dev/null` ]
+	then
+	  echo -e "\nRoute named in command line is already used!"
+	  Fatal_Error
+	fi
+      else
+	echo -e "\nRoute command set without route in command line!"
+	Fatal_Error
+      fi
+    else
+      echo -e "\nRoute set twice in command line!"
+      Fatal_Error
+    fi
+  ;;
+  device)
+    if [ -z "$DEVICE" ]
+    then
+      if [ -n "$ARGV" ]
+      then
+        set `echo $ARGV`
+        ARG=$1
+        shift
+        ARGV=$*
+        DEVICE="$ARG"
+        if [ `cat $STATUS | grep "$DEVICE" >/dev/null` ]
+	then
+	  echo -e "\nDevice named in command line already used!"
+	  Fatal_Error
+	fi
+      else
+	echo -e "\nDevice command set without device name in command line!"
+	Fatal_Error
+      fi
+    else
+      echo -e "\nDevice set twice in command line"
+      Fatal_Error
+    fi
+  ;;
+  maxtries)
+    if [ $MAX_TRIES -eq 0 ]
+    then
+      if [ -n "$ARGV" ]
+      then
+        set `echo $ARGV`
+        ARG=$1
+        shift
+        ARGV=$*
+        MAX_TRIES=$ARG
+      else
+	echo -e "\nmaxtries command set without account of tries in command line!"
+	Fatal_Error
+      fi
+    else
+      echo -e "\nmaxtries set twice in command line!"
+      Fatal_Error
+    fi
+  ;;
+  *)
+    REMOTE_LIST="$REMOTE_LIST $ARG"
+  ;;
+  esac
+
+  # This construct is built against a bash bug.
+  if [ -z "$ARGV" ]
+  then
+    ARG=""
+  else
+    set `echo $ARGV`
+    ARG=$1
+    shift
+    ARGV=$*
+  fi
+  
+done
+
+
+# -----------------------------------------------------------------------------
+
+# now fill up some variables, if empty.
+
+# is there any remote defined in command line / $DEFAULT_REMOTES?   
+
+if [ -z "$REMOTE_LIST" ] 
+then
+  REMOTE_LIST=$DEFAULT_REMOTES    # defined in $BASE
+  if [ -z "$REMOTE_LIST" ]
+  then
+    echo -e "\a\nNo DEFAULT_REMOTES defined in $BASE! Exiting."
+    exit 1
+  fi
+fi
+
+# Operation mode. If none, then assume "on".
+if [ -z "$OP_MODE" ]
+then OP_MODE=on
+fi
+
+## tty device.
+#if [ -z "$DEVICE" ]
+#then
+#  DEVICE=$DEFAULT_DEVICE
+#fi
+
+# Maximum number of dial tries.
+if [ $MAX_TRIES -eq 0 ]
+then  
+  MAX_TRIES=$DEFAULT_MAX_TRIES
+  if [ $MAX_TRIES -eq 0 ]
+  then
+    echo "DEFAULT_MAX_TRIES not set in $BASE!"
+    Fatal_Error
+  fi
+fi
+
+# Any route set?
+if [ -z "$ROUTE" ]
+then
+  ROUTE=default
+fi
+
+
+# -----------------------------------------------------------------------------
+
+# More functions
+
+Connect_Dial()
+# Dials out, automatically chooses i4l or modem.
+# Needs $INTERFACE, $IP_ADDRESS and $ROUTE, and $DEVICE if modem. 
+{
+  BUFFER=$DEVICE 
+  . $PROV_DIR/$REMOTE
+  if [ -n "$BUFFER" ]
+  then
+    DEVICE=$BUFFER
+  else
+    if [ -z "$DEVICE" ]
+    then
+      DEVICE="$DEFAULT_DEVICE"
+    fi
+  fi
+
+  case $INTERFACE in
+  ippp*)
+    # ISDN4Linux syncPPP connection
+    ifconfig $INTERFACE up
+    isdnctrl dial $INTERFACE
+    echo "Sleeping $I4L_WAIT seconds for PPP handshaking..."
+    sleep $I4L_WAIT
+  ;;
+  *)
+    # Modem asyncPPP connection
+    pppd connect "chat $CHAT_SCRIPT" file $OPTIONS_FILE /dev/$DEVICE &
+    # the interface name was saved now by /etc/ppp/ip-up in IF_FILE.
+    sleep 1
+    echo "Sleeping $MODEM_WAIT seconds for establishing connection..."
+    sleep $MODEM_WAIT
+    if [ -e $IF_FILE ]
+    then
+      read INTERFACE <$IF_FILE  
+    else
+      INTERFACE="-----"
+    fi
+  ;;
+  esac
+  if [ "$INTERFACE" != "-----" ]
+  then
+    if [ "$ROUTE" = "default" ]
+    then
+      route add $ROUTE $INTERFACE
+    else
+      route add $IP_ADDRESS
+      route add $ROUTE gw $IP_ADDRESS
+    fi
+  fi
+}
+
+Connect_Hangup()
+# Hangs up device $INTERFACE. Automatically chooses i4l or modem.
+# Needs $INTERFACE, $DEVICE, $REMOTE, $IP_ADDRESS and $ROUTE. 
+{
+  case $INTERFACE in
+  ippp*)
+    # ISDN4Linux hangup
+    echo -e "$REMOTE: \c"
+    isdnctrl hangup $INTERFACE
+    ifconfig $INTERFACE down
+  ;;  
+  *)
+    # Modem hangup
+    if [ -e $PPP_PID_DIR/$INTERFACE.pid ]
+    then
+      kill -HUP `cat $PPP_PID_DIR/$INTERFACE.pid`
+      echo "$REMOTE: $INTERFACE hung up"
+    else
+      echo "$REMOTE: $INTERFACE not connected"
+    fi  
+  ;;    
+  esac
+  if [ "$ROUTE" != "default" ]
+  then
+    route del $IP_ADDRESS 2>/dev/null
+  fi
+  route del $ROUTE 2>/dev/null
+  rm $IF_FILE 2>/dev/null
+}
+
+Line_OK()
+# Checks whether channel really is connected.
+{
+  case $INTERFACE in
+  ippp*)   # test i4l connection
+    # check whether physical connection is established:
+    echo -e "Physical connection... \c" 
+    # Therefore get phone number used:
+    PHONE=`cat $PROV_DIR/$REMOTE | grep "PHONE="`
+    # Now we have a string like PHONE=08912345 - use it as command to set PHONE
+    export $PHONE;
+    if [ -n "`imontty | grep $PHONE | grep outgoing`" ]
+    then
+      echo -e "established; PPP negotiation... \c"
+      # check whether PPP negotiation was successful:
+      set `ping -qc3 -i1 $IP_ADDRESS 2>/dev/null | grep transmitted`
+      let RETURN=$4
+      if [ $RETURN -gt 0 ]
+      then
+	echo "succeeded."
+      else
+	echo "failed!"
+      fi
+    else
+      let RETURN=0
+      echo "not established!"
+    fi
+  ;;
+  *)     # test modem connection
+    echo -e "Physical connection... \c" 
+    if [ "$INTERFACE" = "-----" ]  # Modem connect failed
+    then
+      let RETURN=0
+      echo "not established!"
+    else
+      echo -e "established; PPP negotiation... \c"
+      set `ping -qc3 -i1 $IP_ADDRESS 2>/dev/null | grep transmitted`
+      let RETURN=$4
+      if [ $RETURN -gt 0 ]
+      then
+	echo "succeeded."
+      else
+	echo "failed!"
+      fi
+    fi
+  ;;
+  esac
+}
+
+Rd_Status()
+# Reads status file. Sets INTERFACE, DEVICE, IP_ADDRESS, TIMES_OPEN and ROUTE;
+# needs $REMOTE.
+# If you want to change the format, don't forget the init file (rc.connect)! 
+{
+  set `cat $STATUS | grep $REMOTE`
+  if [ -z "$2" ]
+  then
+    echo -e "$PROV_DIR/$REMOTE does not exist! Check also $BASE!"
+    Fatal_Error
+  fi
+  INTERFACE=$2
+  ACT_DEVICE=$3
+  IP_ADDRESS=$4
+  TIMES_OPEN=$5
+  ACT_ROUTE=$6
+}
+
+Wr_Status()
+# Actualizes status file. Needs $REMOTE, $IP_ADDRESS and actualized
+# $TIMES_OPEN. Also needs actual $ACT_ROUTE.
+# If you want to change the format, don't forget the init file (rc.connect)! 
+{
+  # actualize $REMOTE line and save it as first line
+  echo "$REMOTE $INTERFACE $DEVICE $IP_ADDRESS $TIMES_OPEN $ACT_ROUTE" \
+       >$STATUS_BAK
+
+  # save all lines in status file but not the $REMOTE one. 
+  cat $STATUS | grep -v $REMOTE >>$STATUS_BAK
+
+  # restore status file.
+  mv $STATUS_BAK $STATUS
+}
+
+
+# =============================================================================
+
+
+# Main script
+
+
+# -----------------------------------------------------------------------------
+
+# Did rc.connect run?
+if [ ! -e $STATUS ]
+then
+  echo -e "$STATUS missing - did you run rc.connect? Exiting."
+  rm /var/lock/LCK..connect
+  exit 1
+fi
+
+
+# -----------------------------------------------------------------------------
+
+# Lock script (against errors in status file)
+let i=3
+while [ $i -gt 0 ]
+do  
+  let i-=1
+  if [ -e /var/lock/LCK..connect ]
+  then
+    read LCK_PID </var/lock/LCK..connect
+    set `ps -a | grep $LCK_PID`
+    if [ $LCK_PID -eq $1 ]
+    then
+      echo "Script is locked - trying again in 30 seconds."
+      sleep 30
+    else
+      echo "Unclean shutdown - removing lock file /var/lock/LCK..connect"
+      rm /var/lock/LCK..connect
+      break
+    fi
+  else
+    break
+  fi
+done
+
+# also locked after three attempts?
+if [ -e /var/lock/LCK..connect ]
+then
+  echo -e "\aSorry - could not unlock for three times. Try later!"
+  exit 1
+fi
+
+# create lock file
+echo $PID >/var/lock/LCK..connect
+
+
+# -----------------------------------------------------------------------------
+
+# Main loop.
+
+case $OP_MODE in
+on)
+
+  # check whether one of the remotes seem already open
+  BUFFER=$REMOTE_LIST
+  until [ -z "$BUFFER" ]
+  do
+    set `echo $BUFFER`
+    REMOTE=$1
+    shift
+    BUFFER=$*
+    Rd_Status
+    if [ $TIMES_OPEN -gt 0 ]
+    then
+      ALREADY_OPEN=TRUE
+      break
+    fi
+  done
+
+  # Now main loop: open channel, if necessary, and check it.
+  until [ $MAX_TRIES -eq 0 ]
+  do
+
+    if [ "$ALREADY_OPEN" = "TRUE" ]
+    then
+      ALREADY_OPEN=FALSE
+    else
+      # rotation of devices
+      set `echo $REMOTE_LIST`
+      REMOTE=$1
+      shift
+      REMOTE_LIST="$* $REMOTE"
+
+      # Pick REMOTE's data from status file.
+      Rd_Status
+    fi
+      
+    # Found channel now. Already open?
+    case $TIMES_OPEN in
+    0)
+      echo -e "\nCalling $REMOTE"
+      Connect_Dial
+      NEW_CONN=true  # this is to detect whether line was closed by HUPTIMEOUT.
+    ;;
+    1)
+      echo "Line may be used already by an application - checking..."
+    ;;
+    *)
+      echo "Line may be used already by $TIMES_OPEN applications - checking..."
+    ;; 
+    esac
+
+    # check channel.
+    echo "Line open - checking..."    
+    Line_OK
+    if [ $RETURN -gt 0 ]
+    then
+      # channel is ok
+      if [ $TIMES_OPEN -eq 0 ]
+      then
+        ACT_ROUTE=$ROUTE
+      else
+        echo "Parameters set in command line will be ignored"
+	Rd_Status
+	DEVICE=$ACT_DEVICE
+      fi
+      if [ -n "`echo $INTERFACE | grep "ippp"`" ]
+      then
+        DEVICE="-----"
+      fi
+      let TIMES_OPEN+=1
+      Wr_Status
+      echo -e "8-) Line is ok - have fun!\n"
+      break
+    else
+      Connect_Hangup
+      if [ "$NEW_CONN" = "false" ]
+      then
+        # channel is closed - try to reopen
+        echo ":-| Hmm, no. Trying to rebuild..."
+        Connect_Dial      
+        echo "Line open - checking..."    
+        Line_OK
+        if [ $RETURN -gt 0 ]
+        then
+         #channel now open
+          if [ $TIMES_OPEN -eq 0 ]
+          then
+            ACT_ROUTE=$ROUTE
+          else
+            echo "Parameters set in command line will be ignored"
+            Rd_Status
+            DEVICE=$ACT_DEVICE
+          fi
+          if [ `echo $INTERFACE | grep "ippp"` ]
+          then
+            DEVICE="-----"
+          fi
+          let TIMES_OPEN+=1
+          Wr_Status
+          echo -e "8-) Line is ok - have fun!\n"
+          break
+        fi
+      fi
+      
+      #channel could not be opened
+      if [ $MAX_TRIES -eq 1 ]
+      then
+        let TIMES_OPEN=0
+        ACT_ROUTE=""
+        if ! [ `echo $INTERFACE | grep "ippp"` ]
+	then
+	  INTERFACE="-----"
+	fi
+	DEVICE="-----"
+        Wr_Status
+        echo -e ":-[ Sorry, all lines are down. Bad luck... Try later!\n"
+        rm /var/lock/LCK..connect
+        exit 1
+      fi
+    fi
+
+    echo ":-( This line is down. Trying next one."
+    let MAX_TRIES-=1
+    
+  done
+
+;;
+
+# -----------------------------------------------------------------------------
+
+
+off)
+
+  # parse device string
+  until [ -z "$REMOTE_LIST" ]
+  do
+    set `echo $REMOTE_LIST`
+    REMOTE=$1
+    shift
+    REMOTE_LIST=$*
+
+    case $REMOTE in
+
+    all)
+      # force closing of all channels and clear status file
+      for FILE in $PROV_DIR/*
+      do
+        REMOTE=`basename $FILE`
+	Rd_Status
+	TIMES_OPEN=0
+        ACT_ROUTE=""
+	Connect_Hangup
+        if ! [ `echo $INTERFACE | grep "ippp"` ]
+	then
+	  INTERFACE="-----"
+	fi
+	DEVICE="-----"
+        Wr_Status
+      done
+    ;;
+
+    *) 
+      # Pick REMOTE's data from status file.
+      Rd_Status
+      if [ -z "$INTERFACE" ]
+      then
+        echo "$PROV_DIR/$REMOTE does not exist! Check also $BASE!"
+        echo "To force closing all channels use \"connect off all\"."
+        Fatal_Error
+      fi
+
+      # close $INTERFACE, if no other application running
+      case $TIMES_OPEN in
+      0)
+        echo "$REMOTE already closed! To force closing use \"connect off all\""
+      ;;
+      1)
+        echo "Last application - hanging up $REMOTE ($INTERFACE)."
+        Connect_Hangup
+        let TIMES_OPEN=0
+        ACT_ROUTE=""
+        if [ -z "`echo $INTERFACE | grep "ippp"`" ]
+	then
+	  INTERFACE="-----"
+	fi
+	DEVICE="-----"
+        Wr_Status
+      ;;
+      2)
+        echo "One more application running - $REMOTE ($INTERFACE) left open."
+        let TIMES_OPEN-=1
+        ACT_ROUTE=$ROUTE
+        DEVICE=$ACT_DEVICE 
+        Wr_Status      
+      ;;
+      *)
+        let TIMES_OPEN-=1
+        echo "$TIMES_OPEN more applications running - $REMOTE ($INTERFACE) left open."
+	ACT_ROUTE=$ROUTE
+        DEVICE=$ACT_DEVICE 
+        Wr_Status      
+      ;;
+      esac
+    ;;
+    esac
+
+  done
+;;
+
+# -----------------------------------------------------------------------------
+
+
+status)  
+
+  for INTERFACE in $PROV_DIR/*
+  do
+    REMOTE=`basename $INTERFACE`
+    Rd_Status
+    echo -e "$REMOTE ($INTERFACE): \c"
+    case $TIMES_OPEN in
+    0)
+      echo "closed";;
+    1)
+      echo "used by one application";;
+    *)
+      echo "used by $TIMES_OPEN applications";;
+    esac  
+  done
+
+;;
+
+# -----------------------------------------------------------------------------
+  
+
+help)
+
+  Fatal_Error  # I know this is dirty...
+
+;;
+
+# -----------------------------------------------------------------------------
+  
+
+*)
+
+  Fatal_Error
+
+;;
+
+esac
+
+# -----------------------------------------------------------------------------
+
+
+# unlock script
+rm /var/lock/LCK..connect
+
+
+
+# End of script.

@@ -1,0 +1,14 @@
+--- vbox.c	Sat Sep 28 11:57:58 1996
++++ vbox.c.orig	Sat Sep 28 11:57:46 1996
+@@ -1953,9 +1953,9 @@
+ 
+ static chtype Color(int Pair)
+ {
+-	if (!Mono) return(COLOR_PAIR(Pair) | A_ALTCHARSET);
++	if (!Mono) return(COLOR_PAIR(Pair));
+ 
+-	return(COLOR_PAIR(0) | A_ALTCHARSET);
++	return(COLOR_PAIR(0));
+ }
+ 
+ /*************************************************************************

@@ -1,0 +1,34 @@
+Gentle Reader,
+
+in this archive you find a complete easy-to-use tutorial concerning ISDN
+and syncPPP. You also find a lot of advices to build up a comfortable
+"leafsite": how to install an offline email system, an offline Usenet
+server, an answering machine, how to make "fax on demand" and how to
+create a fax machine (may be, some of these things come later). 
+
+*All* files within this archive are copyright (C) under the terms of the
+Gnu General Public License, Bernhard Hailer, 1996. You will find the text of
+this license within this archive (gnulis_e.html, or in German gnulis.html). 
+You may distribute this archive and vary it, but do not remove my name, 
+the names of the other involved authors, the README file or the GPL copyright 
+notices. Please pass me a note, if you want to publicate or vary the package.
+
+LYNX users: please load index.html (German) or index_e.html (English).
+
+In the subdirectory "scripts" are some script files (as described in the
+WWW pages). They are mostly ready-to-use. There also is a database of provider 
+data. I would be pleased if you send me your entries.
+
+In the subdirectory "FAQ" is the complete ISDN4linux FAQ, compressed (MS-DOS
+PKZIP and Linux GNUZIP) and uncompressed. Please read it carefully before
+asking questions to me or to the ISDN4Linux mailinglist (see tutorial).
+
+Have fun!
+Bernhard Hailer <dl4mhk@lrz.uni-muenchen.de>                       23-Nov-96
+
+PS: I would be glad about criticism or bug reports!
+
+--... ...--   . ...   --. .-..   -.. .   -.. .-.. ....- -- .... -.-   -.-
+ _                   Tel ++49-89/5902-248;   home: Tel/Fax ++49-8178/5634
+|_)        |_|       http://www.lrz-muenchen.de/%7Eui161ab/ 
+|_)ERNHARD | |AILER  DL4MHK  (hams: http://www.dl0tum.vo.tu-muenchen.de/)

@@ -1,0 +1,14 @@
+#!/bin/sh
+# isdn4linux connection template.
+
+# modem or i4l?
+MODE=i4l
+
+# phone number of provider
+PHONE=
+
+# IP address of remote host
+IP_ADDRESS=
+
+# (i)pppd options file
+OPTIONS_FILE=/etc/ppp/options.ipppd

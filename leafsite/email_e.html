@@ -1,0 +1,329 @@
+<HTML>
+<HEAD>
+<TITLE>
+Email
+</TITLE>
+<!-- Changed by: Bernhard Hailer, 21-Feb-1997 -->
+</HEAD>
+
+<BODY>
+<H1>
+<P ALIGN=CENTER>
+<IMG SRC="psst.jpg" ALT="Linux">
+<!IMG SRC="linux.gif" ALT="Linux">
+<!IMG SRC="isdn.gif"  ALT="ISDN">
+<BR>
+ <FONT SIZE=+3>An Off-Line Email System</FONT>
+</P>
+</H1>
+
+<HR>
+<P>
+
+<FONT SIZE=+3><B>E</B></FONT>ven 
+if you can read emails online, it is a very good way to waste your money.
+What can you do to save money?
+<P>
+
+There are two programs which allow an off-line work at home. The first is
+<TT>sendmail</TT>, the second is <TT>popclient</TT>.
+<P>
+
+But before we explore sendmail and popclient we have to edit the file 
+<TT>/etc/hosts</TT> and to insert one entry for the mail server. If you have
+created <TT>i4l.config</TT> and called "makeleaf" this is done already.
+If you did not do it, you must add:
+
+<PRE>
+<B>/etc/hosts</B> (cutting)
+  <I>&lt;IP address&gt;</I>  <I>&lt;name_of_mail_server&gt;</I>    getmail
+</PRE>
+<P>
+
+
+<H2>sendmail</H2>
+
+I will not explain the low level configuration of sendmail - this is 
+somewhat for masochists ;-) I'm using a Linux distribution (S.u.S.E. aktuell 
+4.2 June 96; ELF) with a sendmail version R8. It is configurable with some m4
+scripts - have a look at the README of sendmail. I prepared a slightly modified
+configuration of the suggested original ("<TT>linux.smtp.mc</TT>"). Go to
+<TT>/usr/src/sendmail/cf/cf</TT> and write a file 
+<TT>linux.<I>asyoulike</I>.mc</TT>, e.g.:
+
+<PRE>
+<B>/usr/src/sendmail/cf/cf/linux.<I>asyoulike</I>.mc</B>  # Bernhard's sendmail.cf
+  include(`../m4/cf.m4')dnl              # must be!!!
+  VERSIONID(`<I>asyoulike</I>')dnl       # name it as you like
+  OSTYPE(linux)dnl                       # We're doing Linux!
+  FEATURE(nodns)dnl                      # No own name server
+  FEATURE(nocanonify)dnl                 # Don't lookup DNS while sending
+  FEATURE(nouucp)dnl                     # We don't use UUCP
+  define(SMART_HOST, relay:<I>&lt;provider.name&gt;</I>)dnl   # mail to ...
+  define(confCON_EXPENSIVE, True)dnl     # distributing mail is expensive
+  MASQUERADE_AS(lrz.uni-muenchen.de)dnl  # we act as "provider"
+  define(confUSERDB_SPEC, /etc/userdb.db)dnl  # Address correction
+  FEATURE(notsticky)dnl                  # don't change From: line
+  MAILER(local)dnl                       # use mailer:
+  MAILER(smtp)dnl                        # local, Simple Mail Transfer Prot.
+</PRE>
+
+You just must tell sendmail this now:
+
+<PRE>
+  root:# m4 linux.<I>asyoulike</I>.mc &gt; /etc/sendmail.cf
+  root:# _
+</PRE>
+
+Writing emails you have to tell your address so that a "reply" works properly.
+This means, the From: line in the email header must contain your account name
+at your provider. This happens because of the line "MASQUERADE_AS ..." in the
+m4 script, and because of a user database built in there. This database 
+(<TT>/etc/userdb.db</TT>) also must be prepared, therefore you must create a
+file containing two lines per user:
+
+<PRE>
+<B>/etc/userdb.db</B>
+  <I>&lt;login_at_your_pc&gt;</I>:mailname  <I>&lt;provider_login_name&gt;</I>
+  <I>&lt;provider_login_name&gt;</I>:maildrop <I>&lt;login_at_your_pc&gt;</I>
+</PRE>
+
+It must be changed to a format <TT>sendmail</TT> can read:
+
+<PRE>
+  root:# makemap btree /etc/userdb.db &lt; /etc/userdb
+  root:# _
+</PRE>
+
+(sendmail-FAQ tells that this only works, if you have the Berkeley db package
+- the S.u.S.E. 4.2 installs it.)
+<P>
+
+Now you have after a reboot (or after killing sendmail and restarting it 
+with the option "-bd") a working mail slave.
+<P>
+ 
+Sendmail is running as daemon in the background. You can tell him to
+collect all the email you wrote (it will be stored in
+<TT>/var/spool/mqueue</TT> or <TT>/var/mqueue</TT>), and to send it on demand 
+only. 
+<P>
+
+Therefore you must start sendmail while booting as daemon 
+<I>without</I> the "<TT>-q ...</TT>" option. In simpleinit environment this 
+happens in the last part of the startup script <TT>/etc/rc.d/rc.M</TT>;
+if you have sysvinit it is in an extra file (SuSE 4.2: 
+<TT>/sbin/init.d/sendmail</TT>. Here you must remove this option;
+"<TT>-bd</TT>" must remain, 
+because it is the command for sendmail to go into background as daemon.
+<P>
+
+
+<H2>Mailer's Will...</H2>
+
+Sending mails with the classical UNIX command <I>mail</I> works correctly
+now. The header is written properly, and the From: line contains the correct
+email address at your provider.
+<P>
+
+But there are some mail programs which are something obstinate. Programs
+like pine or Netscape overwrite the header with some entries, which are
+not correct.
+<P>
+
+<B>Mutt</B> 
+<P>
+
+Jan Berkel &lt;jan.berkel@on-line.de&gt; wrote me this hint: 
+You need to edit <TT>.muttrc</TT> in your home directory and to add the following line:
+<PRE>
+my_hdr From: foo@foonet.com (Foo Name)
+</PRE>
+With this the header rewriting works.
+<P>
+
+<B>Netscape</B> 
+<P>
+
+For Netscape you can edit the file <TT>~/.netscape/preferences</TT>. 
+In it you find the line
+
+<PRE>
+<B>~/.netscape/preferences</B> (cutting)
+  [...]
+  EMAIL_ADDRESS:          <I>&lt;Email@Address&gt;</I>
+  [...]
+</PRE>
+
+Type in your correct email address.
+<P>
+
+<B>Pine</B> 
+<P>
+
+Tilo Winkler &lt;twinkler@uni-paderborn.de&gt; found out how to manage it that
+pine does not write garbage into the From: line. You must get the pine source 
+code and edit <TT>pine/makefile.lnx</TT>: add <TT>-DALLOW_CHANGING_FROM</TT>
+at the <TT>CFLAGS</TT> and recompile. Now you can add the following to
+<TT>.pinerc</TT> in your home directory:
+<PRE>
+customized-hdrs=From: My Name &lt;My@email.address&gt;,
+                Reply-To: My Name &lt;My@email.address&gt;
+</PRE>
+
+<B>XEmacs</B>
+<P>
+
+(Thanks, Markus Dickebohm
+&lt;<A HREF="mailto:m.dickebohm@uni-koeln.de?subject=Mailer und Mailheader">m.dickebohm@uni-koeln.de</A>&gt; for sending me these hints!)
+<P>
+
+You can fake the From: address within XEmacs, if you edit the file
+<TT>~/.emacs</TT> and add the following entries:
+<PRE>
+        (setq user-mail-address "m.dickebohm@uni-koeln.de")
+        (setq mail-host-address "mail.rrz.uni-koeln.de")
+</PRE>
+This is not ideal, like the mailer programs above: this mailer changes the 
+mailer header.
+<P>
+
+<B>More Mailers</B>
+<P>
+
+If you have information about other MUAs (<I>Mail User Agents</I>), please
+<A HREF="mailto:hailer@ilo.baynet.de?subject=Mailer und Mailheader">send 
+them to me</A>. Thank you!
+
+
+<H2>popclient</H2>
+
+Popclient is a simple-to-use program. Use it this way:
+
+<PRE>
+  ~:#    popclient -3 -u<I>&lt;host-login&gt;</I> -p<I>&lt;host-password&gt;</I> -o/var/spool/mail/<I>&lt;user&gt;</I> getmail
+  ~:# _
+</PRE>
+
+<TT>getmail</TT> is the mailhost defined in <TT>/etc/hosts</TT>. If you give 
+an additional "-k" as option, the emails at the provider will <I>not</I> be 
+erased.
+<P>
+
+<B>Hint:</B> In the meantime a powerful child of popclient was born:
+fetchmail. Sorry, but I'm not familiar with fetchmail until now.
+
+
+<H2>A Script</H2>
+
+This script manages the fetching and sending of your emails. If you are
+lucky this takes so few time, that only one telephone tariff unit is lost.
+Some cosmetics in it create a readable log output of the running transfer.
+You create this script as root and store it in <TT>/sbin</TT>.
+This file is also written now in a way which allows more open applications at 
+one time - it uses the file <TT>/sbin/isdn</TT> which we discussed in the 
+last chapter.
+
+<PRE>
+<B><A HREF="scripts/transmail">/sbin/transmail</A></B>
+  #!/bin/sh
+  # transmail.sh: exchanges email with the provider.
+  # Author:       Bernhard Hailer &lt;dl4mhk@lrz.uni-muenchen.de&gt;
+  # Version:      4.0 (27-Jan-97)
+
+  PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+  . /etc/i4l.provider
+  . /etc/i4l.secrets
+
+  cd /                                # against PATH=. effect 
+
+  echo -----------------------------------------------------------------------
+  echo -e "Starting mail transfer: \c"; date
+
+  . /sbin/connect on
+
+  echo "Checking mail server..."
+  set `ping -qc5 -i1 getmail | grep transmitted`
+  if [ $4 -gt 0 ]      
+  then
+    echo ":-) Mail server online - starting mail exchange"  
+    echo "Sending mail..."
+    sendmail -q
+    echo "Again sleeping 1 sec for PPP handshaking"
+    sleep 1
+    echo "Fetching mail..."
+    popclient -3 -u $MAIL_LOGIN -p $MAIL_PASSWD -o $MAIL_PATH getmail
+    echo "Again sleeping 1 sec for PPP handshaking"
+    sleep 1
+  else
+    echo ":-[ Sorry - mail server is down. Try later..." 
+  fi  
+
+  . /sbin/isdn off
+
+  # allow dl4mhk access to mail:
+  chown dl4mhk.users /var/spool/mail/dl4mhk
+
+  echo -e "Finished mail transfer: \c"; date
+</PRE>
+
+The <TT>sleep</TT> commands are important: the connection may hang without 
+them.
+<P>
+
+
+<H2>Let's cron!</H2>
+
+If you want to run your computer twentyfour hours a day, you could create an
+automatic mail transfer using the <TT>cron</TT> daemon. Therefore do:
+<P>
+
+<B>1.) modify cron table.</B><BR>
+<PRE>
+  root:# cd ~
+  root:# cp /var/spool/cron/crontabs/root .crontab
+  root:# _
+</PRE>
+
+Append the following lines to the file <TT>.crontab</TT>:
+<PRE>
+  # Transfer mail
+  30 04 * * * /sbin/transmail.sh 1>> /var/log/transmail-log 2>> /var/log/transmail-log
+</PRE>
+
+<B>2.) Tell crond these modifications.</B><BR>
+<PRE>
+  crontab .crontab
+</PRE>
+
+Now the clock in the computer automatically handles all the emails. Each
+night at 4:30 a.m. the mails are fetched and sent. Remark: Of course
+the system time must be set properly - <TT>man date; man clock</TT>.
+<P>
+
+You need to calculate what's more expensive: telephone or electricity.
+Electricity is expensive. But I use this system because it is so 
+comfortable...
+
+<P>
+<HR>
+<ADDRESS>
+<A HREF="gnulis_e.html"  TARGET=Main>Copyright &#169; (GPL V 2)</A> 1996 
+<A HREF="http://www.chemie.uni-muenchen.de/ac/boehm/beh.html">Bernhard Hailer</A><BR>
+Last modification: 21-Feb-97
+</ADDRESS>
+
+</BODY>
+</HTML>
+
+
+
+
+
+
+
+
+
+
+

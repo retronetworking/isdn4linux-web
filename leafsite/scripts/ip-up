@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# This script is called by (i)pppd while starting up.
+
+# It is called this way:
+#   ip-up interface device speed local_address remote_address.
+#   So you can get the used interface by fetching $1
+
+# If you want to change this, also change IF_FILE in /sbin/connect!
+echo $1 >/var/lib/connect/interface

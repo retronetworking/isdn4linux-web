@@ -1,0 +1,221 @@
+<HTML>
+<HEAD>
+<TITLE>
+FTP on demand
+</TITLE>
+<!-- Changed by: Bernhard Hailer, 24-Feb-1997 -->
+</HEAD>
+
+<BODY>
+<H1>
+<P ALIGN=CENTER>
+<IMG SRC="ftp.jpg" ALT="Linux">
+<!IMG SRC="linux.gif" ALT="Linux">
+<!IMG SRC="isdn.gif"  ALT="ISDN">
+<BR>
+ <FONT SIZE=+3>FTP on demand
+</FONT>
+</P>
+</H1>
+
+<HR>
+<P>
+
+<FONT SIZE=+3><B>D</B></FONT>as 
+kennt man: wenn man von einem etwas weiter entfernten Server (wom&ouml;glich
+aus &Uuml;bersee) eine gro&szlig;e 
+Bin&auml;rdatei holen will, wird die maximale &Uuml;bertragungsrate nicht
+mehr richtig ausgenutzt - besonders bei ISDN passiert das schnell. Nun hat man
+sich keinen ISDN-Anschlu&szlig; legen lassen, um dem Fernmeldeanbieter das
+Geld in den Rachen zu werfen, und au&szlig;erdem benutzen wir das beste 
+Betriebssystem der Welt :-) Und zumindestens Leute, die einen Uni-Zugang 
+haben, und dort ein paar Unix-Befehle loswerden k&ouml;nnen, k&ouml;nnen hier 
+tricksen.
+<P>
+
+<H2>Die Theorie</H2>
+
+Aber wie? Der Trick besteht darin, da&szlig; die Datei nicht sofort und direkt
+downgeloadet wird, sondern da&szlig; man das zun&auml;chst den Server an der 
+Uni machen l&auml;&szlig;t. Nach einiger Zeit holt man sich die 
+gew&uuml;nschte Datei dann von dort - die Verbindung zum Uniserver ist ja in 
+der Regel so gut, da&szlig; die maximale &Uuml;bertragungsrate voll ausgenutzt 
+wird. UNIX kennt den Befehl <TT>nohup</TT>, mit dem man Befehle ausf&uuml;hren 
+kann, ohne eingeloggt zu sein - das ist die Voraussetzung. Man kann sich also 
+beim Provider einloggen und folgende Befehlssequenz eingeben:
+
+<PRE>
+  provider:# nohup ftp -i ftp.leo.org &amp;
+  provider:# exit
+  connection closed by foreign host.
+  root:# _
+</PRE>
+
+Das ganze dauert nicht mehr als ein paar Sekunden, eine Telefoneinheit wurde
+der guten Sache geopfert.
+<P>
+
+Allerdings mu&szlig; man etwas Vorarbeit leisten, denn <TT>ftp</TT> ist ein
+interaktives Programm, welches zur Arbeit eine ganze Menge Informationen 
+ben&ouml;tigt (zum Bleistift, was es denn holen soll). Die Interaktivit&auml;t 
+kann man ihm abgew&ouml;hnen, daf&uuml;r ist die Option "-i" da. Die 
+Informationen mu&szlig; man trotzdem &uuml;bergeben, und das kann man, indem 
+man eine Datei <TT>.netrc</TT> beim Provider hinterlegt, in dem alles das 
+drinsteht, was ftp tun soll. (Gibt man als Option "-n" an, wird diese Datei 
+<I>nicht</I> beachtet!)
+<P>
+
+So k&ouml;nnte die Datei <TT>.netrc</TT> aussehen, wenn man sich 
+beispielsweise den Kernel 2.0.7 (immerhin mehr als 5 Megabyte!) vom Server
+bei LEO.ORG holen will:
+
+<PRE>
+<B>provider:~/.netrc</B>
+  machine ftp.leo.org
+  login anonymous
+  password <I>&lt;eigene@email.adresse&gt;</I>
+  macdef init
+    lcd /usr/src
+    cd /pub/comp/os/linux/Linus/v2.0
+    bin
+    get linux-2.0.7.tar.gz
+    close
+    quit
+</PRE>
+
+So kann man sich f&uuml;r jeden Server einen Eintrag machen. Diese Datei 
+mu&szlig; vor dem <TT>nohup ftp</TT> im Heimatverzeichnis beim Provider 
+abgelegt werden.
+Eine Stunde sp&auml;ter kann man sich den Kernel mit H&ouml;chstgeschwindigkeit
+beim Provider abholen. Sch&ouml;n, gell?
+
+
+<H2>Automatisierung</H2>
+
+So. Nun wollen wir das automatisieren. Hierzu mu&szlig; nat&uuml;rlich wieder 
+der cron herhalten, der die datenintensive &Uuml;bertragung in die billigen
+Nachtstunden verlegt.
+<P>
+
+<IMG ALIGN=left SRC="constr.gif">
+<IMG ALIGN=right SRC="constr.gif">
+
+<P ALIGN=center>
+<B>... Aber daran arbeite ich noch - la&szlig;t Euch &uuml;berraschen!</B>
+</P>
+
+<HR>
+<P>
+
+Ich hatte bisher keine Zeit f&uuml;r weitere Forschungen - aber einige
+Leute haben mir geschrieben.
+<P>
+
+Uwe Bonnes &lt;bon@elektron.ikp.physik.th-darmstadt.de&gt; schrieb:
+<PRE>
+Hallo,
+
+zu "FTP on Demand " solltest Du auf "ncftp" verweisen. Ich oeffne mit "nohup
+ncftp" das Programm, oeffne den Server, denn ich brauchte, waehle mit
+"Tab"-Expansion das File aus, das ich will, starte den Download. Ein CTRL-Z 
+und "bg" bringen den Download in den Hintergrund und mich auf die 
+Kommandozeile, so das ich den Connect beenden kann. 
+</PRE>
+
+<P>
+
+Gunnar Larisch &lt;Gunnar.Larisch@lpr.e-technik.tu-muenchen.de&gt; schrieb:
+
+<PRE>
+anscheinend hast Du auch ISDN, da Du so sch&ouml;ne Anleitungen geschrieben
+hast. Ich hab da paar sch&ouml;ne Skripten, die Dich vielleicht interessieren.
+
+getme &lt;Server&gt; &lt;Dir&gt; &lt;File&gt;
+Per cron muss dann noch cronftp gestartet werden. Am n&auml;chsten Tag kannst
+Du Dir Dein File abholen.
+
+getfrom ist vielleicht auch ganz n&uuml;tzlich.
+
+-----------getme--------------
+#!/usr/local/bin/bash
+
+# Parameters: Server Path File(s)
+
+FTPFILE="/tmp/.$UID.ftpjobs"
+echo Server : $1
+echo Dir    : $2
+echo "File   : $3"
+echo Jobfile: $FTPFILE
+
+touch $FTPFILE
+
+echo lcd ~/tmp/ftpjobs &gt;&gt;$FTPFILE
+echo open $1 &gt;&gt;$FTPFILE
+echo user anonymous t8231ah@sunmail.lrz-muenchen.de &gt;&gt;$FTPFILE
+echo bin &gt;&gt;$FTPFILE
+echo "cd $2" &gt;&gt;$FTPFILE
+echo "mget $3" &gt;&gt;$FTPFILE
+echo close &gt;&gt;$FTPFILE
+-------------------------------
+
+---------getfrom---------------
+echo Hole $2 von $1...
+echo ftp -i $1 &gt;&gt;~/tmp/ftpjob
+echo bin &gt;&gt;~/TMP/ftpjob
+echo cd $2 &gt;&gt;~/tmp/ftpjob
+-------------------------------
+
+---------cronftp--------------
+#!/usr/local/bin/bash
+FTPFILE="/tmp/.$UID.ftpjobs"
+NEWFTPFILE="/tmp/.bgjob_$UID_$RANDOM"
+mkdir ~/tmp/ftpjobs
+echo Using $FTPFILE... as $NEWFTPFILE
+mv $FTPFILE $NEWFTPFILE
+nohup ftp -in &gt;$NEWFTPFILE &
+-------------------------------------
+
+Ciao Gunnar
+</PRE>
+<P>
+
+Siggi Thoma &lt;sthoma@twilight.rhein-neckar.de&gt; schrieb:
+<PRE>
+Hast Du diesbezüglich mal von FTPMAIL gehört? Vielleicht erfüllt das auch den 
+gewünschten Zweck und ein bi&szlig;chen einfacher.
+
+Schreib mal mail an ftpmail@ftp.uni-stuttgart.de 
+subject HELP
+body:
+help
+quit
+
+
+---------------
+Dieser Server der da an der Uni läuft ermöglicht es beliebige Dateien
+von jedem ftp-archive auf der Welt nach Stuttgart zu holen. Von dort
+sendet Dir der FTPMAIL-Server die Datei uuencoded als email zu. Von
+Stuttgart aus als EMAIL. Da fällt also nur die
+Übertragungsgeschwindigkeit zu Deinem Provider ins Spiel.
+
+Genauere Beschreibungen gibts überall im Netz. Such mal in Yahoo oder
+Altavista unter FTPMAIL.
+
+Tschau
+Siggi
+</PRE>
+
+<HR>
+<ADDRESS>
+<A HREF="gnulis.html"  TARGET=Main>Copyright &#169; (GPL V 2)</A> 1996 
+<A HREF="http://www.chemie.uni-muenchen.de/ac/boehm/beh.html">Bernhard Hailer</A><BR>
+Last modification: 24-Feb-97 BeH
+</ADDRESS>
+
+</BODY>
+</HTML>
+
+
+
+
+
