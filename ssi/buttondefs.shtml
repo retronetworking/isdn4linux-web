@@ -1,4 +1,4 @@
-<SCRIPT LANGUAGE="JavaScript" TYPE="JavaScript">
+<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
 <!--
 js_but["_pics_home_gif"] = new js_button("/pics/home.gif", "Back to the ISDN4Linux Homepage");
 js_but["_pics_up_gif"] = new js_button("/pics/up.gif", "Go up one level");
