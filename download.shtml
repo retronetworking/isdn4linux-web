@@ -9,13 +9,13 @@
 <TR>
 <TD ALIGN=LEFT WIDTH="90"><!--#include virtual="/ssi/b_home.shtml" --></TD>
 <!--#set var="alt" value="Download" -->
-<TD VALIGN=MIDDLE ALIGN=CENTER><IMG SRC="pics/download_hdr.gif" WIDTH=255 HEIGTH=48 BORDER=0 <!--#include virtual="/ssi/calt.shtml" -->></TD>
+<TD VALIGN=MIDDLE ALIGN=CENTER><IMG SRC="pics/download_hdr.gif" WIDTH=255 HEIGHT=48 BORDER=0 <!--#include virtual="/ssi/calt.shtml" -->></TD>
 <TD ALIGN=RIGHT WIDTH="90"><!--#include virtual="/ssi/b_mail.shtml" --></TD>
 </TR>
 <TR><TD ALIGN=CENTER COLSPAN=3><!--#include virtual="/ssi/rule.shtml" --></TD>
 </TR>
 </TABLE>
-<TABLE WITH="70%">
+<TABLE WIDTH="70%">
 <TR><TD>You can get latest Utility package from the following sites:</TD></TR>
 <TR><TD><A HREF="ftp://ftp.isdn4linux.de/pub/isdn4linux/">ftp.isdn4linux.de</A></TD></TR>
 <TR><TD><A HREF="ftp://ftp.gwdg.de:/pub/linux/isdn/isdn4linux/">ftp.gwdg.de</A></TD></TR>
