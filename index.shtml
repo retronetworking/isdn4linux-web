@@ -58,7 +58,7 @@ SRC="/pics/4.gif" WIDTH=47 HEIGHT=58
 <TR><TD COLSPAN="3" HEIGHT=20> </TD></TR>
 <TR><TD>
 <TABLE>
-><TR><TD
+<TR><TD
 ><!--#set var="href" value="mISDN/" -->
 <!--#set var="picnam" value="mISDN" -->
 <!--#set var="alt" value="mISDN" -->
