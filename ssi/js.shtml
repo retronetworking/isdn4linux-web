@@ -42,7 +42,7 @@ function js_moveaway(id) {
 function check_frame() {
  	if (window != parent) {
  		document.writeln('<BR>This Document has been put into a frame by some foreign document.<BR>');
- 		document.writeln('If you do not like frames, go directly to <A HREF="http://www.isdn4linux.de" TARGET="_top">www.isdn4linux.de</A>, the original site.<BR>');
+ 		document.writeln('If you do not like frames, go directly to <A HREF="http://www.isdn4linux.de" TARGET="_top">www.isdn4linux.de<\/A>, the original site.<BR>');
  	}
 }
 // -->
