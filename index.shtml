@@ -19,6 +19,10 @@
 <!--#set var="picstr" value="Mailinglist Archive" -->
 <!--#include virtual="/ssi/jbdef.shtml" -->
 
+<!--#set var="picnam" value="mISDN" -->
+<!--#set var="picstr" value="New driver architecture" -->
+<!--#include virtual="/ssi/jbdef.shtml" -->
+
 <!--#set var="picnam" value="devmeet" -->
 <!--#set var="picstr" value="About the Developer Meeting 1998" -->
 <!--#include virtual="/ssi/jbdef.shtml" -->
@@ -54,6 +58,11 @@ SRC="/pics/4.gif" WIDTH=47 HEIGHT=58
 <TR><TD COLSPAN="3" HEIGHT=20> </TD></TR>
 <TR><TD>
 <TABLE>
+><TR><TD
+><!--#set var="href" value="mISDN/" -->
+<!--#set var="picnam" value="mISDN" -->
+<!--#set var="alt" value="mISDN" -->
+<!--#include virtual="/ssi/jbref.shtml" --> WIDTH=83 HEIGHT=26></A></TD></TR
 <TR><TD
 ><!--#set var="href" value="workshop/" -->
 <!--#set var="picnam" value="workshop" -->
