@@ -75,7 +75,7 @@ SRC="/pics/4.gif" WIDTH=47 HEIGHT=58
 <!--#set var="alt" value="FAQ" -->
 <!--#include virtual="/ssi/jbref.shtml" --> WIDTH=56 HEIGHT=32></A></TD></TR
 ><TR><TD
-><!--#set var="href" value="/cgi-bin/cvsweb.cgi" -->
+><!--#set var="href" value="/cgi-bin/viewcvs.cgi" -->
 <!--#set var="picnam" value="cvs" -->
 <!--#set var="alt" value="CVS" -->
 <!--#include virtual="/ssi/jbref.shtml" --> WIDTH=52 HEIGHT=28></A></TD></TR
