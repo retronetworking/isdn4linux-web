@@ -32,7 +32,7 @@
 <H2>IOCTL FUNCTIONS</H2><PRE>
        Currently, the following ioctl calls are supported:
 
-       <A HREF="includes/isdn.h.php3#IIOCNETAIF" TARGET="_code">IIOCNETAIF</A>
+       <A HREF="includes/isdn.h.shtml#IIOCNETAIF" TARGET="_code">IIOCNETAIF</A>
               Add an ISDN network interface.
               This  function adds a network interface to the ker­
               nel's device table.  This  interface  can  be  used
@@ -48,7 +48,7 @@
                      copied to <EM>arg</EM>.  and the call returns  0.  On
                      failure, an error code is returned.
 
-       <A HREF="includes/isdn.h.php3#IIOCNETASL" TARGET="_code">IIOCNETASL</A>
+       <A HREF="includes/isdn.h.shtml#IIOCNETASL" TARGET="_code">IIOCNETASL</A>
               Create a slave interface.
               Creates  a  slave interface for RAW-device channel-
               bundling.  These devices behave like network-inter­
@@ -70,7 +70,7 @@
                      copied to <EM>arg</EM>.  and the call returns  0.  On
                      failure, an error code is returned.
 
-       <A HREF="includes/isdn.h.php3#IIOCNETDIF" TARGET="_code">IIOCNETDIF</A>
+       <A HREF="includes/isdn.h.shtml#IIOCNETDIF" TARGET="_code">IIOCNETDIF</A>
               face.
 
               Argument:
@@ -84,7 +84,7 @@
                      On success, the call returns 0. On  failure,
                      an error code is returned.
 
-       <A HREF="includes/isdn.h.php3#IIOCNETSCF" TARGET="_code">IIOCNETSCF</A>
+       <A HREF="includes/isdn.h.shtml#IIOCNETSCF" TARGET="_code">IIOCNETSCF</A>
               Set  configurable  parameters  of  an  ISDN network
               interface.
               This call replaces all ISDN related  parameters  of
@@ -92,13 +92,13 @@
 
               Argument:
                      <EM>arg</EM> should point to a <EM>struct</EM>
-                     <A HREF="includes/isdn.h.php3#isdn_net_ioctl_cfg" TARGET="_code">isdn_net_ioctl_cfg</A>
+                     <A HREF="includes/isdn.h.shtml#isdn_net_ioctl_cfg" TARGET="_code">isdn_net_ioctl_cfg</A>
 
               Return:
                      On  success, the call returns 0. On failure,
                      an error code is returned.
 
-       <A HREF="includes/isdn.h.php3#IIOCNETGCF" TARGET="_code">IIOCNETGCF</A>
+       <A HREF="includes/isdn.h.shtml#IIOCNETGCF" TARGET="_code">IIOCNETGCF</A>
               Get configurable  parameters  of  an  ISDN  network
               interface.
               This call returns all ISDN related parameters of an
@@ -106,7 +106,7 @@
 
               Argument:
                      <EM>arg</EM>    shoud    point    to     a     <EM>struct</EM>
-                     <A HREF="includes/isdn.h.php3#isdn_net_ioctl_cfg" TARGET="_code">isdn_net_ioctl_cfg</A> (defined in linux/isdn.h)
+                     <A HREF="includes/isdn.h.shtml#isdn_net_ioctl_cfg" TARGET="_code">isdn_net_ioctl_cfg</A> (defined in linux/isdn.h)
                      which will be filled by the current setup.
 
               Return:
@@ -114,21 +114,21 @@
                      interface-setup  is copied to *arg. On fail­
                      ure, an error code is returned.
 
-       <A HREF="includes/isdn.h.php3#IIOCNETANM" TARGET="_code">IIOCNETANM</A>
+       <A HREF="includes/isdn.h.shtml#IIOCNETANM" TARGET="_code">IIOCNETANM</A>
               Add a phone number to an ISDN network interface.
               This call adds a phone number to an  existing  net­
               work interface.
 
               Argument:
                      <EM>arg</EM>     shoud     point    to    a    <EM>struct</EM>
-                     <A HREF="includes/isdn.h.php3#isdn_net_ioctl_phone" TARGET="_code">isdn_net_ioctl_phone</A> which  contains  neces­
+                     <A HREF="includes/isdn.h.shtml#isdn_net_ioctl_phone" TARGET="_code">isdn_net_ioctl_phone</A> which  contains  neces­
                      sary information.
                      On success, the call returns 0 and the phone
                      number is added to either outgoing or incom­
                      ing  number  list. On failure, an error code
                      is returned.
 
-       <A HREF="includes/isdn.h.php3#IIOCNETDNM" TARGET="_code">IIOCNETDNM</A>
+       <A HREF="includes/isdn.h.shtml#IIOCNETDNM" TARGET="_code">IIOCNETDNM</A>
               Delete a phone number from an ISDN  network  inter­
               face.
               This  call  deletes a phone number from an existing
@@ -136,7 +136,7 @@
 
               Argument:
                      <EM>arg</EM>    shoud    point    to     a     <EM>struct</EM>
-                     <A HREF="includes/isdn.h.php3#isdn_net_ioctl_phone" TARGET="_code">isdn_net_ioctl_phone</A> which  contains  neces­
+                     <A HREF="includes/isdn.h.shtml#isdn_net_ioctl_phone" TARGET="_code">isdn_net_ioctl_phone</A> which  contains  neces­
                      sary information.
 
               Return:
@@ -145,7 +145,7 @@
                      incoming number list. On failure,  an  error
                      code is returned.
 
-       <A HREF="includes/isdn.h.php3#IIOCNETGNM" TARGET="_code">IIOCNETGNM</A>
+       <A HREF="includes/isdn.h.shtml#IIOCNETGNM" TARGET="_code">IIOCNETGNM</A>
               Get  list  of  phone  numbers  from an ISDN network
               interface.
               This call returns the list of phone numbers associ­
@@ -153,7 +153,7 @@
 
               Argument:
                      <EM>arg</EM>  shoud  point  to  a  a  union of <EM>struct</EM>
-                     <A HREF="includes/isdn.h.php3#isdn_net_ioctl_phone" TARGET="_code">isdn_net_ioctl_phone</A>  and  a  buffer,  large
+                     <A HREF="includes/isdn.h.shtml#isdn_net_ioctl_phone" TARGET="_code">isdn_net_ioctl_phone</A>  and  a  buffer,  large
                      enough   to  hold  a  concatenated  list  of
                      strings containing the phone numbers.
 
@@ -163,7 +163,7 @@
                      arated list of number-strings terminated  by
                      a NULL byte.
 
-       <A HREF="includes/isdn.h.php3#IIOCNETDIL" TARGET="_code">IIOCNETDIL</A>
+       <A HREF="includes/isdn.h.shtml#IIOCNETDIL" TARGET="_code">IIOCNETDIL</A>
               Trigger dialing of an ISDN network interface.
               This  call  initiates  dialing  of  an ISDN network
               interface, if it is not connected.  Normally,  this
@@ -178,7 +178,7 @@
                      On success,  the  call  returns  0  and  the
                      interface starts dialing.
 
-       <A HREF="includes/isdn.h.php3#IIOCNETHUP" TARGET="_code">IIOCNETHUP</A>
+       <A HREF="includes/isdn.h.shtml#IIOCNETHUP" TARGET="_code">IIOCNETHUP</A>
               Hangup an ISDN network interface.
               This  call  initiates  hangup  of  an  ISDN network
               interface, if it is connected.
@@ -192,7 +192,7 @@
                      On success,  the  call  returns  0  and  the
                      interface hangs up.
 
-       <A HREF="includes/isdn.h.php3#IIOCNETALN" TARGET="_code">IIOCNETALN</A>
+       <A HREF="includes/isdn.h.shtml#IIOCNETALN" TARGET="_code">IIOCNETALN</A>
               Add a link of an MPP-configured ISDN network inter­
               face.
               This call  initiates  dialing  of  a  Multilink-PPP
@@ -208,7 +208,7 @@
                      On success,  the  call  returns  0  and  the
                      interface starts dialing.
 
-       <A HREF="includes/isdn.h.php3#IIOCNETDLN" TARGET="_code">IIOCNETDLN</A>
+       <A HREF="includes/isdn.h.shtml#IIOCNETDLN" TARGET="_code">IIOCNETDLN</A>
               Hangup an MPP-configured ISDN network interface.
               This call initiates hangup of an Multilink-PPP ISDN
               network interface, if it is connected.
@@ -222,20 +222,20 @@
                      On success,  the  call  returns  0  and  the
                      interface hangs up.
 
-       <A HREF="includes/isdn.h.php3#IIOCNETDLN" TARGET="_code">IIOCNETARU</A>
+       <A HREF="includes/isdn.h.shtml#IIOCNETDLN" TARGET="_code">IIOCNETARU</A>
               Add a timeout rule to an ISDN network interface.
               This call adds a timeout rule to an existing inter­
               face.
 
                      <EM>arg</EM>    should    point    to    a     <EM>struct</EM>
-                     <A HREF="includes/isdn_timru.h.php3#isdn_ioctl_timeout_rule" TARGET="_code">isdn_ioctl_timeout_rule</A>  containing the nec­
+                     <A HREF="includes/isdn_timru.h.shtml#isdn_ioctl_timeout_rule" TARGET="_code">isdn_ioctl_timeout_rule</A>  containing the nec­
                      essary parameters.
 
               Return:
                      On success, the call returns 0 and the  rule
                      is  added to the rule list of the interface.
 
-       <A HREF="includes/isdn.h.php3#IIOCNETDRU" TARGET="_code">IIOCNETDRU</A>
+       <A HREF="includes/isdn.h.shtml#IIOCNETDRU" TARGET="_code">IIOCNETDRU</A>
               Delete a timeout rule from an ISDN  network  inter­
               face.
               This  call  deletes a timeout rule from an existing
@@ -243,7 +243,7 @@
 
               Argument:
                      <EM>arg</EM>    should    point    to    a     <EM>struct</EM>
-                     <A HREF="includes/isdn_timru.h.php3#isdn_ioctl_timeout_rule" TARGET="_code">isdn_ioctl_timeout_rule</A>  containing the nec­
+                     <A HREF="includes/isdn_timru.h.shtml#isdn_ioctl_timeout_rule" TARGET="_code">isdn_ioctl_timeout_rule</A>  containing the nec­
                      essary parameters.
 
               Return:
@@ -251,14 +251,14 @@
                      is  deleted from the rule list of the inter­
                      face.
 
-       <A HREF="includes/isdn.h.php3#IIOCNETGRU" TARGET="_code">IIOCNETGRU</A>
+       <A HREF="includes/isdn.h.shtml#IIOCNETGRU" TARGET="_code">IIOCNETGRU</A>
               Get a timeout rule from an ISDN network  interface.
               This  call  returns a timeout rule from an existing
               interface.
 
               Argument:
                      <EM>arg</EM>    should    point    to    a     <EM>struct</EM>
-                     <A HREF="includes/isdn_timru.h.php3#isdn_ioctl_timeout_rule" TARGET="_code">isdn_ioctl_timeout_rule</A>  containing the nec­
+                     <A HREF="includes/isdn_timru.h.shtml#isdn_ioctl_timeout_rule" TARGET="_code">isdn_ioctl_timeout_rule</A>  containing the nec­
                      essary parameters.
 
               Return:
@@ -266,14 +266,14 @@
                      struct  is  filled from the rule list of the
                      interface.
 
-       <A HREF="includes/isdn.h.php3#IIOCNETBUD" TARGET="_code">IIOCNETBUD</A>
+       <A HREF="includes/isdn.h.shtml#IIOCNETBUD" TARGET="_code">IIOCNETBUD</A>
               Handle budget accounting of an ISDN network  inter­
               face.
 
               Argument and Return:
                      to be defined.
 
-       <A HREF="includes/isdn.h.php3#IIOCNETBUD" TARGET="_code">IIOCSETVER</A>
+       <A HREF="includes/isdn.h.shtml#IIOCNETBUD" TARGET="_code">IIOCSETVER</A>
               Set verbosity of link level.
 
               Argument:
@@ -281,7 +281,7 @@
                      value.
                      This call always returns 0.
 
-       <A HREF="includes/isdn.h.php3#IIOCSETGST" TARGET="_code">IIOCSETGST</A>
+       <A HREF="includes/isdn.h.shtml#IIOCSETGST" TARGET="_code">IIOCSETGST</A>
               Set global stop flag of link level.
 
               Argument:
@@ -291,12 +291,12 @@
               Return:
                      This call always returns 0.
 
-       <A HREF="includes/isdn.h.php3#IIOCSETBRJ" TARGET="_code">IIOCSETBRJ</A>
+       <A HREF="includes/isdn.h.shtml#IIOCSETBRJ" TARGET="_code">IIOCSETBRJ</A>
               Set busreject flag of a lowlevel driver.
 
               Argument:
                      <EM>arg</EM>    should    point    to    an    <EM>struct</EM>
-                     <A HREF="includes/isdn.h.php3#isdn_ioctl_struct" TARGET="_code">isdn_ioctl_struct</A> containing the driver's ID
+                     <A HREF="includes/isdn.h.shtml#isdn_ioctl_struct" TARGET="_code">isdn_ioctl_struct</A> containing the driver's ID
                      and the value of the busreject flag.
 
               Return:
@@ -304,7 +304,7 @@
                      reject flag of the selected  driver  is  set
                      according the given parameter.
 
-       <A HREF="includes/isdn.h.php3#IIOCSIGPRF" TARGET="_code">IIOCSIGPRF</A>
+       <A HREF="includes/isdn.h.shtml#IIOCSIGPRF" TARGET="_code">IIOCSIGPRF</A>
               Enable signaling on change of modem profiles.
               With  this  call, the calling process is registered
               to receive a SIGIO on every change of any  register
@@ -320,55 +320,55 @@
               Return:
                      This call always returns 0.
 
-       <A HREF="includes/isdn.h.php3#IIOCGETPRF" TARGET="_code">IIOCGETPRF</A>
+       <A HREF="includes/isdn.h.shtml#IIOCGETPRF" TARGET="_code">IIOCGETPRF</A>
               Get all modem register settings.
               With  this  call,  all  modem registers of all ttyI
               devices can be read.
 
               Argument:
                      <EM>arg</EM> should point to a  buffer  of  length
-                     (<A HREF="includes/isdn.h.php3#ISDN_MODEM_ANZREG" TARGET="_code">ISDN_MODEM_ANZREG</A> + <A HREF="includes/isdn.h.php3#ISDN_MSNLEN" TARGET="_code">ISDN_MSNLEN</A>) *
-                     <A HREF="includes/isdn.h.php3#ISDN_MAX_CHANNELS" TARGET="_code">ISDN_MAX_CHANNELS</A>.
+                     (<A HREF="includes/isdn.h.shtml#ISDN_MODEM_ANZREG" TARGET="_code">ISDN_MODEM_ANZREG</A> + <A HREF="includes/isdn.h.shtml#ISDN_MSNLEN" TARGET="_code">ISDN_MSNLEN</A>) *
+                     <A HREF="includes/isdn.h.shtml#ISDN_MAX_CHANNELS" TARGET="_code">ISDN_MAX_CHANNELS</A>.
 
               Return:
 
-       <A HREF="includes/isdn.h.php3#IIOCSETPRF" TARGET="_code">IIOCSETPRF</A>
+       <A HREF="includes/isdn.h.shtml#IIOCSETPRF" TARGET="_code">IIOCSETPRF</A>
               Set all modem register settings.
               With  this  call,  all  modem registers of all ttyI
               devices can be written.
 
               Argument:
                      <EM>arg</EM> should point to a  buffer  of  length
-                     (<A HREF="includes/isdn.h.php3#ISDN_MODEM_ANZREG" TARGET="_code">ISDN_MODEM_ANZREG</A> + <A HREF="includes/isdn.h.php3#ISDN_MSNLEN" TARGET="_code">ISDN_MSNLEN</A>) *
-                     <A HREF="includes/isdn.h.php3#ISDN_MAX_CHANNELS" TARGET="_code">ISDN_MAX_CHANNELS</A>  filled with  the  values
+                     (<A HREF="includes/isdn.h.shtml#ISDN_MODEM_ANZREG" TARGET="_code">ISDN_MODEM_ANZREG</A> + <A HREF="includes/isdn.h.shtml#ISDN_MSNLEN" TARGET="_code">ISDN_MSNLEN</A>) *
+                     <A HREF="includes/isdn.h.shtml#ISDN_MAX_CHANNELS" TARGET="_code">ISDN_MAX_CHANNELS</A>  filled with  the  values
                      of all modem registers.
 
               Return:
                      On  return, the modem registers are set from
                      the contents of the provided buffer.
 
-       <A HREF="includes/isdn.h.php3#IIOCSETMAP" TARGET="_code">IIOCSETMAP</A>
+       <A HREF="includes/isdn.h.shtml#IIOCSETMAP" TARGET="_code">IIOCSETMAP</A>
               Set Mapping table.
               This call is used  to  set  EAZ/MSN  mapping  of  a
               lowlevel driver.
 
               Argument:
                      <EM>arg</EM>     should    point    to    a    <EM>struct</EM>
-                     <A HREF="includes/isdn.h.php3#isdn_ioctl_struct" TARGET="_code">isdn_ioctl_struct</A> containing  the  necessary
+                     <A HREF="includes/isdn.h.shtml#isdn_ioctl_struct" TARGET="_code">isdn_ioctl_struct</A> containing  the  necessary
                      parameters.
 
               Return:
                      On  success,  the  mapping table is set from
                      the given parameters an the call returns  0.
 
-       <A HREF="includes/isdn.h.php3#IIOCGETMAP" TARGET="_code">IIOCGETMAP</A>
+       <A HREF="includes/isdn.h.shtml#IIOCGETMAP" TARGET="_code">IIOCGETMAP</A>
               Get Mapping table.
               This  call  is  used  to  get  EAZ/MSN mapping of a
               lowlevel driver.
 
               Argument:
                      <EM>arg</EM>    should    point    to    a     <EM>struct</EM>
-                     <A HREF="includes/isdn.h.php3#isdn_ioctl_struct" TARGET="_code">isdn_ioctl_struct</A> containing  the  necessary
+                     <A HREF="includes/isdn.h.shtml#isdn_ioctl_struct" TARGET="_code">isdn_ioctl_struct</A> containing  the  necessary
                      parameters.
 
               Return:
@@ -385,7 +385,7 @@
 
 </PRE>
 <H2>SEE ALSO</H2><PRE>
-       <A HREF="isdninfo.php3">isdninfo</A>(4), <STRONG>icnctrl</STRONG>(4).
+       <A HREF="isdninfo.shtml">isdninfo</A>(4), <STRONG>icnctrl</STRONG>(4).
 
 </PRE>
 </BODY>

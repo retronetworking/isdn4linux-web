@@ -286,7 +286,7 @@
 
 </PRE>
 <H2>SEE ALSO</H2><PRE>
-       <STRONG>icnctrl</STRONG>(8), <STRONG>telesctrl</STRONG>(8), <A HREF="isdninfo.php3">isdninfo</A>(4), <A HREF="isdn_audio.php3">isdn_audio</A>(4), <STRONG>isd­</STRONG>
+       <STRONG>icnctrl</STRONG>(8), <STRONG>telesctrl</STRONG>(8), <A HREF="isdninfo.shtml">isdninfo</A>(4), <A HREF="isdn_audio.shtml">isdn_audio</A>(4), <STRONG>isd­</STRONG>
        <STRONG>nctrl</STRONG>(8).
 </PRE>
 </BODY>
