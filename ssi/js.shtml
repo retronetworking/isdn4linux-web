@@ -11,6 +11,9 @@ if ( navigator.appName.substring(0,9) == "Microsoft" &&
 if ( navigator.appName.substring(0,8) == "Netscape" &&
 	parseInt(navigator.appVersion) >= 3 )
 	js_ok = true;
+if ( navigator.appName.substring(0,7) == "Mozilla" &&
+	parseInt(navigator.appVersion) >= 4 )
+	js_ok = true;
 
 function js_button(pic, desc) {
 	if (js_ok) {

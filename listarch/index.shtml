@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
 <HEAD><TITLE>ISDN4Linux Mailinglists</TITLE></HEAD>
 <BODY BGCOLOR="#ffffff">
@@ -14,7 +15,7 @@
 <TR><TD ALIGN=CENTER COLSPAN=3><!--#include virtual="/ssi/rule.shtml" --></TD>
 </TR>
 </TABLE>
-<TABLE WIDTH=60%>
+<TABLE WIDTH="60%">
 <TR><TD>
 This is the complete Archive of the ISDN4Linux Mailinglist at listserv.isdn4linux.de.
 This mailinglist is bidirectionally gated with the newsgroup de.alt.comm.isdn4linux.<BR>
