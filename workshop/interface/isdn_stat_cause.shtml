@@ -1,0 +1,19 @@
+<HTML>
+<HEAD>
+<TITLE>ISDN_STAT_CAUSE</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    With this call, the HL-driver delivers CAUSE-messages to the LL.
+    Currently the LL does not use this messages. Their contents is simply
+    logged via kernel-messages. Therefore, currently the format of the
+    messages is currently completely free. However they should be printable.<P>
+
+Parameter:
+<TABLE>
+<TR VALIGN="TOP"><TD><B>driver</B></TD><TD>driver-Id</TD></TR>
+<TR VALIGN="TOP"><TD><B>command</B></TD><TD><A HREF="../includes/isdnif.h.shtml#ISDN_STAT_CAUSE" TARGET="_code">ISDN_STAT_CAUSE</A></TD></TR>
+<TR VALIGN="TOP"><TD><B>arg</B></TD><TD>channel-number, locally to the driver. (starting with 0)</TD></TR>
+<TR VALIGN="TOP"><TD><B>para.num</B></TD><TD>ASCII string containing CAUSE-message.</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

@@ -1,0 +1,19 @@
+<HTML>
+<HEAD>
+<TITLE>ISDN_CMD_SETSIL</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    With this command, the HL-driver is told to signal only incoming
+    calls with the given Service-Indicators.<P>
+
+Parameter:
+<TABLE>
+<TR VALIGN="TOP"><TD><B>driver</B></TD><TD>driver-Id.</TD></TR>
+<TR VALIGN="TOP"><TD><B>command</B></TD><TD><A HREF="../includes/isdnif.h.shtml#ISDN_CMD_SETSIL" TARGET="_code">ISDN_CMD_SETSIL</A></TD></TR>
+<TR VALIGN="TOP"><TD><B>arg</B></TD><TD>channel-number locally to the driver. (starting with 0)</TD></TR>
+<TR VALIGN="TOP"><TD><B>para.num</B></TD><TD>
+ASCII-String, containing the desired Service-Indicators.
+</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

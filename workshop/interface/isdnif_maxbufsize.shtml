@@ -1,0 +1,11 @@
+<HTML>
+<HEAD>
+<TITLE>int maxbufsize</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    <B>***CHANGE0.6: New since this version.</B></P>
+
+    Also <B>to be preset</B> by the HL-driver. With this value the HL-driver
+    tells to the LL the maximum size of a data-packet it will accept. 
+</BODY>
+</HTML>

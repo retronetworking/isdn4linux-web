@@ -1,0 +1,21 @@
+<HTML>
+<HEAD>
+<TITLE>ISDN_CMD_GETEAZ</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    With this command, the HL-driver is told to report the current setting
+    given with <A HREF="../includes/isdnif.h.shtml#ISDN_CMD_SETEAZ" TARGET="_code">ISDN_CMD_SETEAZ</A>.<P>
+
+Parameter:
+<TABLE>
+<TR VALIGN="TOP"><TD><B>driver</B></TD><TD>driver-Id.</TD></TR>
+<TR VALIGN="TOP"><TD><B>command</B></TD><TD><A HREF="../includes/isdnif.h.shtml#ISDN_CMD_GETEAZ" TARGET="_code">ISDN_CMD_GETEAZ</A></TD></TR>
+<TR VALIGN="TOP"><TD><B>arg</B></TD><TD>channel-number locally to the driver. (starting with 0)</TD></TR>
+<TR VALIGN="TOP"><TD><B>para.num</B></TD><TD>
+ASCII-String, containing the desired EAZ's/MSN's
+</TD></TR>
+
+</TABLE><BR>
+      <B>***CHANGE0.6: New since this version the "empty-string"-feature.</B>
+</BODY>
+</HTML>

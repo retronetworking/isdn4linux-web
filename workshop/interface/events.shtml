@@ -1,0 +1,55 @@
+<HTML>
+<HEAD>
+<TITLE>Device Driver Interface</TITLE>
+<!--#include virtual="/ssi/js.shtml" -->
+<!--#include virtual="/ssi/jswin.shtml" -->
+<!--#include virtual="/ssi/buttondefs.shtml" -->
+<!--#set var="picnam" value="prev" -->
+<!--#set var="picstr" value="Description of the commands, a HL-driver has to support" -->
+<!--#include virtual="/ssi/jbdef.shtml" -->
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<TABLE WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT WIDTH="90"><!--#include virtual="/ssi/b_home.shtml" --></TD>
+<TD ALIGN=RIGHT WIDTH="90"><!--#include virtual="/ssi/b_up.shtml" --></TD>
+</TR>
+</TABLE>
+
+<H2>
+Description of the events to be signaled by the HL-driver to the LL.
+</H2>
+  All status-changes are signaled via calling the previously described
+  function <A HREF="../linklevel/isdn_common.c.shtml#isdn_status_callback" TARGET="_code">statcallb()</A>. The field command of the struct isdn_cmd has
+  to be set by the HL-driver with the appropriate Status-Id (event-number).
+  The field arg has to be set to the channel-number (locally to the driver,
+  starting with 0) to which this event applies. (Exception: STAVAIL-event)<P>
+
+<H3>Until now, the following Status-Ids are defined:</H3>
+
+<PRE>
+  <A HREF="javascript:;" onClick="nw(event, 'isdn_stat_stavail.shtml',420,180);">ISDN_STAT_STAVAIL</A>
+  <A HREF="javascript:;" onClick="nw(event, 'isdn_stat_icall.shtml',500,380);">ISDN_STAT_ICALL</A>
+  <A HREF="javascript:;" onClick="nw(event, 'isdn_stat_run.shtml',330,170);">ISDN_STAT_RUN</A>
+  <A HREF="javascript:;" onClick="nw(event, 'isdn_stat_stop.shtml',330,180);">ISDN_STAT_STOP</A>
+  <A HREF="javascript:;" onClick="nw(event, 'isdn_stat_dconn.shtml',400,200);">ISDN_STAT_DCONN</A>
+  <A HREF="javascript:;" onClick="nw(event, 'isdn_stat_bconn.shtml',450,180);">ISDN_STAT_BCONN</A>
+  <A HREF="javascript:;" onClick="nw(event, 'isdn_stat_dhup.shtml',450,200);">ISDN_STAT_DHUP</A>
+  <A HREF="javascript:;" onClick="nw(event, 'isdn_stat_bhup.shtml',430,180);">ISDN_STAT_BHUP</A>
+  <A HREF="javascript:;" onClick="nw(event, 'isdn_stat_cinf.shtml',450,160);">ISDN_STAT_CINF</A>
+  ISDN_STAT_LOAD (currently unused)
+  <A HREF="javascript:;" onClick="nw(event, 'isdn_stat_unload.shtml',330,180);">ISDN_STAT_UNLOAD</A>
+  <A HREF="javascript:;" onClick="nw(event, 'isdn_stat_bsent.shtml',450,200);">ISDN_STAT_BSENT</A>
+  <A HREF="javascript:;" onClick="nw(event, 'isdn_stat_nodch.shtml',430,170);">ISDN_STAT_NODCH</A>
+  <A HREF="javascript:;" onClick="nw(event, 'isdn_stat_addch.shtml',470,210);">ISDN_STAT_ADDCH</A> (currently unused)
+  <A HREF="javascript:;" onClick="nw(event, 'isdn_stat_cause.shtml',450,200);">ISDN_STAT_CAUSE</A>
+</PRE>
+
+<TABLE WIDTH="100%"><TR>
+<!--#set var="href" value="commands.shtml" -->
+<!--#set var="picnam" value="prev" -->
+<!--#set var="alt" value="Previous" -->
+<TD ALIGN="LEFT"><!--#include virtual="/ssi/jbref.shtml" --> HEIGHT=17></A></TD>
+</TR></TABLE>
+</BODY>
+<HTML>

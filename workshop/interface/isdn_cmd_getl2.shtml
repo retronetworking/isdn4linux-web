@@ -1,0 +1,20 @@
+<HTML>
+<HEAD>
+<TITLE>ISDN_CMD_GETL2</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    With this command, the HL-driver is told to return the current
+    setting of the Layer-2-protocol.<P>
+Parameter:
+<TABLE>
+<TR VALIGN="TOP"><TD><B>driver</B></TD><TD>driver-Id.</TD></TR>
+<TR VALIGN="TOP"><TD><B>command</B></TD><TD><A HREF="../includes/isdnif.h.shtml#ISDN_CMD_GETL2" TARGET="_code">ISDN_CMD_GETL2</A></TD></TR>
+<TR VALIGN="TOP"><TD><B>arg</B></TD><TD>channel-number locally to the driver. (starting with 0)</TD></TR>
+<TR VALIGN="TOP"><TD><B>para</B></TD><TD>unused.</TD></TR>
+</TABLE>
+Returnvalue:
+<TABLE>
+<TR VALIGN="TOP"><TD>current protocol-Id (one of the constants <A HREF="../includes/isdnif.h.shtml#ISDN_PROTO_L2_X75I" TARGET="_code">ISDN_PROTO_L2...</A>)</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

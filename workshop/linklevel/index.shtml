@@ -1,0 +1,94 @@
+<HTML>
+<HEAD>
+<TITLE>Aufbau des Linklevels</TITLE>
+<!--#include virtual="/ssi/js.shtml" -->
+<!--#include virtual="/ssi/jswin.shtml" -->
+<!--#include virtual="/ssi/buttondefs.shtml" -->
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+NS4 = (document.layers) ? 1 : 0;
+ncount=0;
+ 
+function sn() {
+	if (ncount == 0) {
+		sl("isdn_v110");
+		ncount++;
+		return;
+	}
+	if (ncount == 1) {
+		sl("isdn_bsdcomp");
+		ncount++;
+		return;
+	}
+	if (ncount == 2) {
+		sl("isdn_budget");
+		ncount++;
+		return;
+	}
+	if (ncount == 3) {
+		sl("isdn_timru");
+		ncount++;
+		return;
+	}
+	if (ncount == 4) {
+		sl("isdn_concap");
+		ncount++;
+		return;
+	}
+	if (ncount == 5) {
+		sl("isdn_x25iface");
+		ncount++;
+		return;
+	}
+	if (ncount > 5) {
+		hl("isdn_v110");
+		hl("isdn_bsdcomp");
+		hl("isdn_budget");
+		hl("isdn_timru");
+		hl("isdn_concap");
+		hl("isdn_x25iface");
+		ncount=0;
+	}
+}
+// -->
+</SCRIPT>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<TABLE WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT WIDTH="90"><!--#include virtual="/ssi/b_home.shtml" --></TD>
+<TD><A HREF="files.shtml">Dateiliste</A></TD>
+<TD ALIGN=RIGHT WIDTH="90"><!--#include virtual="/ssi/b_up.shtml" --></TD>
+</TR>
+</TABLE>
+<CENTER>
+<MAP NAME="linklevel">
+<AREA SHAPE="rect" HREF="../ttyI.shtml" COORDS="181,114,334,169">
+<AREA SHAPE="rect" HREF="../isdninfo.shtml" COORDS="361,145,514,171">
+<AREA SHAPE="rect" HREF="../isdnctrl.shtml" COORDS="360,114,514,145">
+<AREA SHAPE="rect" HREF="isdn_net.c.shtml" COORDS="3,317,157,372">
+<AREA SHAPE="rect" HREF="isdn_tty.c.shtml" COORDS="183,317,336,373">
+<AREA SHAPE="rect" HREF="isdn_common.c.shtml" COORDS="364,317,512,373">
+<AREA SHAPE="rect" HREF="isdn_ppp.c.shtml" COORDS="98,398,252,440">
+<AREA SHAPE="rect" HREF="isdn_audio.c.shtml" COORDS="299,398,454,440">
+<AREA SHAPE="rect" HREF="../interface/" COORDS="132,562,380,593">
+<AREA SHAPE="rect" HREF="../hisax/" COORDS="214,652,367,742">
+</MAP>
+<TABLE><TR>
+<TD>
+<TABLE CELLSPACING="0" CELLPADDING="5">
+<TR VALIGN="CENTER"><TD ALIGN="CENTER">
+<A HREF="javascript:sn();"><H2>Neue<BR>Komponenten</H2></A>
+</TD></TR>
+<TR BGCOLOR="#00F0C0" VALIGN="CENTER"><TD ALIGN="CENTER"><ILAYER NAME="isdn_v110" VISIBILITY="hide"><FONT SIZE=+2><A HREF="isdn_v110.c.shtml" TARGET="_code">isdn_v110</A></FONT></ILAYER></TD></TR>
+<TR BGCOLOR="#00C0F0" VALIGN="CENTER"><TD ALIGN="CENTER"><ILAYER NAME="isdn_bsdcomp" VISIBILITY="hide"><FONT SIZE="+2"><A HREF="isdn_bsdcomp.c.shtml" TARGET="_code">isdn_bsdcomp</A></FONT></ILAYER></TD></TR>
+<TR BGCOLOR="#F0F080" VALIGN="CENTER"><TD ALIGN="CENTER"><ILAYER NAME="isdn_budget" VISIBILITY="hide"><FONT SIZE="+2"><A HREF="isdn_budget.c.shtml" TARGET="_code">isdn_budget</A></FONT></ILAYER></TD></TR>
+<TR BGCOLOR="#F0F080" VALIGN="CENTER"><TD ALIGN="CENTER"><ILAYER NAME="isdn_timru" VISIBILITY="hide"><FONT SIZE="+2"><A HREF="isdn_timru.c.shtml" TARGET="_code">isdn_timru</A></FONT></ILAYER></TD></TR>
+<TR BGCOLOR="#FF00F0" VALIGN="CENTER"><TD ALIGN="CENTER"><ILAYER NAME="isdn_concap" VISIBILITY="hide"><FONT SIZE="+2"><A HREF="isdn_concap.c.shtml" TARGET="_code">isdn_concap</A></FONT></ILAYER></TD></TR>
+<TR BGCOLOR="#FF00F0" VALIGN="CENTER"><TD ALIGN="CENTER"><ILAYER NAME="isdn_x25iface" VISIBILITY="hide"><FONT SIZE="+2"><A HREF="isdn_x25iface.c.shtml" TARGET="_code">isdn_x25iface</A></FONT></ILAYER></TD></TR>
+</TABLE>
+</TD><TD>
+<IMG SRC="linklevel.jpeg" USEMAP="#linklevel" BORDER=0>
+</TD><TR></TABLE>
+</CENTER>
+</BODY></HTML>

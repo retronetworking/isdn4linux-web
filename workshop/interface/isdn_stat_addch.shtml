@@ -1,0 +1,19 @@
+<HTML>
+<HEAD>
+<TITLE>ISDN_STAT_ADDCH</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    This call is planned for HL-drivers, which are unable to check card-type
+    or numbers of supported channels before they have loaded any firmware
+    using ioctl. Those HL-driver simply set the channel-parameter to zero
+    or a minimum channel-number when registering, and later if they know
+    the real amount, perform this call, allocating additional channels.<P>
+Parameter:
+<TABLE>
+<TR VALIGN="TOP"><TD><B>driver</B></TD><TD>driver-Id</TD></TR>
+<TR VALIGN="TOP"><TD><B>command</B></TD><TD><A HREF="../includes/isdnif.h.shtml#ISDN_STAT_ADDCH" TARGET="_code">ISDN_STAT_ADDCH</A></TD></TR>
+<TR VALIGN="TOP"><TD><B>arg</B></TD><TD>to be defined.</TD></TR>
+<TR VALIGN="TOP"><TD><B>para</B></TD><TD>to be defined.</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

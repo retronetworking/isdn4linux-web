@@ -1,0 +1,33 @@
+<HTML>
+<HEAD>
+<TITLE>ISDN Workshop</TITLE>
+<!--#include virtual="/ssi/js.shtml" -->
+<!--#include virtual="/ssi/buttondefs.shtml" -->
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<TABLE WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT WIDTH="90"><!--#include virtual="/ssi/b_home.shtml" --></TD>
+<TD ALIGN=RIGHT WIDTH="90"><!--#include virtual="/ssi/b_up.shtml" --></A></TD>
+</TR>
+</TABLE>
+<CENTER>
+<!--#set var="alt" value="ISDN Workshop" -->
+<IMG SRC="workhdr1.gif" <!--#include virtual="/ssi/calt.shtml" -->><BR>
+<!--#set var="alt" value="@ Linux Congress '98" -->
+<IMG SRC="workhdr2.gif" <!--#include virtual="/ssi/calt.shtml" -->><P>
+<TABLE><TR><TD>
+<H1>1. &Uuml;bersicht, Features</H1>
+<H1>2. Interna</H1>
+<H2>&nbsp;&nbsp;2.1 <A HREF="linklevel/">Aufbau des Linklevels</A></H2>
+<H2>&nbsp;&nbsp;2.2 <A HREF="interface/">Interface der Hardware-Treiber</A></H2>
+<H1>3. <A HREF="hisax/">Beispiel eines Lowlevel-Treibers</A></H1>
+<H1>4. User-Schnittstelle</H1>
+<H2>&nbsp;&nbsp;4.1 <A HREF="isdninfo.shtml">/dev/isdninfo</A></H2>
+<H2>&nbsp;&nbsp;4.2 <A HREF="isdnctrl.shtml">/dev/isdnctrl</A></H2>
+<H2>&nbsp;&nbsp;4.3 <A HREF="ttyI.shtml">/dev/ttyI</A></H2>
+</TD></TR></TABLE>
+</CENTER>
+<!--#include virtual="/ssi/i4lfooter.shtml" -->
+</BODY>
+</HTML>

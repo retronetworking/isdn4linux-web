@@ -1,0 +1,7 @@
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+js_but["_pics_home_gif"] = new js_button("/pics/home.gif", "Back to the ISDN4Linux Homepage");
+js_but["_pics_up_gif"] = new js_button("/pics/up.gif", "Go up one level");
+js_but["_pics_mail_gif"] = new js_button("/pics/mail.gif", "Send mail to webmaster about this page");
+// -->
+</SCRIPT>

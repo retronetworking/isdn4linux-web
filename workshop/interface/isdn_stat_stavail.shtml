@@ -1,0 +1,17 @@
+<HTML>
+<HEAD>
+<TITLE>ISDN_STAT_STAVAIL</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    With this call, the HL-driver signals the availability of new data
+    for readstat(). Used only for debugging-purposes, see description
+    of readstat().<P>
+Parameter:
+<TABLE>
+<TR VALIGN="TOP"><TD><B>driver</B></TD><TD>driver-Id</TD></TR>
+<TR VALIGN="TOP"><TD><B>command</B></TD><TD><A HREF="../includes/isdnif.h.shtml#ISDN_STAT_STAVAIL" TARGET="_code">ISDN_STAT_STAVAIL</A></TD></TR>
+<TR VALIGN="TOP"><TD><B>arg</B></TD><TD>length of available data.</TD></TR>
+<TR VALIGN="TOP"><TD><B>para</B></TD><TD>unused.</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

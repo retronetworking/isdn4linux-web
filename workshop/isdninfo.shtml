@@ -1,0 +1,189 @@
+<HTML>
+<HEAD>
+<TITLE>isdninfo - ISDN status device</TITLE>
+<!--#include virtual="/ssi/js.shtml" -->
+<!--#include virtual="/ssi/buttondefs.shtml" -->
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<TABLE WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT WIDTH="90"><!--#include virtual="/ssi/b_home.shtml" --></TD>
+<TD ALIGN=RIGHT WIDTH="90"><!--#include virtual="/ssi/b_index.shtml" --></TD>
+</TR>
+</TABLE>
+<PRE>
+       isdninfo - ISDN status device
+
+
+</PRE>
+<H2>SYNOPSIS</H2><PRE>
+       <STRONG>#include</STRONG> <STRONG>&lt;linux/isdn.h&gt;</STRONG>
+
+
+</PRE>
+<H2>DESCRIPTION</H2><PRE>
+       <EM>/dev/isdninfo</EM>  is  a character device with major number <STRONG>45</STRONG>
+       and minor number <STRONG>255</STRONG>.  It delivers status information from
+       the Linux ISDN subsystem to user level.
+
+
+</PRE>
+<H2>DATA FORMAT</H2><PRE>
+       When  reading  from this device, the current status of the
+       Linux ISDN subsystem is delivered in <STRONG>6</STRONG> lines of text. Each
+       line  starts  with  a  tag  string followed by a colon and
+       whitespace. After that the status values are appended sep­
+       arated by whitespace.
+
+       <STRONG>idmap</STRONG>  is  the  tag  of  the  first line. In this line for
+              every virtual channel, the Id-string of the  corre­
+              sponding  lowlevel driver is shown. If no driver is
+              loaded, a - (hyphen) is shown.
+
+       <STRONG>chmap</STRONG>  is the tag of line 2. In this line for  every  vir­
+              tual channel, the channel number of the correspond­
+              ing lowlevel driver  is  shown.  If  no  driver  is
+              loaded, -1 is shown.
+
+       <STRONG>drmap</STRONG>  is  the  tag of line 3. In this line for every vir­
+              tual channel, the index number of the corresponding
+              lowlevel  driver  is shown. If no driver is loaded,
+              -1 is shown.
+
+       <STRONG>usage</STRONG>  is the tag of line 4. In this line for  every  vir­
+              tual  channel, the current usage is shown. The fol­
+              lowing usage constants are defined:
+
+              <STRONG><A HREF="includes/isdn.h.php3#ISDN_USAGE_NONE">ISDN_USAGE_NONE</A></STRONG> (0)
+                     Unused channel
+
+              <STRONG><A HREF="includes/isdn.h.php3#ISDN_USAGE_RAW">ISDN_USAGE_RAW</A></STRONG> (1)
+                     Channel used by raw device (currently unsup­
+                     ported)
+
+              <STRONG><A HREF="includes/isdn.h.php3#ISDN_USAGE_MODEM">ISDN_USAGE_MODEM</A></STRONG> (2)
+                     Channel used by some ttyI
+
+              <STRONG><A HREF="includes/isdn.h.php3#ISDN_USAGE_NET">ISDN_USAGE_NET</A></STRONG> (3)
+                     Channel used by an ISDN net-interface
+
+              <STRONG><A HREF="includes/isdn.h.php3#ISDN_USAGE_VOICE">ISDN_USAGE_VOICE</A></STRONG> (4)
+                     Channel used by some ttyI in voice mode.
+
+                     Channel  exclusively  preserved  for  a net-
+                     interface. This  value  is  logically  or'ed
+                     with one of the other codes.
+
+              <STRONG><A HREF="includes/isdn.h.php3#ISDN_USAGE_OUTGOING">ISDN_USAGE_OUTGOING</A></STRONG> (128)
+                     Channel is used outgoing. This value is log­
+                     ically or'ed with one of the other codes. It
+                     is  set, when dialling is started and reset,
+                     when either dialling failed or after hangup.
+                     Therefore, it is <STRONG>not</STRONG> always an indicator for
+                     an established connection. To get a reliable
+                     indicator for an established connection, the
+                     driver  flags  (see  below)   have   to   be
+                     inspected also.
+
+       <STRONG>flags</STRONG>  is the tag of line 5. In this line for every driver
+              slot, it's B-Channel status is shown. If no  driver
+              is  registered  in a slot, a ? is shown.  For every
+              established B-Channel of the driver, a bit  is  set
+              in  the  shown value. The driver's first channel is
+              mapped to bit 0, the second channel to bit 1 and so
+              on.
+
+       <STRONG>phone</STRONG>  is  the  tag of line 6. In this line for every vir­
+              tual channel, the remote phone number is  shown  if
+              the channel is active. A ??? is shown, if the chan­
+              nel is inactive.
+
+
+
+</PRE>
+<H2>BLOCKING BEHAVIOUR</H2><PRE>
+       After opening the device, at most 6 lines can be read by a
+       user  process.   After  that, the user process is blocked.
+       Whenever a status change happens, the process  is  allowed
+       to read 6 more lines, starting with line one.
+
+
+
+</PRE>
+<H2>IOCTL FUNCTIONS</H2><PRE>
+       Currently, there are two ioctl calls supported:
+
+       <STRONG><A HREF="includes/isdn.h.php3#IIOCGETDVR">IIOCGETDVR</A></STRONG>
+              Get Revision information.
+              Returns an unsigned long value <EM>v</EM>, representing var­
+              ious user level interface revisions, where
+
+              <STRONG>(</STRONG><EM>v</EM> <STRONG>&amp;</STRONG> <STRONG>0xff)</STRONG>
+                     is the revision of the modem-register  info,
+                     available via ioctl on <EM>/dev/isdnctrl</EM>.
+
+              <STRONG>((</STRONG><EM>v</EM> <STRONG>&gt;&gt;</STRONG> <STRONG>8)</STRONG> <STRONG>&amp;</STRONG> <STRONG>0xff)</STRONG>
+                     is  the revision of the net-interface config
+                     data, available via ioctl on  <EM>/dev/isdnctrl</EM>.
+                     and
+                     is  the  revision  of the data delivered via
+                     <EM>/dev/isdninfo</EM> itself.
+
+       <STRONG><A HREF="includes/isdn.h.php3#IIOCGETCPS">IIOCGETCPS</A></STRONG>
+              Get transfer statistics.
+              Returns the number of bytes transferred so far  for
+              all virtual channels. The third parameter should be
+              a pointer to an array  of  unsigned  long  of  size
+              ISDN_MAX_CHANNELS  *  2.  This array is filled with
+              the byte counter values upon return.
+
+
+</PRE>
+<H2>OTHER CONSTANTS</H2><PRE>
+       There  are  some  more   useful   constants   defined   in
+       <EM><A HREF="includes/isdn.h.php3">/usr/include/linux/isdn.h</A></EM>:
+
+       <STRONG><A HREF="includes/isdn.h.php3#ISDN_TTY_MAJOR">ISDN_TTY_MAJOR</A></STRONG>
+              The major device number of <EM>/dev/ttyI</EM>.
+
+       <STRONG><A HREF="includes/isdn.h.php3#ISDN_TTYAUX_MAJOR">ISDN_TTYAUX_MAJOR</A></STRONG>
+              The major device number of <EM>/dev/cui</EM>.
+
+       <STRONG><A HREF="includes/isdn.h.php3#ISDN_MAJOR">ISDN_MAJOR</A></STRONG>
+              The major device number of <EM>/dev/isdnctrl</EM>, <EM>/dev/isd­</EM>
+              <EM>ninfo</EM>, <EM>/dev/ippp</EM> and <EM>/dev/isdn</EM>
+
+       <STRONG><A HREF="includes/isdn.h.php3#ISDN_MAX_DRIVERS">ISDN_MAX_DRIVERS</A></STRONG>
+              The number of driver slots.
+
+       <STRONG><A HREF="includes/isdn.h.php3#ISDN_MAX_CHANNELS">ISDN_MAX_CHANNELS</A></STRONG>
+              The number of virtual channels.
+
+       <STRONG><A HREF="includes/isdn.h.php3#"></A></STRONG>
+       <STRONG><A HREF="includes/isdn.h.php3#ISDN_MINOR_CTRL">ISDN_MINOR_CTRL</A></STRONG>
+              The minor device number of <EM>/dev/isdnctrl0</EM>.
+
+       <STRONG><A HREF="includes/isdn.h.php3#ISDN_MINOR_CTRLMAX">ISDN_MINOR_CTRLMAX</A></STRONG>
+              The minor device number of <EM>/dev/isdnctrl63</EM>.
+
+       <STRONG><A HREF="includes/isdn.h.php3#ISDN_MINOR_PPP">ISDN_MINOR_PPP</A></STRONG>
+              The minor device number of <EM>/dev/ippp0</EM>.
+
+       <STRONG><A HREF="includes/isdn.h.php3#ISDN_MINOR_PPPMAX">ISDN_MINOR_PPPMAX</A></STRONG>
+              The minor device number of <EM>/dev/ippp64</EM>.
+
+       <STRONG><A HREF="includes/isdn.h.php3#ISDN_MINOR_STATUS">ISDN_MINOR_STATUS</A></STRONG>
+              The minor device number of <EM>/dev/isdninfo</EM>.
+
+       Other constants, necessary for  ioctl's  on  <EM>/dev/isdnctrl</EM>
+       are listed in <STRONG>isdnctrl</STRONG>(4).
+
+
+</PRE>
+<H2>AUTHOR</H2><PRE>
+       Fritz Elfert &lt;fritz@wuemaus.franken.de&gt;
+
+       <STRONG>isdnctrl</STRONG>(4), <STRONG>icnctrl</STRONG>(4).
+</PRE>
+</BODY>
+</HTML>

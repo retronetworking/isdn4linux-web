@@ -1,0 +1,13 @@
+<HTML>
+<HEAD>
+<TITLE>unsigned short hl_hdrlen</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    <B>***CHANGED.7.4: New field.</B><P>
+
+    <B>To be preset</B> by the HL-driver, <B>if</B> it supports sk_buff's. The driver
+    should put here the amount of additional space needed in sk-buff's for
+    its internal purposes. Drivers <B>not</B> supporting sk_buff's should
+    initialize this field to <B>0</B>.
+</BODY>
+</HTML>

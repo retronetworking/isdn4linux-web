@@ -1,0 +1,6 @@
+<!--#set var="alt" value="Home" --><A
+HREF="/" onmouseover="js_moveover('_pics_home_gif')"
+onmouseout="js_moveaway('_pics_home_gif')"><IMG
+SRC="/pics/home.gif" name="_pics_home_gif"
+<!--#include virtual="/ssi/calt.shtml" -->
+BORDER=0 HEIGHT=28 WIDTH=76></A>

@@ -1,0 +1,103 @@
+<HTML>
+<HEAD>
+<TITLE>Interface for new ISAC/HSCX based cards</TITLE>
+<!--#include virtual="/ssi/js.shtml" -->
+<!--#include virtual="/ssi/buttondefs.shtml" -->
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<TABLE WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT WIDTH="90"><!--#include virtual="/ssi/b_home.shtml" --></TD>
+<TD ALIGN="CENTER"><A HREF="files.shtml">Dateiliste</A></TD>
+<TD ALIGN=RIGHT WIDTH="90"><!--#include virtual="/ssi/b_index.shtml" --></TD>
+</TR>
+</TABLE>
+<CENTER>
+<H2>Interface for new ISAC/HSCX based cards</H2>
+</CENTER>
+<PRE>
+
+u_char <A HREF="asuscom.c.shtml#ReadISAC" TARGET="_code">ReadISAC(struct IsdnCardState *cs, u_char offset)</A>
+
+	Returns the value of a ISAC Register
+
+void <A HREF="asuscom.c.shtml#ReadISAC" TARGET="_code">WriteISAC(struct IsdnCardState *cs, u_char offset, u_char value)</A>
+
+	Write to a ISAC Register
+
+void <A HREF="asuscom.c.shtml#ReadISAC" TARGET="_code">ReadISACfifo(struct IsdnCardState *cs, u_char * data, int size)</A>
+
+	Read size bytes from the ISAC fifo
+
+void <A HREF="asuscom.c.shtml#ReadISAC" TARGET="_code">WriteISACfifo(struct IsdnCardState *cs, u_char * data, int size)</A>
+
+	Write size bytes to the ISAC fifo
+
+u_char <A HREF="asuscom.c.shtml#ReadISAC" TARGET="_code">ReadHSCX(struct IsdnCardState *cs, int hscx, u_char offset)</A>
+
+	Returns the value of a HSCX Register
+
+void <A HREF="asuscom.c.shtml#ReadISAC" TARGET="_code">WriteHSCX(struct IsdnCardState *cs, int hscx, u_char offset, u_char value)</A>
+
+	Write to a HSCX Register
+
+For fast interupt handling, here are some quick inline functions in
+"hscx_irq.c". These functions need the following macros for card specific
+routines.
+
+#define <A HREF="asuscom.c.shtml#READHSCXFIFO" TARGET="_code">READHSCXFIFO(cs, nr, ptr, cnt)</A>
+#define <A HREF="asuscom.c.shtml#READHSCXFIFO" TARGET="_code">WRITEHSCXFIFO(cs, nr, ptr, cnt)</A>
+
+void
+<A HREF="asuscom.c.shtml#asuscom_interrupt" TARGET="_code">card_interrupt(int intno, void *dev_id, struct pt_regs *regs)</A>
+
+this function is the main IRQ routine. It should contain tests and calls
+for the different IRQ sources (ISAC/HSCX and card specific sources)
+
+
+int <A HREF="asuscom.c.shtml#Asus_card_msg" TARGET="_code">card_msg(struct IsdnCardState *cs, int mt, void *arg)</A>
+
+	This function controls various hardware related functions of the
+        specific card. It have to return 0, if no fatal error occours. 
+
+	the following values for mt are defined (* optional) :
+
+	<A HREF="hisax.h.shtml#CARD_RESET" TARGET="_code">CARD_RESET</A>		- * reset the card
+	<A HREF="hisax.h.shtml#CARD_RELEASE" TARGET="_code">CARD_RELEASE</A>		- release all card resources
+	<A HREF="hisax.h.shtml#CARD_SETIRQ" TARGET="_code">CARD_SETIRQ</A>             - set the irq function
+	<A HREF="hisax.h.shtml#CARD_INIT" TARGET="_code">CARD_INIT</A>               - init components (eg. ISAC, HSCX) and
+				  should request at least one IRQ
+	<A HREF="hisax.h.shtml#CARD_TEST" TARGET="_code">CARD_TEST</A>		- * make some HW checks
+
+	These values are for LED status monitoring on some cards:
+
+	(<A HREF="hisax.h.shtml#MDL_REMOVE" TARGET="_code">MDL_REMOVE</A> | <A HREF="hisax.h.shtml#REQUEST" TARGET="_code">REQUEST</A>)	- * action if a TEI is removed
+	(<A HREF="hisax.h.shtml#MDL_ASSIGN" TARGET="_code">MDL_ASSIGN</A> | <A HREF="hisax.h.shtml#REQUEST" TARGET="_code">REQUEST</A>)	- * action if a TEI is assigned
+	<A HREF="hisax.h.shtml#MDL_INFO_SETUP" TARGET="_code">MDL_INFO_SETUP</A>		- * action if a incoming call is pending
+	<A HREF="hisax.h.shtml#MDL_INFO_CONN" TARGET="_code">MDL_INFO_CONN</A>		- * action if a connection is activ
+	<A HREF="hisax.h.shtml#MDL_INFO_REL" TARGET="_code">MDL_INFO_REL</A>		- * action if a connection is released
+
+
+	<A HREF="hisax.h.shtml#CARD_AUX_IND" TARGET="_code">CARD_AUX_IND</A> 		- * This are for future extentions
+					(like a onboard modem)
+
+	if options are not implemented, it should return 0
+
+<A HREF="asuscom.c.shtml#__initfunc" TARGET="_code">setup_card(struct IsdnCard *card)</A>
+
+	This function is called first and has to allocate resources
+	(IO addresses, memory) for the card and should set these
+	basic functions of the IsdnCardState structure.
+
+	cs->BC_Read_Reg = &ReadHSCX;
+	cs->BC_Write_Reg = &WriteHSCX;
+	cs->BC_Send_Data = &hscx_fill_fifo;
+	cs->cardmsg = &card_msg;
+	cs->readisac = &ReadISAC;
+	cs->writeisac = &WriteISAC;
+	cs->readisacfifo = &ReadISACfifo;
+	cs->writeisacfifo = &WriteISACfifo;
+
+	if anything goes wrong, the function has to return 0.
+</PRE>
+</HTML>

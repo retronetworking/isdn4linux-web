@@ -1,0 +1,112 @@
+<HTML>
+<HEAD><TITLE>ISDN4Linux</TITLE></HEAD>
+<META name="description" content="Official ISDN4Linux Homepage">
+<META name="keywords" content="isdn4linux, ISDN, Linux, ISDN with Linux, Mailinglist, list archive, download">
+<BODY BGCOLOR="#ffffff">
+<!--#include virtual="/ssi/js.shtml" -->
+
+<!--#set var="picnam" value="cvs" -->
+<!--#set var="picstr" value="ISDN4Linux CVS Access" -->
+<!--#include virtual="/ssi/jbdef.shtml" -->
+
+<!--#set var="picnam" value="faq" -->
+<!--#set var="picstr" value="The ISDN4Linux FAQ" -->
+<!--#include virtual="/ssi/jbdef.shtml" -->
+
+<!--#set var="picnam" value="listarch" -->
+<!--#set var="picstr" value="Mailinglist Archive" -->
+<!--#include virtual="/ssi/jbdef.shtml" -->
+
+<!--#set var="picnam" value="devmeet" -->
+<!--#set var="picstr" value="About the Developer Meeting 1998" -->
+<!--#include virtual="/ssi/jbdef.shtml" -->
+
+<!--#set var="picnam" value="links" -->
+<!--#set var="picstr" value="A small collection of ISDN related links" -->
+<!--#include virtual="/ssi/jbdef.shtml" -->
+
+<!--#set var="picnam" value="workshop" -->
+<!--#set var="picstr" value="ISDN workshop at Linux Congress 98" -->
+<!--#include virtual="/ssi/jbdef.shtml" -->
+
+<!--#set var="picnam" value="contacts" -->
+<!--#set var="picvar" value="_pics_contacts_gif" -->
+<!--#set var="picstr" value="Contact authors" -->
+<!--#include virtual="/ssi/jbdef.shtml" -->
+
+<!--#set var="picnam" value="download" -->
+<!--#set var="picstr" value="Download software" -->
+<!--#include virtual="/ssi/jbdef.shtml" -->
+
+<CENTER>
+<TABLE>
+<TR><TD COLSPAN="3" HEIGHT=20> </TD></TR
+><!--#set var="alt" value="ISDN 4 Linux" --><TR><TD><IMG
+SRC="/pics/ISDN.gif" WIDTH=188 HEIGHT=60
+<!--#include virtual="/ssi/calt.shtml" -->></TD><TD> </TD><TD> </TD></TR>
+<TR><TD COLSPAN="3" HEIGHT=20> </TD></TR>
+<TR><TD></TD><TD
+><!--#set var="alt" value="" --><IMG
+SRC="/pics/4.gif" WIDTH=47 HEIGHT=58
+<!--#include virtual="/ssi/calt.shtml" -->></TD><TD> </TD></TR>
+<TR><TD COLSPAN="3" HEIGHT=20> </TD></TR>
+<TR><TD>
+<TABLE>
+<TR><TD
+><!--#set var="href" value="workshop/" -->
+<!--#set var="picnam" value="workshop" -->
+<!--#set var="alt" value="ISDN workshop at Linux Congress 98" -->
+<!--#include virtual="/ssi/jbref.shtml" --> WIDTH=222 HEIGHT=34></A></TD></TR
+><!--
+<!--#set var="href" value="devmeeting/" -->
+<!--#set var="picnam" value="devmeet" -->
+<!--#set var="alt" value="2. Developer Meeting" -->
+<TR><TD><!--#include virtual="/ssi/jbref.shtml" --> WIDTH=242 HEIGHT=34></A><BR CLEAR="ALL">March 6 - 8, 1998 in W&uuml;rzburg</TD></TR>
+--><TR><TD
+><!--#set var="href" value="listarch/" -->
+<!--#set var="picnam" value="listarch" -->
+<!--#set var="alt" value="Mailinglist Archive" -->
+<!--#include virtual="/ssi/jbref.shtml" --> WIDTH=136 HEIGHT=34></A></TD></TR
+><TR><TD
+><!--#set var="href" value="faq/" -->
+<!--#set var="picnam" value="faq" -->
+<!--#set var="alt" value="FAQ" -->
+<!--#include virtual="/ssi/jbref.shtml" --> WIDTH=56 HEIGHT=32></A></TD></TR
+><TR><TD
+><!--#set var="href" value="/cgi-bin/cvsweb.cgi" -->
+<!--#set var="picnam" value="cvs" -->
+<!--#set var="alt" value="CVS" -->
+<!--#include virtual="/ssi/jbref.shtml" --> WIDTH=52 HEIGHT=28></A></TD></TR
+><!--
+<TR><TD
+><!--#set var="href" value="leafsite/" -->
+<!--#set var="picnam" value="leafsite" -->
+<!--#set var="alt" value="Leafsite FAQ" -->
+<!--#include virtual="/ssi/jbref.shtml" --> WIDTH=145 HEIGHT=32></A></TD></TR
+>
+-->
+<TR><TD
+><!--#set var="href" value="download.shtml" -->
+<!--#set var="picnam" value="download" -->
+<!--#set var="alt" value="Download software" -->
+<!--#include virtual="/ssi/jbref.shtml" --> WIDTH=122 HEIGHT=29></A></TD></TR
+><TR><TD
+><!--#set var="href" value="contacts.shtml" -->
+<!--#set var="picnam" value="contacts" -->
+<!--#set var="alt" value="Contact authors" -->
+<!--#include virtual="/ssi/jbref.shtml" --> WIDTH=105 HEIGHT=28></A></TD></TR
+><TR><TD
+><!--#set var="href" value="links.shtml" -->
+<!--#set var="picnam" value="links" -->
+<!--#set var="alt" value="ISDN related links" -->
+<!--#include virtual="/ssi/jbref.shtml" --> WIDTH=67 HEIGHT=29></A></TD></TR
+></TABLE></TD><TD> </TD><TD VALIGN="TOP"
+><!--#set var="alt" value="" --><IMG
+SRC="/pics/penguin-t.gif" WIDTH=128 HEIGHT=150
+<!--#include virtual="/ssi/calt.shtml" -->></TD></TR>
+<TR><TD COLSPAN="3" HEIGHT=20> </TD></TR>
+</TABLE>
+</CENTER>
+<!--#include virtual="/ssi/i4lfooter.shtml" -->
+</BODY>
+</HTML>

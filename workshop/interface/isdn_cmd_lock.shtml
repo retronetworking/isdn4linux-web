@@ -1,0 +1,17 @@
+<HTML>
+<HEAD>
+<TITLE>ISDN_CMD_LOCK</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    With this command the HL-driver is told, that it will be used by the
+    LL and therefore may not be unloaded. The HL-driver should use
+    MOD_INC_USE_COUNT to tell that to the kernel.<P>
+Parameter:
+<TABLE>
+<TR VALIGN="TOP"><TD><B>driver</B></TD><TD>driver-Id.</TD></TR>
+<TR VALIGN="TOP"><TD><B>command</B></TD><TD><A HREF="../includes/isdnif.h.shtml#ISDN_CMD_LOCK" TARGET="_code">ISDN_CMD_LOCK</A></TD></TR>
+<TR VALIGN="TOP"><TD><B>arg</B></TD><TD>unused.</TD></TR>
+<TR VALIGN="TOP"><TD><B>para</B></TD><TD>unused.</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

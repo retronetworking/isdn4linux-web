@@ -1,0 +1,17 @@
+<HTML>
+<HEAD>
+<TITLE>ISDN_CMD_ACCEPTB</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+With this command, the HL-driver is told to perform a
+B-Channel-setup. (after establishing D-Channel-Connection)<P>
+
+Parameter:
+<TABLE>
+<TR VALIGN="TOP"><TD><B>driver</B></TD><TD>driver-Id.</TD></TR>
+<TR VALIGN="TOP"><TD><B>command</B></TD><TD><A HREF="../includes/isdnif.h.shtml#ISDN_CMD_ACCEPTB" TARGET="_code">ISDN_CMD_ACCEPTB</A></TD></TR>
+<TR VALIGN="TOP"><TD><B>arg</B></TD><TD>channel-number locally to the driver. (starting with 0)</TD></TR>
+<TR VALIGN="TOP"><TD><B>para</B></TD><TD>unused.</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

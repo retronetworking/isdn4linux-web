@@ -1,0 +1,14 @@
+<HTML>
+<HEAD>
+<TITLE>unsigned long features</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    <B>To be preset</B> by the HL-driver. Using this field, the HL-driver
+    announces the features supported. At the moment this is limited to
+    report the supported layer2 and layer3-protocols. For setting this
+    field the constants <A HREF="../includes/isdnif.h.shtml#ISDN_FEATURE_L2_X75I" TARGET="_code">ISDN_FEATURE...</A>, declared in <A HREF="../includes/isdnif.h.shtml" TARGET="_code">isdnif.h</A> have to be
+    used.<P>
+
+    <B>***CHANGE0.7.1: The line type (1TR6, EDSS1) has to be set.</B><BR>
+</BODY>
+</HTML>

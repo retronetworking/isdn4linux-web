@@ -1,0 +1,17 @@
+<HTML>
+<HEAD>
+<TITLE>char id[20]</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<B>***CHANGE0.7: New since this version.</B><P>
+
+   This string has <B>to be preset</B> by the HL-driver. Its purpose is for
+   identification of the driver by the user. Eg.: it is shown in the
+   status-info of /dev/isdninfo. Furthermore it is used as Id for binding
+   net-interfaces to a specific channel. If a string of length zero is
+   given, upon return, isdn4linux will replace it by a generic name. (line0,
+   line1 etc.) It is recommended to make this string configurable during
+   module-load-time. (copy a global variable to this string.) For doing that,
+   modules 1.2.8 or newer are necessary.
+</BODY>
+</HTML>

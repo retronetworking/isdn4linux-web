@@ -1,0 +1,9 @@
+<TABLE WIDTH=100%><TR><TD COLSPAN=2 ALIGN=CENTER
+><!--#include virtual="/ssi/rule.shtml" --><BR></TD></TR
+>
+<TR><!--#config timefmt="%d.%m.%Y %H:%M" --><TD ALIGN="LEFT"
+><SMALL>Last change: <!--#echo var="LAST_MODIFIED" --></SMALL></TD
+><TD ALIGN="RIGHT" NOBREAK><SMALL
+>&copy; 1998 Fritz Elfert <A
+HREF="mailto:<!--#echo var="SERVER_ADMIN" -->?subject=ISDN4Linux-Website"
+><!--#echo var="SERVER_ADMIN" --></A></SMALL></TD></TR></TABLE>

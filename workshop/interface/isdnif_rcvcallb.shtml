@@ -1,0 +1,21 @@
+<HTML>
+<HEAD>
+<TITLE>void (*rcvcallb)(int, int, u_char*, int)</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    <B>***CHANGEc1.14: Declared obsolete. Do <FONT COLOR="red">NOT</FONT> use this field/function
+                    anymore, since it will be removed when all current
+                    LL drivers have been changed accordingly. Use
+                    rcvcallb_skb instead.</B><P>
+
+    This field will be set by LL. The HL-driver delivers received data-
+    packets by calling this function.<P>
+Parameter:
+<TABLE>
+<TR><TD><B>int</B></TD><TD>driver-Id</TD></TR>
+<TR><TD><B>int</B></TD><TD>Channel-number locally to the driver. (starting with 0)</TD></TR>
+<TR><TD><B>u_char</B></TD><TD>Pointer to received data. (in kernel-space)</TD></TR>
+<TR><TD><B>int</B></TD><TD>length of data-packet.</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

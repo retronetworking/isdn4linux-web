@@ -1,0 +1,19 @@
+<HTML>
+<HEAD>
+<TITLE>ISDN_CMD_GETSIL</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    With this command, the HL-driver is told to return the current
+    Service-Indicators it will respond to.<P>
+
+Parameter:
+<TABLE>
+<TR VALIGN="TOP"><TD><B>driver</B></TD><TD>driver-Id.</TD></TR>
+<TR VALIGN="TOP"><TD><B>command</B></TD><TD><A HREF="../includes/isdnif.h.shtml#ISDN_CMD_GETSIL" TARGET="_code">ISDN_CMD_GETSIL</A></TD></TR>
+<TR VALIGN="TOP"><TD><B>arg</B></TD><TD>channel-number locally to the driver. (starting with 0)</TD></TR>
+<TR VALIGN="TOP"><TD><B>para.num</B></TD><TD>
+ASCII-String, containing the current Service-Indicators.
+</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

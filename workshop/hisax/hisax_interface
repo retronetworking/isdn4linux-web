@@ -1,0 +1,84 @@
+Interface for new ISAC/HSCX based cards
+
+u_char ReadISAC(struct IsdnCardState *cs, u_char offset)
+
+	Returns the value of a ISAC Register
+
+void WriteISAC(struct IsdnCardState *cs, u_char offset, u_char value)
+
+	Write to a ISAC Register
+
+void ReadISACfifo(struct IsdnCardState *cs, u_char * data, int size)
+
+	Read size bytes from the ISAC fifo
+
+void WriteISACfifo(struct IsdnCardState *cs, u_char * data, int size)
+
+	Write size bytes to the ISAC fifo
+
+u_char ReadHSCX(struct IsdnCardState *cs, int hscx, u_char offset)
+
+	Returns the value of a HSCX Register
+
+void WriteHSCX(struct IsdnCardState *cs, int hscx, u_char offset, u_char value)
+
+	Write to a HSCX Register
+
+For fast interupt handling, here are some quick inline functions in
+"hscx_irq.c". These functions need the following macros for card specific
+routines.
+
+#define READHSCXFIFO(cs, nr, ptr, cnt)
+#define WRITEHSCXFIFO(cs, nr, ptr, cnt)
+
+void
+card_interrupt(int intno, void *dev_id, struct pt_regs *regs)
+
+this function is the main IRQ routine. It should contain tests and calls
+for the different IRQ sources (ISAC/HSCX and card specific sources)
+
+
+int card_msg(struct IsdnCardState *cs, int mt, void *arg)
+
+	This function controls various hardware related functions of the
+        specific card. It have to return 0, if no fatal error occours. 
+
+	the following values for mt are defined (* optional) :
+
+	CARD_RESET		- * reset the card
+	CARD_RELEASE		- release all card resources
+	CARD_SETIRQ             - set the irq function
+	CARD_INIT               - init components (eg. ISAC, HSCX) and
+				  should request at least one IRQ
+	CARD_TEST		- * make some HW checks
+
+	These values are for LED status monitoring on some cards:
+
+	(MDL_REMOVE | REQUEST)	- * action if a TEI is removed
+	(MDL_ASSIGN | REQUEST)	- * action if a TEI is assigned
+	MDL_INFO_SETUP		- * action if a incoming call is pending
+	MDL_INFO_CONN		- * action if a connection is activ
+	MDL_INFO_REL		- * action if a connection is released
+
+
+	CARD_AUX_IND 		- * This are for future extentions
+					(like a onboard modem)
+
+	if options are not implemented, it should return 0
+
+setup_card(struct IsdnCard *card)
+
+	This function is called first and has to allocate resources
+	(IO addresses, memory) for the card and should set these
+	basic functions of the IsdnCardState structure.
+
+	cs->BC_Read_Reg = &ReadHSCX;
+	cs->BC_Write_Reg = &WriteHSCX;
+	cs->BC_Send_Data = &hscx_fill_fifo;
+	cs->cardmsg = &card_msg;
+	cs->readisac = &ReadISAC;
+	cs->writeisac = &WriteISAC;
+	cs->readisacfifo = &ReadISACfifo;
+	cs->writeisacfifo = &WriteISACfifo;
+
+	if anything goes wrong, the function has to return 0.

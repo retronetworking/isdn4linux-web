@@ -1,0 +1,17 @@
+<HTML>
+<HEAD>
+<TITLE>ISDN_STAT_BHUP</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+   With this call, the HL-driver signals the shutdown of a
+   B-Channel-connection. This could be a response to a prior ISDN_CMD_HANGUP,
+   or caused by a remote-hangup.<P>
+Parameter:
+<TABLE>
+<TR VALIGN="TOP"><TD><B>driver</B></TD><TD>driver-Id</TD></TR>
+<TR VALIGN="TOP"><TD><B>command</B></TD><TD><A HREF="../includes/isdnif.h.shtml#ISDN_STAT_BHUP" TARGET="_code">ISDN_STAT_BHUP</A></TD></TR>
+<TR VALIGN="TOP"><TD><B>arg</B></TD><TD>channel-number, locally to the driver. (starting with 0)</TD></TR>
+<TR VALIGN="TOP"><TD><B>para</B></TD><TD>unused.</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

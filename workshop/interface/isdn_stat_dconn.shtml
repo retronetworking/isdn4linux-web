@@ -1,0 +1,16 @@
+<HTML>
+<HEAD>
+<TITLE>ISDN_STAT_DCONN</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+   With this call, the HL-driver signals the successful establishment of
+   a D-Channel-connection. (Response to ISDN_CMD_ACCEPTD or ISDN_CMD_DIAL)<P>
+Parameter:
+<TABLE>
+<TR VALIGN="TOP"><TD><B>driver</B></TD><TD>driver-Id</TD></TR>
+<TR VALIGN="TOP"><TD><B>command</B></TD><TD><A HREF="../includes/isdnif.h.shtml#ISDN_STAT_DCONN" TARGET="_code">ISDN_STAT_DCONN</A></TD></TR>
+<TR VALIGN="TOP"><TD><B>arg</B></TD><TD>channel-number, locally to the driver. (starting with 0)</TD></TR>
+<TR VALIGN="TOP"><TD><B>para</B></TD><TD>unused.</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

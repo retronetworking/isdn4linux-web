@@ -1,0 +1,39 @@
+<HTML>
+<HEAD><TITLE>Contact developers</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<!--#include virtual="/ssi/js.shtml" -->
+<!--#include virtual="/ssi/buttondefs.shtml" -->
+<CENTER>
+<TABLE WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT WIDTH="90"><!--#include virtual="/ssi/b_home.shtml" --></TD>
+<!--#set var="alt" value="Contact developers" -->
+<TD VALIGN=MIDDLE ALIGN=CENTER><IMG SRC="/pics/contacts_hdr.gif" BORDER=0 <!--#include virtual="/ssi/calt.shtml" -->></TD>
+<TD ALIGN=RIGHT WIDTH="90"><!--#include virtual="/ssi/b_mail.shtml" --></TD>
+</TR>
+<TR><TD ALIGN=CENTER COLSPAN=3><!--#include virtual="/ssi/rule.shtml" --></TD>
+</TR>
+</TABLE><P>
+The following eMail addresses are available for contacting authors:<P>
+<TABLE>
+<TR><TD><A HREF="mailto:keil@isdn4linux.de">keil@isdn4linux.de</A><BR>
+General maintainer, author of HiSax.</TD></TR>
+<TR><TD><A HREF="mailto:fritz@isdn4linux.de">fritz@isdn4linux.de</A><BR>
+Author of linklevel, icn, act2000,<BR>list-maintainer, webmaster.</TD></TR>
+<TR><TD><A HREF="mailto:vbox@isdn4linux.de">vbox@isdn4linux.de</A><BR>
+Role-account, author of vbox answering machine.</TD></TR>
+<TR><TD><A HREF="mailto:akool@isdn4linux.de">akool@isdn4linux.de</A><BR>
+Author of isdnlog.</TD></TR>
+<TR><TD><A HREF="mailto:paul@isdn4linux.de">paul@isdn4linux.de</A><BR>
+Debian Maintainer, misc. utility stuff.</TD></TR>
+<TR><TD><A HREF="mailto:faq@isdn4linux.de">faq@isdn4linux.de</A><BR>
+Maintainers of english FAQ.</TD></TR>
+<TR><TD><A HREF="mailto:i4lfaq-de@isdn4linux.de">i4lfaq-de@isdn4linux.de</A><BR>
+Maintainer of german FAQ.</TD></TR>
+</TABLE>
+</CENTER>
+<P>
+<!--#include virtual="/ssi/i4lfooter.shtml" -->
+</BODY>
+</HTML>

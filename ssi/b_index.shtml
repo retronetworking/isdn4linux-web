@@ -1,0 +1,1 @@
+<!--#set var="alt" value="up" --><A HREF="index.shtml" onmouseover="js_moveover('_pics_up_gif')" onmouseout="js_moveaway('_pics_up_gif')"><IMG SRC="/pics/up.gif" name="_pics_up_gif" <!--#include virtual="/ssi/calt.shtml" --> BORDER=0 HEIGHT=33 WIDTH=43></A>

@@ -1,0 +1,19 @@
+<HTML>
+<HEAD>
+<TITLE>void (*rcvcallb_skb)(int, int, struct sk_buff *)</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    <B>***CHANGED.7.4: New field.</B><P>
+
+    This field will be set by LL. The HL-driver delivers received data-
+    packets by calling this function. Upon calling, the HL-driver <B>must</B>
+    already have its <B>private data pulled off</B> the head of the sk_buff.<P>
+
+Parameter:
+<TABLE>
+<TR><TD><B>int</B></TD><TD>driver-Id</TD></TR>
+<TR><TD><B>int</B></TD><TD>Channel-number locally to the driver. (starting with 0)</TD></TR>
+<TR><TD><B>struct sk_buff *</B></TD><TD>Pointer to sk_buff, containing received data.</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

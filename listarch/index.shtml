@@ -1,0 +1,27 @@
+<HTML>
+<HEAD><TITLE>ISDN4Linux Mailinglists</TITLE></HEAD>
+<BODY BGCOLOR="#ffffff">
+<!--#include virtual="/ssi/js.shtml" -->
+<!--#include virtual="/ssi/buttondefs.shtml" -->
+<CENTER>
+<TABLE WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT WIDTH="90"><!--#include virtual="/ssi/b_home.shtml" --></TD>
+<!--#set var="alt" value="ISDN4Linux Mailinglists" -->
+<TD VALIGN=MIDDLE ALIGN=CENTER><IMG SRC="/pics/listarch_hdr.gif" WIDTH=320 BORDER=0 <!--#include virtual="/ssi/calt.shtml" -->></TD>
+<TD ALIGN=RIGHT WIDTH="90"><!--#include virtual="/ssi/b_mail.shtml" --></TD>
+</TR>
+<TR><TD ALIGN=CENTER COLSPAN=3><!--#include virtual="/ssi/rule.shtml" --></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=60%>
+<TR><TD>
+This is the complete Archive of the ISDN4Linux Mailinglist at listserv.isdn4linux.de.
+This mailinglist is bidirectionally gated with the newsgroup de.alt.comm.isdn4linux.<BR>
+Note: Thread- and date-views are <STRONG>reverse</STRONG> sorted (<I>i.e. most recent message first</I>).
+</TD></TR></TABLE>
+<!--#include virtual="/cgi-bin/mlindex.cgi?list=isdn4linux" -->
+</CENTER>
+<!--#include virtual="/ssi/i4lfooter.shtml" -->
+</BODY>
+</HTML>

@@ -1,0 +1,25 @@
+<HTML>
+<HEAD>
+<TITLE>int (*writebuf_skb)(int, int, struct sk_buff *)</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<B>***CHANGED.7.4: New field.</B><P>
+
+    This field has <B>to be preset</B> by the HL-driver. The given function will
+    be called by the LL for delivering data to be send via B-Channel.<P>
+
+Parameter:
+<TABLE>
+<TR VALIGN="TOP"><TD><B>int</B></TD><TD>driver-Id <B>***CHANGE.7.4: New parameter.</B></TD></TR>
+<TR VALIGN="TOP"><TD><B>int</B></TD><TD>channel-number locally to the HL-driver. (starts with 0)</TD></TR>
+<TR VALIGN="TOP"><TD><B>int</B></TD><TD>Flag: Need ACK for this packet.</TD></TR>
+<TR VALIGN="TOP"><TD><B>struct sk_buff *</B></TD><TD>Pointer to sk_buff containing data to be send via
+                       B-channel.</TD></TR>
+</TABLE>
+Returnvalue:
+<TABLE>
+<TR VALIGN="TOP"><TD>Length of data accepted on success, else error-code (-EINVAL on
+      oversized packets etc.)</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

@@ -1,0 +1,43 @@
+<HTML>
+<HEAD>
+<TITLE>Hisax</TITLE>
+<!--#include virtual="/ssi/js.shtml" -->
+<!--#include virtual="/ssi/buttondefs.shtml" -->
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<TABLE WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT WIDTH="90"><!--#include virtual="/ssi/b_home.shtml" --></TD>
+<TD ALIGN="CENTER"><A HREF="files.shtml">Dateiliste</A></TD>
+<TD ALIGN=RIGHT WIDTH="90"><!--#include virtual="/ssi/b_up.shtml" --></TD>
+</TR>
+</TABLE>
+<CENTER>
+
+<MAP NAME="hisax">
+<AREA SHAPE="rect" HREF="../linklevel/" COORDS="5,70,486,126">
+<AREA SHAPE="rect" HREF="hisax.h.shtml" COORDS="4,197,486,254">
+<AREA SHAPE="rect" HREF="callc.c.shtml" COORDS="49,255,486,339">
+<AREA SHAPE="rect" HREF="l3_1tr6.c.shtml" COORDS="89,340,217,424">
+<AREA SHAPE="rect" HREF="l3dss1.c.shtml" COORDS="218,341,344,422">
+<AREA SHAPE="rect" HREF="lmgr.c.shtml" COORDS="20,341,87,614">
+<AREA SHAPE="rect" HREF="isdnl2.c.shtml" COORDS="90,425,484,508">
+<AREA SHAPE="rect" HREF="isdnl1.c.shtml" COORDS="91,511,485,586">
+<AREA SHAPE="rect" HREF="hscx.c.shtml" COORDS="91,589,218,657">
+<AREA SHAPE="rect" HREF="isac.c.shtml" COORDS="220,590,357,657">
+<AREA SHAPE="rect" HREF="asuscom.c.shtml" COORDS="359,591,485,656">
+</MAP>
+<TABLE><TR VALIGN="TOP"><TD>
+<TABLE CELLPADDING="5"><TR>
+<TD BGCOLOR="#C0C0FF" ALIGN="CENTER">
+<A HREF="interface.shtml">
+<STRONG>Neue Karte<BR>
+zuf&uuml;gen</STRONG>
+</A>
+</TD></TR></TABLE>
+</TD><TD>
+<IMG SRC="hisax.jpeg" USEMAP="#hisax" BORDER="0">
+</TD>
+</TR></TABLE>
+</CENTER>
+</BODY></HTML>

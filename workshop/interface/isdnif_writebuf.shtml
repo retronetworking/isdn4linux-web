@@ -1,0 +1,31 @@
+<HTML>
+<HEAD>
+<TITLE>int (*writebuf)(int, int, u_char*, int, int)</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    <B>***CHANGED1.14: Declared obsolete. Do <FONT COLOR="red">NOT</FONT> use this field/function
+                    anymore, since it will be removed when all current
+                    LL drivers have been changed accordingly. Set this
+                    field to NULL and use writebuf_skb instead.</B><P>
+
+    This field has to be preset by the HL-driver. The given function will
+    be called by the LL for delivering data to be send via B-Channel.<P>
+
+Parameter:
+<TABLE>
+<TR><TD><B>int</B></TD><TD>driver-Id <B>***CHANGE.7.4: New parameter.</B></TD></TR>
+<TR><TD><B>int</B></TD><TD>channel-number locally to the HL-driver. (starts with 0)</TD></TR>
+<TR><TD><B>u_char*</B></TD><TD>pointer to data.</TD></TR>
+<TR><TD><B>int</B></TD><TD>length of data-packet.</TD></TR>
+<TR><TD><B>int</B></TD><TD>flag: 0 = call from within kernel-space. (HL-driver must use
+                        memcpy, may NOT use schedule())<BR>
+                    1 = call from user-space. (HL-driver must use
+                        memcpy_fromfs, use of schedule() allowed)</TD></TR>
+</TABLE>
+Returnvalue:
+<TABLE>
+<TR><TD>Length of data accepted on success, else error-code (-EINVAL on
+      oversized packets etc.)</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

@@ -1,0 +1,1 @@
+<A HREF="<!--#echo var="href" -->" onmouseover="js_moveover('_pics_<!--#echo var="picnam" -->_gif')" onmouseout="js_moveaway('_pics_<!--#echo var="picnam" -->_gif')"><IMG SRC="/pics/<!--#echo var="picnam" -->.gif" name="_pics_<!--#echo var="picnam" -->_gif" BORDER=0 <!--#include virtual="/ssi/calt.shtml" -->

@@ -1,0 +1,28 @@
+<HTML>
+<HEAD>
+<TITLE>ISDN_CMD_DIAL</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    This command is used to tell the HL-driver it should dial a given
+    number.<P>
+
+Parameter:
+<TABLE>
+<TR VALIGN="TOP"><TD><B>driver</B></TD><TD>driver-Id.</TD></TR>
+<TR VALIGN="TOP"><TD><B>command</B></TD><TD><A HREF="../includes/isdnif.h.shtml#ISDN_CMD_DIAL" TARGET="_code">ISDN_CMD_DIAL</A></TD></TR>
+<TR VALIGN="TOP"><TD><B>arg</B></TD><TD>channel-number locally to the driver. (starting with 0)</TD></TR>
+      
+<TR VALIGN="TOP"><TD><B>para.setup.phone</B></TD><TD>An ASCII-String containing the number to dial.</TD></TR>
+<TR VALIGN="TOP"><TD><B>para.setup.eazmsn</B></TD><TD>An ASCII-Sting containing the own EAZ or MSN.</TD></TR>
+<TR VALIGN="TOP"><TD><B>para.setup.si1</B></TD><TD>The Service-Indicator.</TD></TR>
+<TR VALIGN="TOP"><TD><B>para.setup.si2</B></TD><TD>Additional Service-Indicator.</TD></TR>
+</TABLE><BR>
+
+                    If the Line has been designed as SPV (a special german
+                    feature, meaning semi-leased-line) the phone has to
+                    start with an "S".<BR>
+      <B>***CHANGE0.6: In previous versions the EAZ has been given in the
+                    highbyte of arg.</B></BR>
+    <B>***CHANGE0.7.1: New since this version: ServiceIndicator and AddInfo.</B><BR>
+</BODY>
+</HTML>

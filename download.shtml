@@ -1,0 +1,33 @@
+<HTML>
+<HEAD><TITLE>Download</TITLE></HEAD>
+<BODY BGCOLOR="#ffffff">
+<!--#include virtual="/ssi/js.shtml" -->
+<!--#include virtual="/ssi/buttondefs.shtml" -->
+<CENTER>
+<TABLE WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT WIDTH="90"><!--#include virtual="/ssi/b_home.shtml" --></TD>
+<!--#set var="alt" value="Download" -->
+<TD VALIGN=MIDDLE ALIGN=CENTER><IMG SRC="pics/download_hdr.gif" WIDTH=255 HEIGTH=48 BORDER=0 <!--#include virtual="/ssi/calt.shtml" -->></TD>
+<TD ALIGN=RIGHT WIDTH="90"><!--#include virtual="/ssi/b_mail.shtml" --></TD>
+</TR>
+<TR><TD ALIGN=CENTER COLSPAN=3><!--#include virtual="/ssi/rule.shtml" --></TD>
+</TR>
+</TABLE>
+<TABLE WITH="70%">
+<TR><TD>You can get latest Utility package from the following sites:</TD></TR>
+<TR><TD><A HREF="ftp://ftp.isdn4linux.de/pub/isdn4linux/">ftp.isdn4linux.de</A></TD></TR>
+<TR><TD><A HREF="ftp://ftp.gwdg.de:/pub/linux/isdn/isdn4linux/">ftp.gwdg.de</A></TD></TR>
+<TR><TD><A HREF="ftp://ftp.cs.tu-berlin.de/pub/net/isdn/isdn4linux/">ftp.cs.tu-berlin.de</A></TD></TR>
+<TR><TD><A HREF="ftp://ftp.leo.org/pub/comp/os/unix/linux/isdn/isdn4linux/">ftp.leo.org</A></TD></TR>
+<TR><TD><A HREF="ftp://linux.mathematik.tu-darmstadt.de/pub/linux/mirrors/misc/isdn4linux/">linux.mathematik.tu-darmstadt.de</A></TD></TR>
+<TR><TD><A HREF="ftp://ftp.nvg.unit.no/pub/linux/isdn/">ftp.nvg.unit.no</A></TD></TR>
+<TR><TD><A HREF="ftp://ftp.pop.de/pub/linux/isdn4linux/">ftp.pop.de</A></TD></TR>
+<TR><TD><A HREF="ftp://ftp.xlink.net/pub/mirror.ftp.franken.de/isdn4linux/">ftp.xlink.net</A></TD></TR>
+<TR><TD>Snapshots of the CVS development tree are available at:</TD></TR>
+<TR><TD><A HREF="ftp://ftp.suse.com/pub/isdn4linux/">ftp.suse.com</A></TD></TR>
+</TABLE>
+</CENTER>
+<!--#include virtual="/ssi/i4lfooter.shtml" -->
+</BODY>
+</HTML>

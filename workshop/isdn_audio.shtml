@@ -1,0 +1,224 @@
+<HTML>
+<HEAD>
+<TITLE>isdn_audio - audio extension of ttyI ISDN character devices</TITLE>
+<!--#include virtual="/ssi/js.shtml" -->
+<!--#include virtual="/ssi/buttondefs.shtml" -->
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<TABLE WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT WIDTH="90"><!--#include virtual="/ssi/b_home.shtml" --></TD>
+<TD ALIGN=RIGHT WIDTH="90"><!--#include virtual="/ssi/b_index.shtml" --></TD>
+</TR>
+</TABLE>
+<PRE>
+       isdn_audio - audio extension of ttyI ISDN character devices
+
+
+</PRE>
+<H2>DESCRIPTION</H2><PRE>
+       This document describes the audio  related  extensions  of
+       the modem emulation, provided by <EM>/dev/ttyIx</EM>.
+
+       The  ISDN  tty devices are equipped with a modem emulation
+       implementing a set of traditional and some special AT com­
+       mands.  This  provides  easy  use together with almost all
+       communication software that  uses  modem  commands:  <STRONG>mini­</STRONG>
+       <STRONG>com</STRONG>(1),  <STRONG>seyon</STRONG>(1), <STRONG>XCept</STRONG>(1), <STRONG>uucico</STRONG>(8), <STRONG>mgetty</STRONG>(8), <STRONG>dip</STRONG>(8),
+       <STRONG>pppd</STRONG>(8) and more. When enabled  during  kernel  configura­
+       tion, the emulator is capable of a reduced set of commands
+       to support audio. To use audio features, an ISDN card with
+       a  audio-capable low-level driver is needed. Currently the
+       only audio-capable drivers are the teles and HiSax driver.
+
+       The  port  speed  of  the ISDN tty devices is always 64000
+       bps.
+
+
+
+</PRE>
+<H2>AUDIO RELATED AT COMMAND SET</H2><PRE>
+       This description does <STRONG>not</STRONG> include the standard AT  command
+       set.  For  a  description  of the standard AT command set,
+       provided by the Linux ISDN subsystem,  see  <STRONG>ttyI</STRONG>(4).   All
+       commands  starting  with  <STRONG>AT+</STRONG> except <STRONG>AT+FCLASS</STRONG> are enabled
+       only, if  audio  mode  is  active.   The  following  <STRONG>audio</STRONG>
+       <STRONG>related</STRONG> <STRONG>AT</STRONG> <STRONG>commands</STRONG> are supported by ISDN tty devices:
+
+       <STRONG>AT+FCLASS=0</STRONG>
+              Disable  audio  mode  (default).  This command sets
+              register <EM>18</EM> to <EM>4</EM>.
+
+       <STRONG>AT+FCLASS=8</STRONG>
+              Enable audio mode (default). This command sets reg­
+              ister <EM>18</EM> to <EM>5</EM>.
+
+       <STRONG>AT+FCLASS=?</STRONG>
+              Show possible modes.
+
+       <STRONG>AT+FCLASS?</STRONG>
+              Show current mode.
+
+       <STRONG>AT+VNH=</STRONG><EM>x</EM>
+              No function, provided for compatibility only.
+
+       <STRONG>AT+VNH=?</STRONG>
+              Always showing "1".
+
+       <STRONG>AT+VNH?</STRONG>
+              Always showing "1".
+
+       <STRONG>AT+VLS=</STRONG><EM>x</EM>
+              Select line <EM>x</EM>, where <EM>x</EM> is one of the following:
+              0 = No device.
+              2 = Phone line.
+
+       <STRONG>AT+VLS=?</STRONG>
+              Always showing "0,2".
+
+       <STRONG>AT+VLS?</STRONG>
+              Show current line.
+
+       <STRONG>AT+VRX</STRONG> Start  audio recording. See below for more informa­
+              tion.
+
+       <STRONG>AT+VSD=</STRONG><EM>x</EM><STRONG>,</STRONG><EM>y</EM>
+              No function, provided for compatibility only.  Pos­
+              sible parameters:
+              <EM>x</EM> = 0 ... 31
+              <EM>y</EM> = 0 ... 255
+
+       <STRONG>AT+VSD=?</STRONG>
+              Show possible parameters.
+
+       <STRONG>AT+VSD?</STRONG>
+              Show current parameters.
+
+       <STRONG>AT+VSM=</STRONG><EM>x</EM>
+              Select audio data format to <EM>x</EM>, where <EM>x</EM> is:
+              2 = ADPCM-2
+              3 = ADPCM-3
+              4 = ADPCM-4
+              5 = aLAW
+              6 = uLAW
+
+       <STRONG>AT+VSM=?</STRONG>
+              Show possible audio data formats.
+
+       <STRONG>AT+VSM?</STRONG>
+              Show current audio data format.
+
+       <STRONG>AT+VTX</STRONG> Start  audio  playback. See below for more informa­
+              tion.
+
+
+</PRE>
+<H2>GENERAL BEHAVIOUR</H2><PRE>
+       On incoming calls, if the application responds to  a  <STRONG>RING</STRONG>
+       by sending <STRONG>ATA</STRONG>, depending on the calling service, the emu­
+       lator responds with either <STRONG>CONNECT</STRONG>  (data  call)  or  <STRONG>VCON</STRONG>
+       (voice call).
+
+       When  starting  audio  playback or recording, the emulator
+       responds with <STRONG>CONNECT</STRONG>.   After  that,  the  data  transfer
+       in  a  <STRONG>single</STRONG> command. In this case, <STRONG>no</STRONG> CONNECT message is
+       sent to the application and the protocol  described  below
+       is started immediately.
+
+       When  stopping  audio  playback  or recording, the message
+       returned by the emulator depends on how the data  transfer
+       is  stopped.  If  the data transfer is stopped by a remote
+       hangup, <STRONG>NO</STRONG> <STRONG>CARRIER</STRONG> is sent to the application, while stop­
+       ping  data transfer with one of the DLE sequences, <STRONG>VCON</STRONG> is
+       sent. In any case, the message is preceeded by the  appro­
+       priate  DLE  sequence  for  end of audio data and/or abort
+       respectively.
+
+       On outgoing voice calls, the emulator responds  with  <STRONG>VCON</STRONG>
+       upon connection setup.
+
+
+</PRE>
+<H2>AUDIO DATA FORMAT</H2><PRE>
+       When recording or playing back audio data, a kind of modi­
+       fied bisync protocol is used. When recording  audio  data,
+       the  modem  emulator is considered to be the <STRONG>sender</STRONG>, while
+       the application is the <STRONG>receiver</STRONG>.  When playing back,  this
+       relationship  is  reversed:  The  modem  emulator  acts as
+       <STRONG>receiver</STRONG>, while the application is the <STRONG>sender</STRONG>.   With  the
+       bisync  protocol  the  character  <STRONG>DLE</STRONG> (0x10) has a special
+       meaning and is used  like  an  escape  character.   It  is
+       always  followed  by a second character which has the fol­
+       lowing meanings defined:
+
+       <STRONG>ETX</STRONG> (0x03)
+              End of audio data. This code has to be sent by  the
+              <STRONG>sender</STRONG>, indicating end of audio data.
+
+       <STRONG>DC4</STRONG> (0x14)
+              Abort  sending.  This  code  has  to be sent by the
+              <STRONG>receiver</STRONG>, when it wishes to abort  receiving  data.
+              The  <STRONG>sender</STRONG>  has  to reply by stop sending data and
+              finally indicating end of audio data.
+
+       <STRONG>DLE</STRONG> (0x10)
+              a single byte with value 0x10 in the data stream.
+
+       <STRONG>0</STRONG>      Touch-tone "0" received. Valid  only  in  direction
+              from emulator to application.
+
+       <STRONG>1</STRONG>      Touch-tone  "1"  received.  Valid only in direction
+              from emulator to application.
+
+       <STRONG>2</STRONG>      Touch-tone "2" received. Valid  only  in  direction
+              from emulator to application.
+
+       <STRONG>3</STRONG>      Touch-tone  "3"  received.  Valid only in direction
+              from emulator to application.
+              from emulator to application.
+
+       <STRONG>5</STRONG>      Touch-tone  "5"  received.  Valid only in direction
+              from emulator to application.
+
+       <STRONG>6</STRONG>      Touch-tone "6" received. Valid  only  in  direction
+              from emulator to application.
+
+       <STRONG>7</STRONG>      Touch-tone  "7"  received.  Valid only in direction
+              from emulator to application.
+
+       <STRONG>8</STRONG>      Touch-tone "8" received. Valid  only  in  direction
+              from emulator to application.
+
+       <STRONG>9</STRONG>      Touch-tone  "9"  received.  Valid only in direction
+              from emulator to application.
+
+       <STRONG>#</STRONG>      Touch-tone "#" received. Valid  only  in  direction
+              from emulator to application.
+
+       <STRONG>*</STRONG>      Touch-tone  "*"  received.  Valid only in direction
+              from emulator to application.
+
+       <STRONG>A</STRONG>      Touch-tone "A" received. Valid  only  in  direction
+              from emulator to application.
+
+       <STRONG>B</STRONG>      Touch-tone  "B"  received.  Valid only in direction
+              from emulator to application.
+
+       <STRONG>C</STRONG>      Touch-tone "C" received. Valid  only  in  direction
+              from emulator to application.
+
+       <STRONG>D</STRONG>      Touch-tone  "D"  received.  Valid only in direction
+              from emulator to application.
+
+
+</PRE>
+<H2>AUTHOR</H2><PRE>
+       Fritz Elfert &lt;fritz@wuemaus.franken.de&gt;
+
+
+</PRE>
+<H2>SEE ALSO</H2><PRE>
+       <A HREF="ttyI.php3">ttyI</A>(4).
+</PRE>
+</BODY>
+</HTML>

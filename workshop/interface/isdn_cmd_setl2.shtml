@@ -1,0 +1,19 @@
+<HTML>
+<HEAD>
+<TITLE>ISDN_CMD_SETL2</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    With this command, the HL-driver is told to select the given Layer-2-
+    protocol. This command is issued by the LL prior to <A HREF="../includes/isdnif.h.shtml#ISDN_CMD_DIAL" TARGET="_code">ISDN_CMD_DIAL</A> or
+    <A HREF="../includes/isdnif.h.shtml#ISDN_CMD_ACCEPTD" TARGET="_code">ISDN_CMD_ACCEPTD</A>.<P>
+Parameter:
+<TABLE>
+<TR VALIGN="TOP"><TD><B>driver</B></TD><TD>driver-Id.</TD></TR>
+<TR VALIGN="TOP"><TD><B>command</B></TD><TD><A HREF="../includes/isdnif.h.shtml#ISDN_CMD_SETL2" TARGET="_code">ISDN_CMD_SETL2</A></TD></TR>
+<TR VALIGN="TOP"><TD><B>arg</B></TD><TD>channel-number locally to the driver. (starting with 0)
+                    logical or'ed with (protocol-Id << 8)
+                    protocol-Id is one of the constants <A HREF="../includes/isdnif.h.shtml#ISDN_PROTO_L2_X75I" TARGET="_code">ISDN_PROTO_L2...</A></TD></TR>
+<TR VALIGN="TOP"><TD><B>para</B></TD><TD>unused.</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

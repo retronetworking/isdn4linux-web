@@ -1,0 +1,65 @@
+<HTML>
+<HEAD>
+<TITLE>Device Driver Interface</TITLE>
+<!--#include virtual="/ssi/js.shtml" -->
+<!--#include virtual="/ssi/jswin.shtml" -->
+<!--#include virtual="/ssi/buttondefs.shtml" -->
+<!--#set var="picnam" value="prev" -->
+<!--#set var="picstr" value="Description of the fields of isdn_if" -->
+<!--#include virtual="/ssi/jbdef.shtml" -->
+<!--#set var="picnam" value="next" -->
+<!--#set var="picstr" value="Description of the events to be signaled by the HL-driver to th LL" -->
+<!--#include virtual="/ssi/jbdef.shtml" -->
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<TABLE WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT WIDTH="90"><!--#include virtual="/ssi/b_home.shtml" --></TD>
+<TD ALIGN=RIGHT WIDTH="90"><!--#include virtual="/ssi/b_up.shtml" --></TD>
+</TR>
+</TABLE>
+<H2>
+Description of the commands, a HL-driver has to support
+</H2>
+   All commands will be performed by calling the function command() described
+   above from within the LL. The field command of the struct-parameter will
+   contain the desired command, the field driver always is set to the
+   appropriate driver-Id.<P>
+
+   <H3>Until now, the following commands are defined:</H3>
+
+<PRE>
+<B>***CHANGED1.34: The parameter "num" has been replaced by a union "para" containing
+                the old "num" and a new setup_type struct used for ISDN_CMD_DIAL
+                and ISDN_STAT_ICALL callback.</B>
+
+   <A HREF="javascript:;" onClick="nw(event, 'isdn_cmd_ioctl.shtml',520,300);">ISDN_CMD_IOCTL</A>
+   <A HREF="javascript:;" onClick="nw(event, 'isdn_cmd_dial.shtml',500,320);">ISDN_CMD_DIAL</A>
+   <A HREF="javascript:;" onClick="nw(event, 'isdn_cmd_acceptd.shtml',400,180);">ISDN_CMD_ACCEPTD</A>
+   <A HREF="javascript:;" onClick="nw(event, 'isdn_cmd_acceptb.shtml',400,180);">ISDN_CMD_ACCEPTB</A>
+   <A HREF="javascript:;" onClick="nw(event, 'isdn_cmd_hangup.shtml',400,200);">ISDN_CMD_HANGUP</A>
+   <A HREF="javascript:;" onClick="nw(event, 'isdn_cmd_clreaz.shtml',400,180);">ISDN_CMD_CLREAZ</A>
+   <A HREF="javascript:;" onClick="nw(event, 'isdn_cmd_seteaz.shtml',480,250);">ISDN_CMD_SETEAZ</A>
+   <A HREF="javascript:;" onClick="nw(event, 'isdn_cmd_geteaz.shtml',480,220);">ISDN_CMD_GETEAZ</A> (currently unused)
+   <A HREF="javascript:;" onClick="nw(event, 'isdn_cmd_setsil.shtml',450,170);">ISDN_CMD_SETSIL</A> (currently unused)
+   <A HREF="javascript:;" onClick="nw(event, 'isdn_cmd_getsil.shtml',450,170);">ISDN_CMD_GETSIL</A> (currently unused)
+   <A HREF="javascript:;" onClick="nw(event, 'isdn_cmd_setl2.shtml',450,220);">ISDN_CMD_SETL2</A>
+   <A HREF="javascript:;" onClick="nw(event, 'isdn_cmd_getl2.shtml',450,210);">ISDN_CMD_GETL2</A> (currently unused)
+   <A HREF="javascript:;" onClick="nw(event, 'isdn_cmd_setl3.shtml',450,210);">ISDN_CMD_SETL3</A>
+   <A HREF="javascript:;" onClick="nw(event, 'isdn_cmd_getl3.shtml',450,210);">ISDN_CMD_GETL3</A> (currently unused)
+   <A HREF="javascript:;" onClick="nw(event, 'isdn_cmd_lock.shtml',450,180);">ISDN_CMD_LOCK</A>
+   <A HREF="javascript:;" onClick="nw(event, 'isdn_cmd_unlock.shtml',450,180);">ISDN_CMD_UNLOCK</A>
+</PRE>
+
+<TABLE WIDTH="100%"><TR>
+<!--#set var="href" value="fields.shtml" -->
+<!--#set var="picnam" value="prev" -->
+<!--#set var="alt" value="Previous" -->
+<TD ALIGN="LEFT"><!--#include virtual="/ssi/jbref.shtml" --> HEIGHT=17></A></TD>
+<!--#set var="href" value="events.shtml" -->
+<!--#set var="picnam" value="next" -->
+<!--#set var="alt" value="Next" -->
+<TD ALIGN="RIGHT"><!--#include virtual="/ssi/jbref.shtml" --> HEIGHT=17></A></TD>
+</TR></TABLE>
+</BODY>
+<HTML>

@@ -1,0 +1,28 @@
+<HTML>
+<HEAD>
+<TITLE>int (*statcallb)(isdn_ctrl*)</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    This field will be set by LL. This function has to be called by the
+    HL-driver for signaling status-changes or other events to the LL.<P>
+
+Parameter:
+<TABLE>
+<TR VALIGN="TOP"><TD><B>isdn_ctrl*</B></TD><TD>
+
+      The struct <A HREF="../includes/isdnif.h.shtml#isdn_ctrl" Target="_code">isdn_ctrl</A> also defined in <A HREF="../includes/isdnif.h.shtml" Target="_code">isdnif.h</A>. The exact meanings of its
+      fields are described together with the descriptions of the possible
+      events. Here is only a short description of the fields:
+</TD></TR>
+<TR><TD><B>driver</B></TD><TD>driver Id.</TD></TR>
+<TR><TD><B>command</B></TD><TD>event-type. (one of the constants <A HREF="../includes/isdnif.h.shtml#ISDN_STAT_STAVAIL" Target="_code">ISDN_STAT_...</A>)</TD></TR>
+<TR><TD><B>arg</B></TD><TD>depends on event-type.</TD></TR>
+<TR><TD><B>num</B></TD><TD>depends on event-type.</TD></TR>
+<TR><TD></TD></TR>
+</TABLE>
+Returnvalue:
+<TABLE>
+<TR><TD>0 on success, else -1</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

@@ -1,0 +1,64 @@
+<HTML>
+<HEAD>
+<TITLE>Device Driver Interface</TITLE>
+<!--#include virtual="/ssi/js.shtml" -->
+<!--#include virtual="/ssi/buttondefs.shtml" -->
+<!--#set var="picnam" value="next" -->
+<!--#set var="picstr" value="Description of the fields of isdn_if" -->
+<!--#include virtual="/ssi/jbdef.shtml" -->
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<TABLE WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT WIDTH="90"><!--#include virtual="/ssi/b_home.shtml" --></TD>
+<TD ALIGN=RIGHT WIDTH="90"><!--#include virtual="/ssi/b_up.shtml" --></TD>
+</TR>
+</TABLE>
+<H2>
+Description of the Interface between Linklevel and Hardwarelevel
+</H2>
+  The Communication between Linklevel (LL) and Hardwarelevel (HL)
+  is based on the <B>struct isdn_if</B> (defined in <B>isdnif.h</B>).<P>
+
+  An HL-driver can register itself at LL by calling the function
+  <B>register_isdn()</B> with a pointer to that struct. Prior to that, it has
+  to preset some of the fields of isdn_if. The LL sets the rest of
+  the fields. All further communication is done via callbacks using
+  the function-pointers defined in isdn_if.<P>
+
+  <H3>Changes/Version numbering:</H3>
+
+  During development of the ISDN subsystem, several changes have been
+  made to the interface. Before it went into kernel, the package
+  had a unique version number. The last version, distributed separately
+  was 0.7.4. When the subsystem went into kernel, every functional unit
+  got a separate version number. These numbers are shown at initialization,
+  separated by slashes:<P>
+
+<PRE>
+   c.c/t.t/n.n/p.p/a.a
+</PRE>
+
+  where
+
+<PRE>
+   c.c is the revision of the common code.
+   t.t is the revision of the tty related code.
+   n.n is the revision of the network related code.
+   p.p is the revision of the ppp related code.
+   a.a is the revision of the audio related code.
+</PRE>
+
+  Changes in this document are marked with '***CHANGEx' where x representing
+  the version number. If that number starts with 0, it refers to the old,
+  separately distributed package. If it starts with one of the letters
+  above, it refers to the revision of the corresponding module.<P>
+
+<TABLE WIDTH="100%">
+<!--#set var="href" value="fields.shtml" -->
+<!--#set var="picnam" value="next" -->
+<!--#set var="alt" value="Next" -->
+<TR><TD ALIGN="RIGHT"><!--#include virtual="/ssi/jbref.shtml" --> HEIGHT=17></A></TD></TR>
+</TABLE>
+</BODY>
+<HTML>

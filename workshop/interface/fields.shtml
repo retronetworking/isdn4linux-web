@@ -1,0 +1,53 @@
+<HTML>
+<HEAD>
+<TITLE>Device Driver Interface</TITLE>
+<!--#include virtual="/ssi/js.shtml" -->
+<!--#include virtual="/ssi/jswin.shtml" -->
+<!--#include virtual="/ssi/buttondefs.shtml" -->
+<!--#set var="picnam" value="prev" -->
+<!--#set var="picstr" value="Description of the Interface between Linklevel and Hardwarelevel" -->
+<!--#include virtual="/ssi/jbdef.shtml" -->
+<!--#set var="picnam" value="next" -->
+<!--#set var="picstr" value="Description of the commands, a HL-driver has to support" -->
+<!--#include virtual="/ssi/jbdef.shtml" -->
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<TABLE WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT WIDTH="90"><!--#include virtual="/ssi/b_home.shtml" --></TD>
+<TD ALIGN=RIGHT WIDTH="90"><!--#include virtual="/ssi/b_up.shtml" --></TD>
+</TR>
+</TABLE>
+<H2>
+Description of the struct isdn_if
+</H2>
+<PRE>
+typedef struct {
+  <B>int</B> <A HREF="javascript:;" onClick="nw(event, 'isdnif_channels.shtml',300,150);">channels</A>;
+  <B>int</B> <A HREF="javascript:;" onClick="nw(event, 'isdnif_maxbufsize.shtml',300,150);">maxbufsize</A>;
+  <B>unsigned long</B> <A HREF="javascript:;" onClick="nw(event, 'isdnif_features.shtml',450,150);">features</A>;
+  <B>unsigned short</B> <A HREF="javascript:;" onClick="nw(event, 'isdnif_hl_hdrlen.shtml',300,150);">hl_hdrlen</A>;
+  <B>void</B> <A HREF="javascript:;" onClick="nw(event, 'isdnif_rcvcallb.shtml',450,250);">(*rcvcallb)(int, int, u_char*, int)</A>;
+  <B>void</B> <A HREF="javascript:;" onClick="nw(event, 'isdnif_rcvcallb_skb.shtml',470,220);">(*rcvcallb_skb)(int, int, struct sk_buff *)</A>;
+  <B>int</B> <A HREF="javascript:;" onClick="nw(event, 'isdnif_statcallb.shtml',450,280);">(*statcallb)(isdn_ctrl*)</A>;
+  <B>int</B> <A HREF="javascript:;" onClick="nw(event, 'isdnif_command.shtml',450,280);">(*command)(isdn_ctrl*)</A>;
+  <B>int</B> <A HREF="javascript:;" onClick="nw(event, 'isdnif_writebuf.shtml',500,350);">(*writebuf)(int, int, u_char*, int, int)</A>;
+  <B>int</B> <A HREF="javascript:;" onClick="nw(event, 'isdnif_writebuf_skb.shtml',450,280);">(*writebuf_skb)(int, int, struct sk_buff *)</A>;
+  <B>int</B> <A HREF="javascript:;" onClick="nw(event, 'isdnif_writecmd.shtml',550,380);">(*writecmd)(u_char*, int, int, int, int)</A>;
+  <B>int</B> <A HREF="javascript:;" onClick="nw(event, 'isdnif_readstat.shtml',550,380);">(*readstat)(u_char*, int, int, int, int)</A>;
+  <B>char</B> <A HREF="javascript:;" onClick="nw(event, 'isdnif_id.shtml',450,180);">id[20]</A>;
+} isdn_if;
+</PRE>
+
+<TABLE WIDTH="100%"><TR>
+<!--#set var="href" value="index.shtml" -->
+<!--#set var="picnam" value="prev" -->
+<!--#set var="alt" value="Previous" -->
+<TD ALIGN="LEFT"><!--#include virtual="/ssi/jbref.shtml" --> HEIGHT=17></A></TD>
+<!--#set var="href" value="commands.shtml" -->
+<!--#set var="picnam" value="next" -->
+<!--#set var="alt" value="Next" -->
+<TD ALIGN="RIGHT"><!--#include virtual="/ssi/jbref.shtml" --> HEIGHT=17></A></TD>
+</TR></TABLE>
+</BODY>
+<HTML>

@@ -1,0 +1,29 @@
+<HTML>
+<HEAD>
+<TITLE>ISDN_STAT_ICALL</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    With this call, the HL-driver signals an incoming call to the LL.<P>
+Parameter:
+<TABLE>
+<TR VALIGN="TOP"><TD><B>driver</B></TD><TD>driver-Id</TD></TR>
+<TR VALIGN="TOP"><TD><B>command</B></TD><TD><A HREF="../includes/isdnif.h.shtml#ISDN_STAT_ICALL" TARGET="_code">ISDN_STAT_ICALL</A></TD></TR>
+<TR VALIGN="TOP"><TD><B>arg</B></TD><TD>channel-number, locally to the driver. (starting with 0)</TD></TR>
+<TR VALIGN="TOP"><TD><B>para.setup.phone</B></TD><TD>Callernumber.</TD></TR>
+<TR VALIGN="TOP"><TD><B>para.setup.eazmsn</B></TD><TD>CalledNumber.</TD></TR>
+<TR VALIGN="TOP"><TD><B>para.setup.si1</B></TD><TD>Service Indicator.</TD></TR>
+<TR VALIGN="TOP"><TD><B>para.setup.si2</B></TD><TD>Additional Service Indicator.</TD></TR>
+<TR VALIGN="TOP"><TD><B>para.setup.plan</B></TD><TD>octet 3 from Calling party number Information Element.</TD></TR>
+<TR VALIGN="TOP"><TD><B>para.setup.screen</B></TD><TD>octet 3a from Calling party number Information Element.</TD></TR>
+</TABLE>
+Return:
+<TABLE>
+<TR VALIGN="TOP"><TD ALIGN="RIGHT">0</TD><TD>No device matching this call.</TD></TR>
+<TR VALIGN="TOP"><TD ALIGN="RIGHT">1</TD><TD>At least one device matching this call (RING on ttyI).
+                    HL-driver may send ALERTING on the D-channel in this case.</TD></TR>
+<TR VALIGN="TOP"><TD ALIGN="RIGHT">2</TD><TD>Call will be rejected.</TD></TR>
+<TR VALIGN="TOP"><TD ALIGN="RIGHT">-1</TD><TD>An error happened. (Invalid parameters for example.)</TD></TR>
+</TABLE>
+</BODY>
+</HTML>
+

@@ -1,0 +1,5 @@
+<IMG SRC="/pics/hrule.gif" WIDTH=579 HEIGHT=17 BORDER=0
+<!--#if expr="! ${NETSCAPE}" -->
+ALT="---------------------------------------------------------"
+<!--#endif -->
+>

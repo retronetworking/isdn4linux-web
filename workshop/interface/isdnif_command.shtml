@@ -1,0 +1,24 @@
+<HTML>
+<HEAD>
+<TITLE>int (*command)(isdn_ctrl*)</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    This field has <B>to be preset</B> by the HL-driver. It points to a function,
+    to be called by LL to perform functions like dialing, B-channel
+    setup, etc. The exact meaning of the parameters is described with the
+    descriptions of the possible commands.<P>
+
+Parameter:
+<TABLE>
+<TR><TD COLSPAN=2>The following fields of <A HREF="../includes/isdnif.h.shtml#isdn_ctrl" TARGET="_code">isdn_ctrl*</A> are set:</TD></TR>
+<TR><TD><B>driver</B></TD><TD>driver-Id</TD></TR>
+<TR><TD><B>command</B></TD><TD>command to perform. (one of the constants <A HREF="../includes/isdnif.h.shtml#ISDN_CMD_IOCTL" TARGET="_code">ISDN_CMD_...</A>)</TD></TR>
+<TR><TD><B>arg</B></TD><TD>depends on command.</TD></TR>
+<TR><TD><B>num</B></TD><TD>depends on command.</TD></TR>
+</TABLE>
+Returnvalue:
+<TABLE>
+<TR><TD>&gt;=0 on success, else error-code (-ENODEV etc.)</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

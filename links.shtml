@@ -1,0 +1,45 @@
+<HTML>
+<HEAD><TITLE>ISDN-related links</TITLE></HEAD>
+<BODY BGCOLOR="#ffffff">
+<!--#include virtual="/ssi/js.shtml" -->
+<!--#include virtual="/ssi/buttondefs.shtml" -->
+<CENTER>
+<TABLE WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT WIDTH="90"><!--#include virtual="/ssi/b_home.shtml" --></TD>
+<!--#set var="alt" value="ISDN related links" -->
+<TD VALIGN=MIDDLE ALIGN=CENTER><IMG SRC="pics/linkshdr.gif" WIDTH=320 BORDER=0
+<!--#include virtual="/ssi/calt.shtml" -->></TD>
+<TD ALIGN=RIGHT WIDTH="90"><!--#include virtual="/ssi/b_mail.shtml" --></TD>
+</TR>
+<TR><TD ALIGN=CENTER COLSPAN=3><!--#include virtual="/ssi/rule.shtml" --></TD>
+</TR>
+</TABLE>
+<TABLE>
+<TR><TD><A HREF="http://www.linux-france.org/article/connex/ISDN">ISDN4Linux in France.</A></TD></TR>
+<TR><TD><A HREF="http://www.franken.de/users/klaus/">The ISDN4Linux HOWTO by Klaus Franken.</A></TD></TR>
+<TR><TD><A HREF="http://www.bjoern.net/vbox2www/">The Vbox2WWW Homepage.</A></TD></TR>
+<TR><TD><A HREF="http://w1.2667.telia.com/~u266700740/linux/i4lfax/index.html">Homepage of the i4lfax project.</A></TD></TR>
+<TR><TD><A HREF="http://www.digitalprojects.com/rates">Tarif-Datenbank f&uuml;r isdnlog.</A></TD></TR>
+<TR><TD><A HREF="http://www-ti.informatik.uni-tuebingen.de/~hippm/isdn.html">Michael Hipp's ISDN stuff.</A></TD></TR>
+<TR><TD><A HREF="http://jw.nttam.com/OLD/ST/ISDN/isdn_intro.html">Japanese ISDN specification.</A></TD></TR>
+<TR><TD><A HREF="http://www.uni-mannheim.de/rum/netze/isdn/">ISDN-page at Mannheim university.</A></TD></TR>
+<TR><TD><A HREF="http://www.weinheim.de/isdn/index.html">I4L page at www.weinheim.de.</A></TD></TR>
+<TR><TD><A HREF="http://www.lrz.de/~isdn/traces.htm">Interesting D-Channel traces.</A></TD></TR>
+<TR><TD><A HREF="http://www.rosat.mpe-garching.mpg.de/~web/ISDN.html">A collection of I4L configurations.</A></TD></TR>
+<TR><TD><A HREF="http://www.provi.de/~gvz/chargeint.html">The ChargeInt Homepage.</A></TD></TR>
+<TR><TD><A HREF="http://www.isdn4linux.de/leafsite/">The original I4L FAQ.</A></TD></TR>
+<TR><TD><A HREF="http://alumni.caltech.edu/~dank/isdn/">The first of all ISDN pages - Dan Kegel's collection.</A></TD></TR>
+<TR><TD><A HREF="http://www.avm.de/">Manufacturer of ISDN-Cards: AVM</A></TD></TR>
+<TR><TD><A HREF="http://www.creatix.de/">Manufacturer of ISDN-Cards: Creatix</A></TD></TR>
+<TR><TD><A HREF="http://www.eicon.de/">Manufacturer of ISDN-Cards: Eicon Diehl</A></TD></TR>
+<TR><TD><A HREF="http://www.elsa.de/">Manufacturer of ISDN-Cards: Elsa</A></TD></TR>
+<TR><TD><A HREF="http://www.itk.de/">Manufacturer of ISDN-Cards: ITK</A></TD></TR>
+<TR><TD><A HREF="http://www.spellcast.com/">Manufacturer of ISDN-Cards: Spellcaster</A></TD></TR>
+<TR><TD><A HREF="http://www.teles.de/">Manufacturer of ISDN-Cards: Teles</A></TD></TR>
+<TR><TD><A HREF="http://www.3com.com/products/isdn.html">Manufacturer of ISDN-Cards: 3com (former US Robotics)</A></TD></TR>
+</TABLE>
+</CENTER>
+<!--#include virtual="/ssi/i4lfooter.shtml" -->
+</BODY>
+</HTML>

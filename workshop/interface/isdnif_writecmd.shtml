@@ -1,0 +1,29 @@
+<HTML>
+<HEAD>
+<TITLE>int (*writecmd)(u_char*, int, int, int, int)</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    This field has <B>to be preset</B> by the HL-driver. The given function will be
+    called to perform write-requests on /dev/isdnctrl (i.e. sending commands
+    to the card) The data-format is hardware-specific. This function is
+    intended for debugging only. It is not necessary for normal operation
+    and never will be called by the tty-emulation- or network-code. If
+    this function is not supported, the driver has to set NULL here.<P>
+
+Parameter:
+<TABLE>
+<TR VALIGN="TOP"><TD><B>u_char*</B></TD><TD>pointer to data.</TD></TR>
+<TR VALIGN="TOP"><TD><B>int</B></TD><TD>length of data.</TD></TR>
+<TR VALIGN="TOP"><TD><B>int</B></TD><TD>flag:<BR>0 = call from within kernel-space. (HL-driver must use
+                        memcpy, may NOT use schedule())<BR>
+                    1 = call from user-space. (HL-driver must use
+                        memcpy_fromfs, use of schedule() allowed)</TD></TR>
+<TR VALIGN="TOP"><TD><B>int</B></TD><TD>driver-Id.</TD></TR>
+<TR VALIGN="TOP"><TD><B>int</B></TD><TD>channel-number locally to the HL-driver. (starts with 0)</TD></TR>
+</TABLE>
+<B>***CHANGED1.14: The driver-Id and channel-number are new since this revision.</B><P>
+Returnvalue:
+<TABLE>
+<TR VALIGN="TOP"><TD>Length of data accepted on success, else error-code (-EINVAL etc.)</TD></TR>
+</TABLE>
+

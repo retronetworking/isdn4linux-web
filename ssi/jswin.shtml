@@ -1,0 +1,28 @@
+<SCRIPT LANGUAGE="JavaScript">
+<!-- 
+function nw(e, loc, w, h) {
+	x = e.screenX + 20;
+	y = e.screenY + 20;
+	w = window.open("", "popUp", "dependent,scrollbars=yes"
+		+ ",screenX=" + x + ",screenY=" + y
+		+ ",width=" + w + ",height=" + h);
+	w.location = loc;
+}
+
+function hl(name) {
+	if (NS4) {
+		document.layers[name].visibility = "hide";
+	} else {
+		document.all[name].style.visibility = "hidden";
+	}
+}
+ 
+function sl(name) {
+	if (NS4) {
+		document.layers[name].visibility = "show";
+	} else {
+		document.all[name].style.visibility = "visible";
+	}
+}
+// -->
+</SCRIPT>

@@ -1,0 +1,11 @@
+<HTML>
+<HEAD>
+<TITLE>int channels</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+    This field has <B>to be set</B> by the HL-driver to the number of channels
+    supported prior to calling <A HREF="../linklevel/isdn_common.c.shtml#register_isdn" TARGET="_code">register_isdn()</A>. Upon return of the call,
+    the LL puts an <B>id</B> there, which has to be used by the HL-driver when
+    invoking the other callbacks.
+</BODY>
+</HTML>
