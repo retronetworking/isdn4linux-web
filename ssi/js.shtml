@@ -1,4 +1,4 @@
-<SCRIPT LANGUAGE="JavaScript">
+<SCRIPT LANGUAGE="JavaScript" TYPE="JavaScript">
 <!-- 
 if (window.name == "bannerframe") {
 	top.location = "http://www.isdn4linux.de";

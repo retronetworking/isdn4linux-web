@@ -1,4 +1,4 @@
-<SCRIPT LANGUAGE="JavaScript">
+<SCRIPT LANGUAGE="JavaScript" TYPE="JavaScript">
 <!-- 
 function nw(e, loc, w, h) {
 	x = e.screenX + 20;

@@ -1,4 +1,4 @@
-<SCRIPT LANGUAGE="JavaScript">
+<SCRIPT LANGUAGE="JavaScript" TYPE="JavaScript">
 <!-- 
 js_but["_pics_<!--#echo var="picnam" -->_gif"] = new js_button("/pics/<!--#echo var="picnam" -->.gif", "<!--#echo var="picstr" -->");
 // -->
