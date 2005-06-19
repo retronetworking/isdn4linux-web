@@ -29,7 +29,7 @@ When asked for a password during login, enter "<EM>readonly</EM>" (without the q
 Instead of <EM>isdn</EM> you also can check out other modules like <EM>isdn4k-utils</EM>,
 <EM>mISDN</EM>,  <EM>mISDNuser</EM>,  <EM>NGC4Linux</EM> or <EM>web</EM>
 <BR>For a more detailed description, have a look into the <A HREF="/faq/i4lfaq.html#toc2.2">FAQ</A>.
-<LI>Browsing via web (currently diabled due to maintenance)<BR>
+<LI>Browsing via <A HREF="/cgi-bin/viewcvs.cgi">web</A>.<BR>
 </UL>
 </TD></TR></TABLE>
 </CENTER>
