@@ -4,6 +4,6 @@
 <TR><!--#config timefmt="%d.%m.%Y %H:%M" --><TD ALIGN="LEFT"
 ><SMALL>Last change: <!--#echo var="LAST_MODIFIED" --></SMALL></TD
 ><TD ALIGN="RIGHT"><SMALL
->&copy;&nbsp;1998&nbsp;Fritz&nbsp;Elfert&nbsp;<A
+>&copy;&nbsp;1998-2005&nbsp;Fritz&nbsp;Elfert&nbsp;<A
 HREF="mailto:<!--#echo var="SERVER_ADMIN" -->?subject=ISDN4Linux-Website"
 ><!--#echo var="SERVER_ADMIN" --></A></SMALL></TD></TR></TABLE>
