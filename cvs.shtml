@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>ISDN-related links</TITLE></HEAD>
+<BODY BGCOLOR="#ffffff">
+<!--#include virtual="/ssi/js.shtml" -->
+<!--#include virtual="/ssi/buttondefs.shtml" -->
+<CENTER>
+<TABLE WIDTH="100%">
+<TR>
+<TD ALIGN=LEFT WIDTH="90"><!--#include virtual="/ssi/b_home.shtml" --></TD>
+<!--#set var="alt" value="ISDN4Linux CVS repository" -->
+<TD VALIGN=MIDDLE ALIGN=CENTER><!--<IMG SRC="pics/linkshdr.gif" WIDTH=320 BORDER=0
+<!--#include virtual="/ssi/calt.shtml" -->>--></TD>
+<TD ALIGN=RIGHT WIDTH="90"><!--#include virtual="/ssi/b_mail.shtml" --></TD>
+</TR>
+<TR><TD ALIGN=CENTER COLSPAN=3><!--#include virtual="/ssi/rule.shtml" --></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH="50%"><TR><TD>
+The ISDN4Linux CVS repository can be accessed in several ways.
+<UL>
+<LI>Anonymous access using the pserver method with any cvs client<BR>
+Use the following commands:<P>
+<PRE>
+	cvs -d :pserver:guest@cvs.isdn4linux.de:/i4ldev login
+	cvs -d :pserver:guest@cvs.isdn4linux.de:/i4ldev co isdn
+</PRE>
+When asked for a password during login, enter "<EM>readonly</EM>" (without the quotes).
+Instead of <EM>isdn</EM> you also can check out other modules like <EM>isdn4k-utils</EM>,
+<EM>mISDN</EM>,  <EM>mISDNuser</EM>,  <EM>NGC4Linux</EM> or <EM>web</EM>
+<BR>For a more detailed description, have a look into the <A HREF="/faq/i4lfaq.html#toc2.2">FAQ</A>.
+<LI>Browsing via web (currently diabled due to maintenance)<BR>
+</UL>
+</TD></TR></TABLE>
+</CENTER>
+<!--#include virtual="/ssi/i4lfooter.shtml" -->
+</BODY>
+</HTML>
