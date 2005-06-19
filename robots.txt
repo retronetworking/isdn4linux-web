@@ -1,4 +1,2 @@
 User-agent: *
 Disallow: /listarch/isdn4linux
-User-agent: i4ldig
-Disallow:
