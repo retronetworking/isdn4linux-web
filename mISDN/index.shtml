@@ -1,15 +1,9 @@
 <HTML>
 <HEAD>
-<TITLE>Homepage for mISDN</TITLE>
-<META NAME="Content-Version" CONTENT="$Revision$">
+<meta http-equiv="Refresh"content="2;URL=http://www.misdn.org/index.php/Main_Page">
 </HEAD>
 <BODY BACKGROUND="#000000">
-<H2>Homepage for mISDN</H2>
-
-mISDN (modular ISDN) is the new ISDN stack of the <A HREF="http://www.kernel.org">linux kernel</A> version 2.6.
-<P>
-See this <A HREF="http://rcum.uni-mb.si/~uvp00845b/">Howto</A> for a short introduction.<BR>
-Latest Sourcecode can be retrieved via <A HREF="http://www.isdn4linux.de/cgi-bin/viewcvs.cgi/">CVS</A><BR>
-Have a look in this <A HREF="http://listserv.isdn4linux.de/pipermail/isdn4linux/">isdn4linux mailing list archive</A> or subscribe to the <A HREF="https://www.isdn4linux.de/mailman/listinfo/isdn4linux">isdn4linux mailing list</A>. Please read the archive first!
+If your browser do not redirect you please use this link
+<A HREF="http://www.misdn.org/">http://www.misdn.org .</A>
 </BODY>
 </HTML>
